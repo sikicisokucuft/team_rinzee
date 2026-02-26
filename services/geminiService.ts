@@ -1,19 +1,26 @@
 import { GoogleGenAI } from "@google/genai";
 import { ChatMessage } from "../types";
 
-const API_KEY = process.env.API_KEY || '';
+// Use import.meta.env for Vite or process.env for Node
+const API_KEY = import.meta.env?.VITE_GEMINI_API_KEY || process.env.GEMINI_API_KEY || '';
 
 class GeminiService {
-  private ai: GoogleGenAI;
+  private ai: GoogleGenAI | null = null;
   private modelId: string = 'gemini-3-flash-preview';
 
   constructor() {
-    this.ai = new GoogleGenAI({ apiKey: API_KEY });
+    if (API_KEY) {
+      try {
+        this.ai = new GoogleGenAI({ apiKey: API_KEY });
+      } catch (error) {
+        console.error("Failed to initialize Gemini:", error);
+      }
+    }
   }
 
   async *streamChat(history: ChatMessage[], newMessage: string) {
-    if (!API_KEY) {
-      yield "ERROR: NO_API_KEY_DETECTED. SYSTEM OFFLINE.";
+    if (!this.ai || !API_KEY) {
+      yield "System Offline: API Key missing or invalid. Please configure VITE_GEMINI_API_KEY in your environment.";
       return;
     }
 
@@ -36,6 +43,7 @@ class GeminiService {
         }))
       });
 
+      // Use sendMessageStream with the message content
       const result = await chat.sendMessageStream({ message: newMessage });
 
       for await (const chunk of result) {
