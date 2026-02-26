@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { CheckCircle2, TrendingUp, DollarSign, Globe2, Lock, ArrowRight, ShieldCheck, Users, Crown, Star, Plus, Minus, Reply, X } from 'lucide-react';
 import MatrixCanvas from './components/MatrixCanvas';
-import ChatWidget from './components/ChatWidget';
 import Countdown from './components/Countdown';
 import { Testimonial } from './types';
 
@@ -564,6 +563,7 @@ const App: React.FC = () => {
             <div className="text-center space-y-4 text-slate-800 font-bold text-lg">
               <p>Contact us : +1 (213) 986-8699</p>
               <p>For UK: +44 20 4628 1675</p>
+              <p>Email: naxavt@gmail.com</p>
             </div>
           </div>
         </div>
@@ -581,9 +581,6 @@ const App: React.FC = () => {
           </div>
         </div>
       </footer>
-
-      {/* Chat Widget */}
-      <ChatWidget />
       
       {/* Legal Modal */}
       <LegalModal 
