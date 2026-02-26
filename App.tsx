@@ -323,7 +323,8 @@ const App: React.FC = () => {
           </div>
           
           <h1 className="font-display text-4xl md:text-7xl leading-tight mb-4 text-slate-900">
-            START YOUR <span className="brand-text">3 DAYS FREE TRIAL!</span>
+            JOIN OUR <span className="brand-text">VIP MEMBERSHIP</span> <br />
+            TODAY!
           </h1>
           
           <div className="text-slate-600 text-lg md:text-xl max-w-3xl mb-6 leading-relaxed text-left inline-block">
@@ -354,6 +355,14 @@ const App: React.FC = () => {
               className="w-full md:w-auto brand-bg text-white font-display text-xl px-12 py-4 rounded hover:brightness-110 hover:scale-105 transition-all shadow-[0_10px_40px_rgba(139,92,246,0.3)] flex items-center justify-center gap-2"
             >
               JOIN PLEASURE HEAVEN <ArrowRight size={24} />
+            </a>
+            <a 
+              href="https://t.me/pleasureheavenn"
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="w-full md:w-auto bg-slate-100 text-slate-700 font-display text-xl px-12 py-4 rounded hover:bg-slate-200 hover:scale-105 transition-all shadow-sm flex items-center justify-center gap-2 border border-slate-200"
+            >
+              WATCH THE TRAILER
             </a>
           </div>
           
