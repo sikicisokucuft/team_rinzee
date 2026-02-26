@@ -204,21 +204,67 @@ type SocialProofItem =
   | { type: 'chat'; name: string; avatarColor: string; messages: { text: string; isMe: boolean; time: string; reaction?: string }[] }
   | { type: 'stat' };
 
-// IMPORTANT: These images are from your public folder (p1.jpg to p12.jpg)
-const localImages = Array.from({ length: 12 }, (_, i) => ({
-  type: 'image' as const,
-  src: `/p${i + 1}.jpg`,
-  alt: `Member Proof ${i + 1}`
-}));
-
 const socialProofItems: SocialProofItem[] = [
-  ...localImages.slice(0, 8),
   {
     type: 'image',
-    src: 'https://i.postimg.cc/xjf67J46/gorsel-2026-01-16-174844839.png',
-    alt: 'Member Proof Extra'
+    src: 'https://i.postimg.cc/sGJJdYLK/photo-2026-02-06-15-45-48.jpg',
+    alt: 'Member Proof 1'
   },
-  ...localImages.slice(8)
+  {
+    type: 'image',
+    src: 'https://i.postimg.cc/8fGb0KZY/photo-2026-02-06-15-45-48-(2).jpg',
+    alt: 'Member Proof 2'
+  },
+  {
+    type: 'image',
+    src: 'https://i.postimg.cc/dZF9xH5g/photo-2026-02-06-15-45-49.jpg',
+    alt: 'Member Proof 3'
+  },
+  {
+    type: 'image',
+    src: 'https://i.postimg.cc/hQn05y23/photo-2026-02-06-15-45-49-(2).jpg',
+    alt: 'Member Proof 4'
+  },
+  {
+    type: 'image',
+    src: 'https://i.postimg.cc/V0wFVGKR/photo-2026-02-06-15-45-50.jpg',
+    alt: 'Member Proof 5'
+  },
+  {
+    type: 'image',
+    src: 'https://i.postimg.cc/LgSVbCxP/photo-2026-02-06-15-45-50-(2).jpg',
+    alt: 'Member Proof 6'
+  },
+  {
+    type: 'image',
+    src: 'https://i.postimg.cc/q6rG5b1N/photo-2026-02-06-15-45-50-(3).jpg',
+    alt: 'Member Proof 7'
+  },
+  {
+    type: 'image',
+    src: 'https://i.postimg.cc/XBWgzHsq/photo-2026-02-06-15-45-51.jpg',
+    alt: 'Member Proof 8'
+  },
+  {
+    type: 'image',
+    src: 'https://i.postimg.cc/bSPRBCms/photo-2026-02-06-15-45-51-(2).jpg',
+    alt: 'Member Proof 9'
+  },
+  {
+    type: 'image',
+    src: 'https://i.postimg.cc/ZBpcjtxC/photo-2026-02-06-15-45-51-(3).jpg',
+    alt: 'Member Proof 10'
+  },
+  {
+    type: 'image',
+    src: 'https://i.postimg.cc/mzCwVfyW/photo-2026-02-06-15-45-52.jpg',
+    alt: 'Member Proof 11'
+  },
+  {
+    type: 'image',
+    src: 'https://i.postimg.cc/QKqqGQzv/photo-2026-02-12-02-02-36-(2).jpg',
+    alt: 'Member Proof 12'
+  }
 ];
 
 const faqs = [
@@ -435,16 +481,16 @@ const App: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4">
           <h2 className="font-display text-center text-4xl mb-16 text-slate-900">TRUSTED BY <span className="text-violet-500">MANY</span></h2>
           
-          <div className="columns-2 md:columns-3 lg:columns-4 gap-3 md:gap-6 space-y-3 md:space-y-6">
+          <div className="columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4">
             {socialProofItems.map((item, index) => {
               if (item.type === 'image') {
                 return (
-                  <div key={index} className="break-inside-avoid mb-6">
+                  <div key={index} className="break-inside-avoid mb-4">
                     <img 
                       src={item.src} 
                       alt={item.alt} 
-                      className="w-full h-auto rounded-xl shadow-md border border-violet-100 hover:scale-[1.02] transition-transform duration-300"
-                      loading="lazy"
+                      className="w-full h-auto rounded-xl shadow-md border border-violet-100/50 hover:scale-105 hover:shadow-xl transition-all duration-300 bg-white transform"
+                      loading="eager"
                     />
                   </div>
                 );
