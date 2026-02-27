@@ -392,7 +392,7 @@ const App: React.FC = () => {
       <nav className="absolute top-10 w-full z-40 bg-[#f4f1fd]/90 backdrop-blur-md border-b border-violet-100 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
           <div className="flex items-center gap-2">
-             <span className="text-3xl md:text-4xl text-violet-600" style={{ fontFamily: "'Great Vibes', cursive" }}>PleasureHeaven</span>
+             <span className="text-2xl md:text-3xl text-violet-600 font-display tracking-wide">PLEASURE HEAVEN</span>
           </div>
           <div className="flex items-center gap-4">
             <a 
@@ -420,9 +420,7 @@ const App: React.FC = () => {
       {/* Hero Section */}
       <header className="relative z-10 pt-40 pb-12 px-4 text-center overflow-hidden">
         <div className="max-w-5xl mx-auto flex flex-col items-center">
-          <div className="inline-block border border-violet-200 bg-white rounded-full px-4 py-1 text-violet-600 font-mono text-sm mb-4 animate-fade-in shadow-sm">
-            ● PORTAL OPEN: LIMITED SPOTS AVAILABLE
-          </div>
+
           
           <h1 className="font-display text-4xl md:text-7xl leading-tight mb-4 text-slate-900">
             JOIN OUR <span className="brand-text">VIP MEMBERSHIP</span> <br />
