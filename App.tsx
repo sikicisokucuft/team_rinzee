@@ -418,16 +418,16 @@ const App: React.FC = () => {
       </nav>
 
       {/* Hero Section */}
-      <header className="relative z-10 pt-40 pb-12 px-4 text-center overflow-hidden">
+      <header className="relative z-10 pt-32 md:pt-40 pb-8 md:pb-12 px-4 text-center overflow-hidden">
         <div className="max-w-5xl mx-auto flex flex-col items-center">
 
           
-          <h1 className="font-display text-4xl md:text-7xl leading-tight mb-4 text-slate-900">
+          <h1 className="font-display text-3xl md:text-6xl leading-tight mb-4 text-slate-900">
             JOIN OUR <span className="brand-text">VIP MEMBERSHIP</span> <br />
             TODAY!
           </h1>
           
-          <div className="text-slate-600 text-lg md:text-xl max-w-3xl mb-6 leading-relaxed text-left inline-block">
+          <div className="text-slate-600 text-base md:text-xl max-w-3xl mb-6 leading-relaxed text-left inline-block">
             <ul className="space-y-3 list-disc pl-5 marker:text-violet-500">
               <li>
                 Get full access to content worth over <span className="font-bold text-slate-900">$3000/month</span> and we upload 100+ videos every day.
@@ -467,27 +467,48 @@ const App: React.FC = () => {
           </div>
           
           {/* Social Proof Bar */}
-          <div className="mt-24 flex flex-wrap justify-center gap-8 md:gap-16 text-slate-500 font-mono text-sm">
-            <div className="flex items-center gap-2">
-              <Users className="text-violet-500" size={18} />
+          <div className="mt-8 md:mt-24 flex flex-row flex-nowrap items-center justify-center gap-x-6 md:gap-16 text-slate-500 font-mono text-xs md:text-sm whitespace-nowrap">
+            <div className="flex items-center gap-1.5 md:gap-2">
+              <Users className="text-violet-500" size={16} />
               <span>3,000+ MEMBERS</span>
             </div>
-            <div className="flex items-center gap-2">
-              <Star className="text-violet-500" size={18} />
+            <div className="flex items-center gap-1.5 md:gap-2">
+              <Star className="text-violet-500" size={16} />
               <span>99% POSITIVE REVIEWS</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <ShieldCheck className="text-violet-500" size={18} />
-              <span>PAY SAFELY</span>
             </div>
           </div>
         </div>
       </header>
 
+
+
+      {/* Trusted By Many / Social Proof - Updated with Masonry Grid */}
+      <section className="relative z-10 py-16 md:py-24 bg-[#f4f1fd] border-y border-violet-100">
+        <div className="max-w-7xl mx-auto px-4">
+          <h2 className="font-display text-center text-3xl md:text-4xl mb-12 md:mb-16 text-slate-900">TRUSTED BY <span className="text-violet-500">MANY</span></h2>
+          
+          <MasonryGrid items={socialProofItems} />
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="relative z-10 py-16 md:py-24 bg-white">
+        <div className="max-w-4xl mx-auto px-4">
+          <h2 className="font-display text-center text-3xl md:text-4xl mb-8 md:mb-12 text-slate-900">FREQUENTLY ASKED <span className="brand-text">QUESTIONS</span></h2>
+          <div className="space-y-4">
+            {faqs.map((faq, index) => (
+              <FAQItem key={index} question={faq.question} answer={faq.answer} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+
+
       {/* The Choice Section */}
-      <section className="relative z-10 py-24 bg-white border-t border-violet-50">
+      <section className="relative z-10 py-16 md:py-24 bg-white border-t border-violet-50">
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="font-display text-4xl md:text-5xl mb-12 text-slate-900">CHOOSE <span className="text-violet-600">SIDE</span></h2>
+          <h2 className="font-display text-3xl md:text-5xl mb-8 md:mb-12 text-slate-900">CHOOSE <span className="text-violet-600">SIDE</span></h2>
           <div className="grid md:grid-cols-2 gap-8">
             {/* Blue Pill (OnlyFans) - Gray/Slate styled */}
             <div className="p-8 rounded-2xl bg-slate-50 border border-slate-200 hover:border-slate-300 transition-colors group shadow-sm">
@@ -530,36 +551,16 @@ const App: React.FC = () => {
         </div>
       </section>
 
-      {/* Trusted By Many / Social Proof - Updated with Masonry Grid */}
-      <section className="relative z-10 py-24 bg-[#f4f1fd] border-y border-violet-100">
-        <div className="max-w-7xl mx-auto px-4">
-          <h2 className="font-display text-center text-4xl mb-16 text-slate-900">TRUSTED BY <span className="text-violet-500">MANY</span></h2>
-          
-          <MasonryGrid items={socialProofItems} />
-        </div>
-      </section>
-
-      {/* FAQ Section */}
-      <section className="relative z-10 py-24 bg-white">
-        <div className="max-w-4xl mx-auto px-4">
-          <h2 className="font-display text-center text-4xl mb-12 text-slate-900">FREQUENTLY ASKED <span className="brand-text">QUESTIONS</span></h2>
-          <div className="space-y-4">
-            {faqs.map((faq, index) => (
-              <FAQItem key={index} question={faq.question} answer={faq.answer} />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Pricing / CTA */}
-      <section className="relative z-10 py-24 bg-[#f4f1fd] overflow-hidden">
+      {/* Contact Section */}
+      <section className="relative z-10 py-16 md:py-24 bg-[#f4f1fd] overflow-hidden">
         {/* Background glow */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-white blur-[120px] rounded-full pointer-events-none opacity-60"></div>
         
         <div className="relative max-w-lg mx-auto px-4 text-center">
           <div className="bg-white/80 backdrop-blur-xl border border-violet-200 p-8 md:p-12 rounded-3xl shadow-[0_20px_60px_rgba(139,92,246,0.15)]">
-            <div className="text-center space-y-4 text-slate-800 font-bold text-lg">
-              <p>Contact us : +1 (213) 986-8699</p>
+            <h3 className="font-display text-2xl text-slate-900 mb-6 tracking-wide">CONTACT US</h3>
+            <div className="text-center space-y-4 text-slate-700 font-medium text-lg">
+              <p>+1 (213) 986-8699</p>
               <p>For UK: +44 20 4628 1675</p>
               <p>Email: naxavt@gmail.com</p>
             </div>
