@@ -433,7 +433,7 @@ const App: React.FC = () => {
                 Get full access to content worth over <span className="font-bold text-slate-900">$3000/month</span> and we upload 100+ videos every day.
               </li>
               <li>
-                Be able to watch <span className="font-bold text-slate-900">over 6000 long</span> paid videos of OnlyFans models.
+                Be able to watch <span className="font-bold text-slate-900">over 8000 long</span> paid videos of OnlyFans models.
               </li>
               <li>
                 <span className="font-bold text-slate-900">You can request</span> your favourite OnlyFans models. We will upload the videos within 2 days.
