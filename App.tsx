@@ -4,7 +4,7 @@ import MatrixCanvas from './components/MatrixCanvas';
 import Countdown from './components/Countdown';
 import { Testimonial } from './types';
 
-const JOIN_LINK = "https://buy.stripe.com/eVqaEW3Ek4TNeeHg9Nbwk04";
+const JOIN_LINK = "https://www.paypal.com/ncp/payment/D2SR9M5QZL6RQ";
 
 // --- Legal Content Data ---
 const LEGAL_CONTENT = {
@@ -40,7 +40,7 @@ const LEGAL_CONTENT = {
       **1. DATA COLLECTION**
       We respect your privacy. We only collect the minimum information necessary to provide our services:
       - Email address (for purchase confirmation and access).
-      - Payment details (processed securely by Stripe; we do not store your full credit card number).
+      - Payment details (processed securely by PayPal; we do not store your full credit card number).
 
       **2. TELEGRAM USAGE**
       Our services are delivered via Telegram. Your interaction with the Telegram app is subject to Telegram's own Privacy Policy. We do not have access to your private data on Telegram outside of our specific groups/channels.
@@ -64,7 +64,7 @@ const LEGAL_CONTENT = {
 
       **COMMON ISSUES**
       - **Didn't receive invite link?** Please check your email spam folder first. If it's not there, email us with your transaction ID.
-      - **Canceling subscription?** Use the link provided in your purchase email to access the Stripe Customer Portal.
+      - **Canceling subscription?** Use the link provided in your purchase email or your PayPal account to manage your subscription.
     `
   }
 };
@@ -326,7 +326,7 @@ const socialProofItems: SocialProofItem[] = [
 const faqs = [
   {
     question: "Do you see my credit card number when I pay?",
-    answer: "No. We don't see your card informations. Our site is powered by Stripe. So you can just safely pay."
+    answer: "No. We don't see your card informations. Our site is powered by PayPal. So you can just safely pay."
   },
   {
     question: "How can I manage my subscription?",
@@ -442,9 +442,6 @@ const App: React.FC = () => {
                 Don't deal with links and ads. If you want download and <span className="font-bold text-slate-900">watch later</span>.
               </li>
             </ul>
-            <p className="text-sm text-slate-500 font-medium mt-4 italic text-center">
-              (When purchasing, the business name will appear as FLOW1 LTD.)
-            </p>
           </div>
 
           <div className="flex flex-col md:flex-row gap-4 items-center w-full justify-center">
