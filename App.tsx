@@ -384,6 +384,8 @@ const PromoBar: React.FC<{ onJoinClick: () => void }> = ({ onJoinClick }) => {
 const App: React.FC = () => {
   const [activeModal, setActiveModal] = useState<'terms' | 'privacy' | 'support' | null>(null);
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
 
   return (
     <PayPalScriptProvider options={{ "clientId": PAYPAL_CLIENT_ID, currency: "USD", intent: "capture", components: "buttons,applepay,googlepay" }}>
@@ -603,45 +605,78 @@ const App: React.FC = () => {
             </div>
             
             <div className="p-8 bg-slate-50">
-              <div className="mb-6">
-                <div className="flex justify-between items-center mb-2">
-                  <span className="text-slate-600 font-medium">VIP Membership</span>
-                  <span className="text-slate-900 font-bold text-xl">$25.00</span>
+              {isSuccess ? (
+                <div className="text-center py-8">
+                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <CheckCircle2 className="text-green-600" size={32} />
+                  </div>
+                  <h3 className="text-xl font-bold text-slate-900 mb-2">Payment Successful!</h3>
+                  <p className="text-slate-600 mb-6">Welcome to Pleasure Heaven VIP.</p>
+                  <p className="text-sm text-slate-500 animate-pulse">Redirecting to Telegram channel...</p>
                 </div>
-                <p className="text-xs text-slate-400 text-left">
-                  * Note: This is a one-time payment setup. If you need a monthly subscription, you must create a Subscription Plan in PayPal and use that Plan ID instead.
-                </p>
-              </div>
+              ) : (
+                <>
+                  <div className="mb-6">
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="text-slate-600 font-medium">VIP Membership</span>
+                      <span className="text-slate-900 font-bold text-xl">$25.00</span>
+                    </div>
+                    <p className="text-xs text-slate-400 text-left">
+                      * Lifetime Access: Enjoy permanent VIP membership with this one-time payment. No recurring fees.
+                    </p>
+                  </div>
 
-              <PayPalButtons 
-                style={{ layout: "vertical", shape: "rect", color: "gold" }}
-                createOrder={(data, actions) => {
-                  return actions.order.create({
-                    intent: "CAPTURE",
-                    purchase_units: [
-                      {
-                        description: "Pleasure Heaven VIP Membership",
-                        amount: {
-                          currency_code: "USD",
-                          value: "25.00"
+                  {isProcessing ? (
+                    <div className="flex flex-col items-center justify-center py-8">
+                      <div className="w-8 h-8 border-4 border-violet-200 border-t-violet-600 rounded-full animate-spin mb-4"></div>
+                      <p className="text-slate-600 font-medium">Processing payment...</p>
+                    </div>
+                  ) : (
+                    <PayPalButtons 
+                      style={{ layout: "vertical", shape: "rect", color: "gold" }}
+                      createOrder={(data, actions) => {
+                        return actions.order.create({
+                          intent: "CAPTURE",
+                          purchase_units: [
+                            {
+                              description: "Pleasure Heaven VIP Membership",
+                              amount: {
+                                currency_code: "USD",
+                                value: "25.00"
+                              }
+                            }
+                          ]
+                        });
+                      }}
+                      onApprove={async (data, actions) => {
+                        if (actions.order) {
+                          setIsProcessing(true);
+                          try {
+                            const details = await actions.order.capture();
+                            setIsProcessing(false);
+                            setIsSuccess(true);
+                            setTimeout(() => {
+                              window.location.href = "https://t.me/+tfa6ux05WnAwYjQ8";
+                            }, 2500);
+                          } catch (error) {
+                            setIsProcessing(false);
+                            alert("An error occurred during payment capture. Please try again.");
+                          }
                         }
-                      }
-                    ]
-                  });
-                }}
-                onApprove={async (data, actions) => {
-                  if (actions.order) {
-                    const details = await actions.order.capture();
-                    alert("Transaction completed by " + details.payer?.name?.given_name + ". Welcome to Pleasure Heaven!");
-                    setIsPaymentModalOpen(false);
-                    // Here you would typically redirect to a success page or Telegram link
-                  }
-                }}
-                onError={(err) => {
-                  console.error("PayPal Checkout onError", err);
-                  alert("An error occurred during payment. Please try again.");
-                }}
-              />
+                      }}
+                      onError={(err) => {
+                        console.error("PayPal Checkout onError", err);
+                        alert("An error occurred during payment. Please try again.");
+                      }}
+                    />
+                  )}
+                  
+                  <div className="mt-6 flex items-center justify-center gap-2 text-xs text-slate-400">
+                    <Lock size={12} />
+                    <span>Secure encrypted payment</span>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>
