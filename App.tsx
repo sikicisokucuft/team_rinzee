@@ -447,6 +447,9 @@ const App: React.FC = () => {
               <li>
                 Don't deal with links and ads. If you want download and <span className="font-bold text-slate-900">watch later</span>.
               </li>
+              <li>
+                <span className="font-bold text-slate-900">One-time payment</span> for <span className="font-bold text-slate-900">Lifetime Access</span>. No recurring fees, ever.
+              </li>
             </ul>
           </div>
 
@@ -455,7 +458,7 @@ const App: React.FC = () => {
               onClick={() => setIsPaymentModalOpen(true)}
               className="w-full md:w-auto brand-bg text-white font-display text-xl px-12 py-4 rounded hover:brightness-110 hover:scale-105 transition-all shadow-[0_10px_40px_rgba(139,92,246,0.3)] flex items-center justify-center gap-2"
             >
-              JOIN PLEASURE HEAVEN <ArrowRight size={24} />
+              GET LIFETIME ACCESS FOR $19.99 <ArrowRight size={24} />
             </button>
             <a 
               href="https://t.me/pleheaven"
@@ -618,8 +621,8 @@ const App: React.FC = () => {
                 <>
                   <div className="mb-6">
                     <div className="flex justify-between items-center mb-2">
-                      <span className="text-slate-600 font-medium">VIP Membership</span>
-                      <span className="text-slate-900 font-bold text-xl">$25.00</span>
+                      <span className="text-slate-600 font-medium">Lifetime VIP Membership</span>
+                      <span className="text-slate-900 font-bold text-xl">$19.99</span>
                     </div>
                     <p className="text-xs text-slate-400 text-left">
                       * Lifetime Access: Enjoy permanent VIP membership with this one-time payment. No recurring fees.
@@ -639,10 +642,10 @@ const App: React.FC = () => {
                           intent: "CAPTURE",
                           purchase_units: [
                             {
-                              description: "Pleasure Heaven VIP Membership",
+                              description: "Pleasure Heaven Lifetime VIP Membership",
                               amount: {
                                 currency_code: "USD",
-                                value: "25.00"
+                                value: "19.99"
                               }
                             }
                           ]
