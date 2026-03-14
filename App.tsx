@@ -386,7 +386,7 @@ const App: React.FC = () => {
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
 
   return (
-    <PayPalScriptProvider options={{ "clientId": PAYPAL_CLIENT_ID, currency: "USD", intent: "capture" }}>
+    <PayPalScriptProvider options={{ "clientId": PAYPAL_CLIENT_ID, currency: "USD", intent: "capture", components: "buttons,applepay,googlepay" }}>
     <div className="relative min-h-screen bg-[#f4f1fd] text-slate-900 selection:bg-violet-200 selection:text-violet-900">
       <MatrixCanvas />
       
