@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { CheckCircle2, TrendingUp, DollarSign, Globe2, Lock, ArrowRight, ShieldCheck, Users, Crown, Star, Plus, Minus, Reply, X } from 'lucide-react';
+import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import MatrixCanvas from './components/MatrixCanvas';
 import Countdown from './components/Countdown';
 import { Testimonial } from './types';
 
+const PAYPAL_CLIENT_ID = "AVxQYNem8VSj-46hc80juvbrt0U9eVfL9RAwFhH8wxlPIcKreVuEjjJZ5FNIN6rhmOTBc6YURTvtGBYq";
 const JOIN_LINK = "https://www.paypal.com/ncp/payment/D2SR9M5QZL6RQ";
 
 // --- Legal Content Data ---
@@ -347,7 +349,7 @@ const faqs = [
 ];
 
 // Top Promo Bar Component
-const PromoBar: React.FC = () => {
+const PromoBar: React.FC<{ onJoinClick: () => void }> = ({ onJoinClick }) => {
   // 4 hours 47 minutes in seconds = (4 * 3600) + (47 * 60) = 14400 + 2820 = 17220
   const INITIAL_TIME = 17220; 
   const [timeLeft, setTimeLeft] = useState(INITIAL_TIME);
@@ -374,19 +376,21 @@ const PromoBar: React.FC = () => {
       <span className="animate-pulse mr-2">●</span>
       LIMITED TIME OFFER: <span className="mx-2 font-mono bg-white/20 px-2 py-0.5 rounded">{formatTime(timeLeft)}</span>
       <span className="hidden md:inline mr-2">-</span>
-      <a href={JOIN_LINK} target="_blank" rel="noopener noreferrer" className="underline hover:text-violet-100 ml-1 md:ml-0">JOIN NOW</a>
+      <button onClick={onJoinClick} className="underline hover:text-violet-100 ml-1 md:ml-0 uppercase tracking-wider">JOIN NOW</button>
     </div>
   );
 };
 
 const App: React.FC = () => {
   const [activeModal, setActiveModal] = useState<'terms' | 'privacy' | 'support' | null>(null);
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
 
   return (
+    <PayPalScriptProvider options={{ "clientId": PAYPAL_CLIENT_ID, currency: "USD", intent: "capture" }}>
     <div className="relative min-h-screen bg-[#f4f1fd] text-slate-900 selection:bg-violet-200 selection:text-violet-900">
       <MatrixCanvas />
       
-      <PromoBar />
+      <PromoBar onJoinClick={() => setIsPaymentModalOpen(true)} />
 
       {/* Absolute Header (disappears on scroll) - Pushed down by PromoBar height */}
       <nav className="absolute top-10 w-full z-40 bg-[#f4f1fd]/90 backdrop-blur-md border-b border-violet-100 shadow-sm">
@@ -396,7 +400,7 @@ const App: React.FC = () => {
           </div>
           <div className="flex items-center gap-4">
             <a 
-              href="https://t.me/pheaven0" 
+              href="https://t.me/pleheaven" 
               target="_blank" 
               rel="noopener noreferrer"
               className="text-violet-600 hover:text-violet-800 transition-colors transform hover:scale-110"
@@ -445,16 +449,14 @@ const App: React.FC = () => {
           </div>
 
           <div className="flex flex-col md:flex-row gap-4 items-center w-full justify-center">
-            <a 
-              href={JOIN_LINK}
-              target="_blank" 
-              rel="noopener noreferrer"
+            <button 
+              onClick={() => setIsPaymentModalOpen(true)}
               className="w-full md:w-auto brand-bg text-white font-display text-xl px-12 py-4 rounded hover:brightness-110 hover:scale-105 transition-all shadow-[0_10px_40px_rgba(139,92,246,0.3)] flex items-center justify-center gap-2"
             >
               JOIN PLEASURE HEAVEN <ArrowRight size={24} />
-            </a>
+            </button>
             <a 
-              href="https://t.me/pleasureheavenn"
+              href="https://t.me/pleheaven"
               target="_blank" 
               rel="noopener noreferrer"
               className="w-full md:w-auto bg-slate-100 text-slate-700 font-display text-xl px-12 py-4 rounded hover:bg-slate-200 hover:scale-105 transition-all shadow-sm flex items-center justify-center gap-2 border border-slate-200"
@@ -535,14 +537,12 @@ const App: React.FC = () => {
                 <li className="flex gap-2 items-start"><CheckCircle2 className="text-violet-500 w-5 h-5 flex-shrink-0 mt-0.5" /> <span>Be able to watch over 80+ models' videos</span></li>
                 <li className="flex gap-2 items-start"><CheckCircle2 className="text-violet-500 w-5 h-5 flex-shrink-0 mt-0.5" /> <span>Be able to request models' videos</span></li>
               </ul>
-              <a 
-                href={JOIN_LINK}
-                target="_blank" 
-                rel="noopener noreferrer"
+              <button 
+                onClick={() => setIsPaymentModalOpen(true)}
                 className="block w-full text-center bg-violet-600 text-white font-bold py-3 uppercase tracking-wider hover:bg-violet-700 transition-colors shadow-lg shadow-violet-500/30 rounded"
               >
                 Enter Pleasure Heaven
-              </a>
+              </button>
             </div>
           </div>
         </div>
@@ -584,7 +584,70 @@ const App: React.FC = () => {
         onClose={() => setActiveModal(null)} 
         type={activeModal} 
       />
+
+      {/* Payment Modal */}
+      {isPaymentModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden relative animate-in fade-in zoom-in duration-200">
+            <button 
+              onClick={() => setIsPaymentModalOpen(false)}
+              className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 transition-colors z-10"
+            >
+              <X size={24} />
+            </button>
+            
+            <div className="p-8 text-center border-b border-slate-100">
+              <Crown className="text-violet-500 mx-auto mb-4" size={40} />
+              <h2 className="font-display text-2xl text-slate-900 mb-2">JOIN PLEASURE HEAVEN</h2>
+              <p className="text-slate-500 text-sm">Secure your VIP access today.</p>
+            </div>
+            
+            <div className="p-8 bg-slate-50">
+              <div className="mb-6">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-slate-600 font-medium">VIP Membership</span>
+                  <span className="text-slate-900 font-bold text-xl">$25.00</span>
+                </div>
+                <p className="text-xs text-slate-400 text-left">
+                  * Note: This is a one-time payment setup. If you need a monthly subscription, you must create a Subscription Plan in PayPal and use that Plan ID instead.
+                </p>
+              </div>
+
+              <PayPalButtons 
+                style={{ layout: "vertical", shape: "rect", color: "gold" }}
+                createOrder={(data, actions) => {
+                  return actions.order.create({
+                    intent: "CAPTURE",
+                    purchase_units: [
+                      {
+                        description: "Pleasure Heaven VIP Membership",
+                        amount: {
+                          currency_code: "USD",
+                          value: "25.00"
+                        }
+                      }
+                    ]
+                  });
+                }}
+                onApprove={async (data, actions) => {
+                  if (actions.order) {
+                    const details = await actions.order.capture();
+                    alert("Transaction completed by " + details.payer?.name?.given_name + ". Welcome to Pleasure Heaven!");
+                    setIsPaymentModalOpen(false);
+                    // Here you would typically redirect to a success page or Telegram link
+                  }
+                }}
+                onError={(err) => {
+                  console.error("PayPal Checkout onError", err);
+                  alert("An error occurred during payment. Please try again.");
+                }}
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
+    </PayPalScriptProvider>
   );
 };
 
