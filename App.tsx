@@ -386,13 +386,14 @@ const App: React.FC = () => {
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [paymentError, setPaymentError] = useState<string | null>(null);
 
   return (
     <PayPalScriptProvider options={{ "clientId": PAYPAL_CLIENT_ID, currency: "USD", intent: "capture", components: "buttons,applepay,googlepay" }}>
     <div className="relative min-h-screen bg-[#f4f1fd] text-slate-900 selection:bg-violet-200 selection:text-violet-900">
       <MatrixCanvas />
       
-      <PromoBar onJoinClick={() => setIsPaymentModalOpen(true)} />
+      <PromoBar onJoinClick={() => window.open(JOIN_LINK, '_blank')} />
 
       {/* Absolute Header (disappears on scroll) - Pushed down by PromoBar height */}
       <nav className="absolute top-10 w-full z-40 bg-[#f4f1fd]/90 backdrop-blur-md border-b border-violet-100 shadow-sm">
@@ -455,10 +456,10 @@ const App: React.FC = () => {
 
           <div className="flex flex-col md:flex-row gap-4 items-center w-full justify-center">
             <button 
-              onClick={() => setIsPaymentModalOpen(true)}
+              onClick={() => window.open(JOIN_LINK, '_blank')}
               className="w-full md:w-auto brand-bg text-white font-display text-xl px-12 py-4 rounded hover:brightness-110 hover:scale-105 transition-all shadow-[0_10px_40px_rgba(139,92,246,0.3)] flex items-center justify-center gap-2"
             >
-              GET LIFETIME ACCESS FOR $19.99 <ArrowRight size={24} />
+              GET LIFETIME ACCESS FOR $24.99 <ArrowRight size={24} />
             </button>
             <a 
               href="https://t.me/pleheaven"
@@ -543,7 +544,7 @@ const App: React.FC = () => {
                 <li className="flex gap-2 items-start"><CheckCircle2 className="text-violet-500 w-5 h-5 flex-shrink-0 mt-0.5" /> <span>Be able to request models' videos</span></li>
               </ul>
               <button 
-                onClick={() => setIsPaymentModalOpen(true)}
+                onClick={() => window.open(JOIN_LINK, '_blank')}
                 className="block w-full text-center bg-violet-600 text-white font-bold py-3 uppercase tracking-wider hover:bg-violet-700 transition-colors shadow-lg shadow-violet-500/30 rounded"
               >
                 Enter Pleasure Heaven
@@ -622,12 +623,18 @@ const App: React.FC = () => {
                   <div className="mb-6">
                     <div className="flex justify-between items-center mb-2">
                       <span className="text-slate-600 font-medium">Lifetime VIP Membership</span>
-                      <span className="text-slate-900 font-bold text-xl">$19.99</span>
+                      <span className="text-slate-900 font-bold text-xl">$24.99</span>
                     </div>
                     <p className="text-xs text-slate-400 text-left">
                       * Lifetime Access: Enjoy permanent VIP membership with this one-time payment. No recurring fees.
                     </p>
                   </div>
+
+                  {paymentError && (
+                    <div className="mb-4 p-3 bg-red-50 border border-red-100 rounded text-red-600 text-sm">
+                      {paymentError}
+                    </div>
+                  )}
 
                   {isProcessing ? (
                     <div className="flex flex-col items-center justify-center py-8">
@@ -645,7 +652,7 @@ const App: React.FC = () => {
                               description: "Pleasure Heaven Lifetime VIP Membership",
                               amount: {
                                 currency_code: "USD",
-                                value: "19.99"
+                                value: "24.99"
                               }
                             }
                           ]
@@ -654,6 +661,7 @@ const App: React.FC = () => {
                       onApprove={async (data, actions) => {
                         if (actions.order) {
                           setIsProcessing(true);
+                          setPaymentError(null);
                           try {
                             const details = await actions.order.capture();
                             setIsProcessing(false);
@@ -663,13 +671,13 @@ const App: React.FC = () => {
                             }, 2500);
                           } catch (error) {
                             setIsProcessing(false);
-                            alert("An error occurred during payment capture. Please try again.");
+                            setPaymentError("An error occurred during payment capture. Please try again.");
                           }
                         }
                       }}
                       onError={(err) => {
                         console.error("PayPal Checkout onError", err);
-                        alert("An error occurred during payment. Please try again.");
+                        setPaymentError("An error occurred during payment. Please try again.");
                       }}
                     />
                   )}

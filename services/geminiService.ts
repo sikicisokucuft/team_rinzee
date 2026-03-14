@@ -2,7 +2,7 @@ import { GoogleGenAI } from "@google/genai";
 import { ChatMessage } from "../types";
 
 // Use import.meta.env for Vite or process.env for Node
-const API_KEY = import.meta.env?.VITE_GEMINI_API_KEY || process.env.GEMINI_API_KEY || '';
+const API_KEY = (import.meta as any).env?.VITE_GEMINI_API_KEY || process.env.GEMINI_API_KEY || '';
 
 class GeminiService {
   private ai: GoogleGenAI | null = null;
