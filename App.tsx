@@ -389,11 +389,16 @@ const App: React.FC = () => {
   const [paymentError, setPaymentError] = useState<string | null>(null);
 
   return (
-    <PayPalScriptProvider options={{ "clientId": PAYPAL_CLIENT_ID, currency: "USD", intent: "capture", components: "buttons,applepay,googlepay" }}>
+    <PayPalScriptProvider options={{ 
+      "client-id": PAYPAL_CLIENT_ID, 
+      currency: "USD", 
+      intent: "capture", 
+      components: "buttons,applepay,googlepay" 
+    }}>
     <div className="relative min-h-screen bg-[#f4f1fd] text-slate-900 selection:bg-violet-200 selection:text-violet-900">
       <MatrixCanvas />
       
-      <PromoBar onJoinClick={() => window.open(JOIN_LINK, '_blank')} />
+      <PromoBar onJoinClick={() => setIsPaymentModalOpen(true)} />
 
       {/* Absolute Header (disappears on scroll) - Pushed down by PromoBar height */}
       <nav className="absolute top-10 w-full z-40 bg-[#f4f1fd]/90 backdrop-blur-md border-b border-violet-100 shadow-sm">
@@ -456,10 +461,10 @@ const App: React.FC = () => {
 
           <div className="flex flex-col md:flex-row gap-4 items-center w-full justify-center">
             <button 
-              onClick={() => window.open(JOIN_LINK, '_blank')}
+              onClick={() => setIsPaymentModalOpen(true)}
               className="w-full md:w-auto brand-bg text-white font-display text-xl px-12 py-4 rounded hover:brightness-110 hover:scale-105 transition-all shadow-[0_10px_40px_rgba(139,92,246,0.3)] flex items-center justify-center gap-2"
             >
-              GET LIFETIME ACCESS FOR $24.99 <ArrowRight size={24} />
+              GET LIFETIME ACCESS FOR $19.99 <ArrowRight size={24} />
             </button>
             <a 
               href="https://t.me/pleheaven"
@@ -544,7 +549,7 @@ const App: React.FC = () => {
                 <li className="flex gap-2 items-start"><CheckCircle2 className="text-violet-500 w-5 h-5 flex-shrink-0 mt-0.5" /> <span>Be able to request models' videos</span></li>
               </ul>
               <button 
-                onClick={() => window.open(JOIN_LINK, '_blank')}
+                onClick={() => setIsPaymentModalOpen(true)}
                 className="block w-full text-center bg-violet-600 text-white font-bold py-3 uppercase tracking-wider hover:bg-violet-700 transition-colors shadow-lg shadow-violet-500/30 rounded"
               >
                 Enter Pleasure Heaven
@@ -623,7 +628,7 @@ const App: React.FC = () => {
                   <div className="mb-6">
                     <div className="flex justify-between items-center mb-2">
                       <span className="text-slate-600 font-medium">Lifetime VIP Membership</span>
-                      <span className="text-slate-900 font-bold text-xl">$24.99</span>
+                      <span className="text-slate-900 font-bold text-xl">$19.99</span>
                     </div>
                     <p className="text-xs text-slate-400 text-left">
                       * Lifetime Access: Enjoy permanent VIP membership with this one-time payment. No recurring fees.
@@ -652,7 +657,7 @@ const App: React.FC = () => {
                               description: "Pleasure Heaven Lifetime VIP Membership",
                               amount: {
                                 currency_code: "USD",
-                                value: "24.99"
+                                value: "19.99"
                               }
                             }
                           ]
@@ -664,6 +669,7 @@ const App: React.FC = () => {
                           setPaymentError(null);
                           try {
                             const details = await actions.order.capture();
+                            console.log("Transaction completed by " + details.payer.name.given_name, details);
                             setIsProcessing(false);
                             setIsSuccess(true);
                             setTimeout(() => {
