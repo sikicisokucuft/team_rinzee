@@ -398,7 +398,7 @@ const App: React.FC = () => {
     <div className="relative min-h-screen bg-[#f4f1fd] text-slate-900 selection:bg-violet-200 selection:text-violet-900">
       <MatrixCanvas />
       
-      <PromoBar onJoinClick={() => setIsPaymentModalOpen(true)} />
+      <PromoBar onJoinClick={() => window.open(JOIN_LINK, '_blank')} />
 
       {/* Absolute Header (disappears on scroll) - Pushed down by PromoBar height */}
       <nav className="absolute top-10 w-full z-40 bg-[#f4f1fd]/90 backdrop-blur-md border-b border-violet-100 shadow-sm">
@@ -461,7 +461,7 @@ const App: React.FC = () => {
 
           <div className="flex flex-col md:flex-row gap-4 items-center w-full justify-center">
             <button 
-              onClick={() => setIsPaymentModalOpen(true)}
+              onClick={() => window.open(JOIN_LINK, '_blank')}
               className="w-full md:w-auto brand-bg text-white font-display text-xl px-12 py-4 rounded hover:brightness-110 hover:scale-105 transition-all shadow-[0_10px_40px_rgba(139,92,246,0.3)] flex items-center justify-center gap-2"
             >
               GET LIFETIME ACCESS FOR $19.99 <ArrowRight size={24} />
@@ -549,7 +549,7 @@ const App: React.FC = () => {
                 <li className="flex gap-2 items-start"><CheckCircle2 className="text-violet-500 w-5 h-5 flex-shrink-0 mt-0.5" /> <span>Be able to request models' videos</span></li>
               </ul>
               <button 
-                onClick={() => setIsPaymentModalOpen(true)}
+                onClick={() => window.open(JOIN_LINK, '_blank')}
                 className="block w-full text-center bg-violet-600 text-white font-bold py-3 uppercase tracking-wider hover:bg-violet-700 transition-colors shadow-lg shadow-violet-500/30 rounded"
               >
                 Enter Pleasure Heaven
