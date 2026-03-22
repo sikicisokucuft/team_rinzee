@@ -467,10 +467,10 @@ const App: React.FC = () => {
               GET LIFETIME ACCESS FOR $19.99 <ArrowRight size={24} />
             </button>
             <a 
-              href="https://t.me/pleheaven"
+              href="https://t.me/pleasureheavenn"
               target="_blank" 
               rel="noopener noreferrer"
-              className="w-full md:w-auto bg-slate-100 text-slate-700 font-display text-xl px-12 py-4 rounded hover:bg-slate-200 hover:scale-105 transition-all shadow-sm flex items-center justify-center gap-2 border border-slate-200"
+              className="w-full md:w-auto bg-slate-200 text-slate-700 font-display text-xl px-12 py-4 rounded hover:bg-slate-300 hover:scale-105 transition-all shadow-sm flex items-center justify-center gap-2 border border-slate-300"
             >
               WATCH THE TRAILER
             </a>
