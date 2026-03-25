@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 const Countdown: React.FC = () => {
-  const [timeLeft, setTimeLeft] = useState({ h: 0, m: 14, s: 59 });
+  const [timeLeft, setTimeLeft] = useState({ h: 2, m: 12, s: 0 });
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -9,7 +9,7 @@ const Countdown: React.FC = () => {
         if (prev.s > 0) return { ...prev, s: prev.s - 1 };
         if (prev.m > 0) return { ...prev, m: prev.m - 1, s: 59 };
         if (prev.h > 0) return { ...prev, h: prev.h - 1, m: 59, s: 59 };
-        return { h: 1, m: 59, s: 59 }; // Reset to create perpetual urgency
+        return { h: 2, m: 12, s: 0 }; // Reset to create perpetual urgency
       });
     }, 1000);
 

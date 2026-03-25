@@ -398,10 +398,8 @@ const App: React.FC = () => {
     <div className="relative min-h-screen bg-[#f4f1fd] text-slate-900 selection:bg-violet-200 selection:text-violet-900">
       <MatrixCanvas />
       
-      <PromoBar onJoinClick={() => window.open(JOIN_LINK, '_blank')} />
-
-      {/* Absolute Header (disappears on scroll) - Pushed down by PromoBar height */}
-      <nav className="absolute top-10 w-full z-40 bg-[#f4f1fd]/90 backdrop-blur-md border-b border-violet-100 shadow-sm">
+      {/* Absolute Header (disappears on scroll) */}
+      <nav className="absolute top-0 w-full z-40 bg-[#f4f1fd]/90 backdrop-blur-md border-b border-violet-100 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
           <div className="flex items-center gap-2">
              <span className="text-2xl md:text-3xl text-violet-600 font-display tracking-wide">PLEASURE HEAVEN</span>
@@ -464,7 +462,7 @@ const App: React.FC = () => {
               onClick={() => window.open(JOIN_LINK, '_blank')}
               className="w-full md:w-auto brand-bg text-white font-display text-xl px-12 py-4 rounded hover:brightness-110 hover:scale-105 transition-all shadow-[0_10px_40px_rgba(139,92,246,0.3)] flex items-center justify-center gap-2"
             >
-              GET LIFETIME ACCESS FOR $19.99 <ArrowRight size={24} />
+              CLICK HERE TO JOIN <ArrowRight size={24} />
             </button>
             <a 
               href="https://t.me/pleasureheavenn"
@@ -474,6 +472,11 @@ const App: React.FC = () => {
             >
               WATCH THE TRAILER
             </a>
+          </div>
+
+          <div className="mt-8 flex flex-col items-center gap-3 animate-bounce-subtle">
+            <span className="text-violet-600 font-display text-sm tracking-[0.2em] uppercase">LIMITED TIME OFFER</span>
+            <Countdown />
           </div>
           
           {/* Social Proof Bar */}
@@ -554,6 +557,10 @@ const App: React.FC = () => {
               >
                 Enter Pleasure Heaven
               </button>
+              <div className="mt-6 flex flex-col items-center gap-2">
+                <span className="text-violet-500 font-display text-xs tracking-[0.2em] uppercase">LIMITED TIME OFFER</span>
+                <Countdown />
+              </div>
             </div>
           </div>
         </div>
