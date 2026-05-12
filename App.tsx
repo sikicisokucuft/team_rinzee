@@ -260,68 +260,63 @@ type SocialProofItem =
 const socialProofItems: SocialProofItem[] = [
   {
     type: 'image',
-    src: 'https://iili.io/qf1uMqQ.jpg',
+    src: 'https://i.ibb.co/Mk96q1G5/photo-2026-05-13-02-44-07.jpg',
     alt: 'Member Proof 1'
   },
   {
     type: 'image',
-    src: 'https://iili.io/qf1u1Xj.jpg',
+    src: 'https://i.ibb.co/d0Tnzsp6/photo-2026-05-13-02-43-51.jpg',
     alt: 'Member Proof 2'
   },
   {
     type: 'image',
-    src: 'https://iili.io/qf1uV1V.jpg',
+    src: 'https://i.ibb.co/xSx6pQqR/photo-2026-05-13-02-43-54.jpg',
     alt: 'Member Proof 3'
   },
   {
     type: 'image',
-    src: 'https://iili.io/qf1uELx.jpg',
+    src: 'https://i.ibb.co/7xSzXcZk/photo-2026-05-13-02-43-59.jpg',
     alt: 'Member Proof 4'
   },
   {
     type: 'image',
-    src: 'https://iili.io/qf1uwkF.jpg',
+    src: 'https://i.ibb.co/Kc6zXhnm/photo-2026-05-13-02-44-08.jpg',
     alt: 'Member Proof 5'
   },
   {
     type: 'image',
-    src: 'https://iili.io/qf1uNmg.jpg',
+    src: 'https://i.ibb.co/4g51XCkB/photo-2026-05-13-02-44-03.jpg',
     alt: 'Member Proof 6'
   },
   {
     type: 'image',
-    src: 'https://iili.io/qf1ueIa.jpg',
+    src: 'https://i.ibb.co/hx90kgxv/photo-2026-05-13-02-44-00.jpg',
     alt: 'Member Proof 7'
   },
   {
     type: 'image',
-    src: 'https://iili.io/qf1ukhJ.jpg',
+    src: 'https://i.ibb.co/FkwjC03G/photo-2026-05-13-02-44-04.jpg',
     alt: 'Member Proof 8'
   },
   {
     type: 'image',
-    src: 'https://iili.io/qf1uvLv.jpg',
+    src: 'https://i.ibb.co/FkBFnGFh/photo-2026-05-13-02-44-02.jpg',
     alt: 'Member Proof 9'
   },
   {
     type: 'image',
-    src: 'https://iili.io/qf1uSBR.jpg',
+    src: 'https://i.ibb.co/rGynTn0h/photo-2026-05-13-02-43-56.jpg',
     alt: 'Member Proof 10'
   },
   {
     type: 'image',
-    src: 'https://iili.io/qf1uU1p.jpg',
+    src: 'https://i.ibb.co/fY34NWG5/photo-2026-05-13-02-43-57.jpg',
     alt: 'Member Proof 11'
   },
   {
     type: 'image',
-    src: 'https://iili.io/qf1ugrN.jpg',
+    src: 'https://i.ibb.co/3YRRm7BR/photo-2026-05-13-02-44-06.jpg',
     alt: 'Member Proof 12'
-  },
-  {
-    type: 'image',
-    src: 'https://iili.io/qf15xzg.jpg',
-    alt: 'Member Proof 13'
   }
 ];
 
