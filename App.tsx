@@ -6,7 +6,7 @@ import Countdown from './components/Countdown';
 import { Testimonial } from './types';
 
 const PAYPAL_CLIENT_ID = "AVxQYNem8VSj-46hc80juvbrt0U9eVfL9RAwFhH8wxlPIcKreVuEjjJZ5FNIN6rhmOTBc6YURTvtGBYq";
-const JOIN_LINK = "https://www.paypal.com/ncp/payment/D2SR9M5QZL6RQ";
+const JOIN_LINK = "https://www.paypal.com/ncp/payment/5NQCWUFDEB63A";
 
 // --- Legal Content Data ---
 const LEGAL_CONTENT = {
