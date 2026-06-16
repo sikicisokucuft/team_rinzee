@@ -513,6 +513,29 @@ const App: React.FC = () => {
 
 
 
+      {/* Who We Are Section */}
+      <section className="relative z-10 py-16 md:py-24 bg-white border-t border-violet-50">
+        <div className="max-w-4xl mx-auto px-4">
+          <h2 className="font-display text-center text-3xl md:text-4xl mb-8 md:mb-12 text-slate-900">WHO WE <span className="brand-text">ARE</span></h2>
+          <div className="bg-[#fcfaff] border border-violet-100 p-8 md:p-12 rounded-3xl shadow-[0_15px_45px_rgba(139,92,246,0.06)] flex flex-col md:flex-row gap-8 items-center">
+            <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center flex-shrink-0 border border-violet-100 shadow-sm">
+              <Crown className="text-violet-600 animate-pulse" size={40} />
+            </div>
+            <div className="space-y-4 text-center md:text-left">
+              <p className="text-slate-700 leading-relaxed text-lg font-medium">
+                As Pleasure Heaven, we have been archiving premium content since 2023. Our team is dedicated to collecting the highest quality and most exclusive media from across hundreds of models, ensuring a continuous and daily updated leak library. Even with our previously closed Twitter accounts, our network has reached millions of views and got hundreds of thousands of followers in total.
+              </p>
+              <p className="text-slate-700 leading-relaxed text-lg font-medium">
+                Our main goal is to provide a safe, private space with clean organization, making it easy to search and find exactly what you want. And providing leaks for a really low price.
+              </p>
+              <p className="text-violet-600 leading-relaxed font-bold text-lg uppercase tracking-wider">
+                Today, we have thousands of active VIP members in our premium channels enjoying daily updates.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* The Choice Section */}
       <section className="relative z-10 py-16 md:py-24 bg-white border-t border-violet-50">
         <div className="max-w-4xl mx-auto px-4 text-center">
