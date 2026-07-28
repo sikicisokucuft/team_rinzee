@@ -70,20 +70,13 @@ const MatrixCanvas: React.FC = () => {
         if (!ctx) return;
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        // Use absolute value for opacity to handle potential small float errors
         ctx.fillStyle = `rgba(${this.color}, ${Math.abs(this.opacity)})`;
-        
-        // Add a tiny glow
-        ctx.shadowBlur = 4;
-        ctx.shadowColor = `rgba(${this.color}, 0.4)`;
-        
         ctx.fill();
-        ctx.shadowBlur = 0;
       }
     }
 
     const particles: Particle[] = [];
-    const particleCount = 60; // Enough to look sweet, not enough to clutter
+    const particleCount = 20; // Lightweight particle count for high performance
 
     const init = () => {
       particles.length = 0;
@@ -126,10 +119,14 @@ const MatrixCanvas: React.FC = () => {
   }, []);
 
   return (
-    <canvas 
-      ref={canvasRef} 
-      className="fixed top-0 left-0 w-full h-full pointer-events-none z-0"
-    />
+    <div className="fixed top-0 left-0 w-full h-full pointer-events-none z-0 overflow-hidden">
+      {/* Hero background placeholder ambient glow for instant interactive feel */}
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] md:w-[1000px] md:h-[1000px] bg-gradient-to-tr from-violet-200/30 via-purple-100/40 to-fuchsia-100/20 rounded-full blur-3xl opacity-80" />
+      <canvas 
+        ref={canvasRef} 
+        className="w-full h-full transition-opacity duration-700"
+      />
+    </div>
   );
 };
 

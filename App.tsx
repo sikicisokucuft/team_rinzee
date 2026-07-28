@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { CheckCircle2, TrendingUp, DollarSign, Globe2, Lock, ArrowRight, ShieldCheck, Users, Crown, Star, Plus, Minus, Reply, X } from 'lucide-react';
+import { CheckCircle2, TrendingUp, DollarSign, Globe2, Lock, ArrowRight, ShieldCheck, Users, Crown, Star, Plus, Minus, Reply, X, Copy, Check } from 'lucide-react';
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import MatrixCanvas from './components/MatrixCanvas';
 import Countdown from './components/Countdown';
@@ -199,7 +199,40 @@ const StatCard: React.FC = () => (
   </div>
 );
 
-// 3. Masonry Grid Component for Balanced Layout
+// 3. Social Proof Image with Shimmer/Skeleton Loader
+const SocialProofImage: React.FC<{ src: string; alt: string }> = ({ src, alt }) => {
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [imgSrc, setImgSrc] = useState(src);
+
+  return (
+    <div className="relative w-full rounded-xl overflow-hidden shadow-md border border-violet-100/50 bg-violet-50/40 group">
+      {/* Skeleton / Shimmer Overlay */}
+      {!isLoaded && (
+        <div className="absolute inset-0 z-10 bg-slate-200/70 overflow-hidden rounded-xl min-h-[200px] flex items-center justify-center">
+          <div className="absolute inset-0 -translate-x-full animate-shimmer bg-gradient-to-r from-transparent via-white/80 to-transparent" />
+          <div className="relative z-20 w-6 h-6 border-2 border-violet-400/40 border-t-violet-600 rounded-full animate-spin" />
+        </div>
+      )}
+
+      <img
+        src={imgSrc}
+        alt={alt}
+        onLoad={() => setIsLoaded(true)}
+        onError={() => {
+          if (imgSrc.endsWith('.jpg')) {
+            setImgSrc(imgSrc.replace('.jpg', '.png'));
+          }
+        }}
+        className={`w-full h-auto rounded-xl transition-all duration-500 ease-out transform group-hover:scale-105 ${
+          isLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-95 min-h-[200px]'
+        }`}
+        loading="eager"
+      />
+    </div>
+  );
+};
+
+// 4. Masonry Grid Component for Balanced Layout
 const MasonryGrid: React.FC<{ items: SocialProofItem[] }> = ({ items }) => {
   const [columns, setColumns] = useState(2);
 
@@ -228,18 +261,7 @@ const MasonryGrid: React.FC<{ items: SocialProofItem[] }> = ({ items }) => {
           {colItems.map((item, idx) => (
             <div key={idx} className="w-full break-inside-avoid">
                {item.type === 'image' && (
-                  <img 
-                      src={item.src} 
-                      alt={item.alt} 
-                      className="w-full h-auto rounded-xl shadow-md border border-violet-100/50 hover:scale-105 hover:shadow-xl transition-all duration-300 bg-white transform"
-                      loading="eager"
-                      onError={(e) => {
-                        const target = e.currentTarget;
-                        if (target.src.endsWith('.jpg')) {
-                          target.src = target.src.replace('.jpg', '.png');
-                        }
-                      }}
-                    />
+                  <SocialProofImage src={item.src} alt={item.alt} />
                )}
                {item.type === 'chat' && <ChatCard name={item.name!} avatarColor={item.avatarColor!} messages={item.messages!} />}
                {item.type === 'stat' && <StatCard />}
@@ -326,8 +348,8 @@ const faqs = [
     answer: "No. We don't see your card informations. Our site is powered by PayPal. So you can just safely pay."
   },
   {
-    question: "How can I manage my subscription?",
-    answer: "After you pay you will get a customer portal. Where you can cancel your subscription or change your payment details.\n\nIf you can't manage your subscription with customer portal, you can reach to us and we can cancel your subscription manually."
+    question: "Is this a one-time payment?",
+    answer: "Yes, this is a one-time payment for Lifetime Access! Once you pay, you get permanent access to watch and download all videos forever. You will never be charged again and there are no recurring subscription fees."
   },
   {
     question: "Where will I watch the videos?",
@@ -367,7 +389,7 @@ const PromoBar: React.FC<{ onJoinClick: () => void }> = ({ onJoinClick }) => {
   };
 
   return (
-    <div className="absolute top-0 left-0 w-full h-10 bg-gradient-to-r from-violet-600 to-fuchsia-600 z-50 flex items-center justify-center text-white text-xs md:text-sm font-bold tracking-wider shadow-md">
+    <div className="absolute top-0 left-0 w-full h-10 bg-gradient-to-r from-violet-500 to-purple-500 z-50 flex items-center justify-center text-white text-xs md:text-sm font-bold tracking-wider shadow-sm">
       <span className="animate-pulse mr-2">●</span>
       LIMITED TIME OFFER: <span className="mx-2 font-mono bg-white/20 px-2 py-0.5 rounded">{formatTime(timeLeft)}</span>
       <span className="hidden md:inline mr-2">-</span>
@@ -382,6 +404,26 @@ const App: React.FC = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [paymentError, setPaymentError] = useState<string | null>(null);
+  const [emailCopied, setEmailCopied] = useState(false);
+  const [showStickyCTA, setShowStickyCTA] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 400) {
+        setShowStickyCTA(true);
+      } else {
+        setShowStickyCTA(false);
+      }
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const handleCopyEmail = (email: string) => {
+    navigator.clipboard.writeText(email);
+    setEmailCopied(true);
+    setTimeout(() => setEmailCopied(false), 2000);
+  };
 
   return (
     <PayPalScriptProvider options={{ 
@@ -390,21 +432,21 @@ const App: React.FC = () => {
       intent: "capture", 
       components: "buttons,applepay,googlepay" 
     }}>
-    <div className="relative min-h-screen bg-[#f4f1fd] text-slate-900 selection:bg-violet-200 selection:text-violet-900">
+    <div className="relative min-h-screen bg-[#f8f6fe] text-slate-900 selection:bg-violet-100 selection:text-violet-800">
       <MatrixCanvas />
       
       {/* Absolute Header (disappears on scroll) */}
-      <nav className="absolute top-0 w-full z-40 bg-[#f4f1fd]/90 backdrop-blur-md border-b border-violet-100 shadow-sm">
+      <nav className="absolute top-0 w-full z-40 bg-[#f8f6fe]/90 backdrop-blur-md border-b border-violet-100/60 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
           <div className="flex items-center gap-2">
-             <span className="text-2xl md:text-3xl text-violet-600 font-display tracking-wide">PLEASURE HEAVEN</span>
+             <span className="text-2xl md:text-3xl text-violet-500 font-display tracking-wide">PLEASURE HEAVEN</span>
           </div>
           <div className="flex items-center gap-4">
             <a 
               href="https://t.me/pleheaven" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="text-violet-600 hover:text-violet-800 transition-colors transform hover:scale-110"
+              className="text-violet-500 hover:text-violet-700 transition-colors"
               aria-label="Telegram"
             >
               <TelegramIcon className="w-8 h-8" />
@@ -413,7 +455,7 @@ const App: React.FC = () => {
               href="https://x.com/MistikTapinak" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="text-violet-600 hover:text-violet-800 transition-colors transform hover:scale-110"
+              className="text-violet-500 hover:text-violet-700 transition-colors"
               aria-label="X (Twitter)"
             >
               <XIcon className="w-6 h-6" />
@@ -423,13 +465,15 @@ const App: React.FC = () => {
       </nav>
 
       {/* Hero Section */}
-      <header className="relative z-10 pt-32 md:pt-40 pb-8 md:pb-12 px-4 text-center overflow-hidden">
+      <header className="relative z-10 pt-20 md:pt-24 pb-6 md:pb-10 px-4 text-center overflow-hidden">
+        {/* Instant Hero Background Ambient Placeholder */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] md:w-[800px] md:h-[450px] bg-gradient-to-r from-violet-200/40 via-purple-100/30 to-fuchsia-100/30 blur-3xl rounded-full pointer-events-none -z-10" />
+
         <div className="max-w-5xl mx-auto flex flex-col items-center">
 
           
           <h1 className="font-display text-3xl md:text-6xl leading-tight mb-4 text-slate-900">
-            JOIN OUR <span className="brand-text">VIP MEMBERSHIP</span> <br />
-            TODAY!
+            JOIN OUR <span className="brand-text">VIP MEMBERSHIP!</span>
           </h1>
           
           <div className="text-slate-600 text-base md:text-xl max-w-3xl mb-6 leading-relaxed text-left inline-block">
@@ -452,25 +496,35 @@ const App: React.FC = () => {
             </ul>
           </div>
 
-          <div className="flex flex-col md:flex-row gap-4 items-center w-full justify-center">
-            <button 
-              onClick={() => window.open(JOIN_LINK, '_blank')}
-              className="w-full md:w-auto brand-bg text-white font-display text-xl px-12 py-4 rounded hover:brightness-110 hover:scale-105 transition-all shadow-[0_10px_40px_rgba(139,92,246,0.3)] flex items-center justify-center gap-2"
-            >
-              CLICK HERE TO JOIN <ArrowRight size={24} />
-            </button>
-            <a 
-              href="https://t.me/pleasureheavenn"
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="w-full md:w-auto bg-slate-200 text-slate-700 font-display text-xl px-12 py-4 rounded hover:bg-slate-300 hover:scale-105 transition-all shadow-sm flex items-center justify-center gap-2 border border-slate-300"
-            >
-              WATCH THE TRAILER
-            </a>
+          {/* CTA Buttons */}
+          <div className="w-full max-w-2xl flex flex-col items-center">
+            <div className="flex flex-col md:flex-row gap-4 items-center w-full justify-center">
+              <button 
+                onClick={() => window.open(JOIN_LINK, '_blank')}
+                className="w-full md:w-auto brand-bg text-white font-display text-xl px-12 py-4 rounded-xl hover:brightness-110 transition-all shadow-[0_10px_30px_rgba(139,92,246,0.3)] hover:shadow-[0_15px_35px_rgba(139,92,246,0.4)] flex items-center justify-center gap-3 group active:scale-98"
+              >
+                <span>GET LIFETIME ACCESS NOW</span>
+                <ArrowRight size={22} className="group-hover:translate-x-1 transition-transform" />
+              </button>
+              <a 
+                href="https://t.me/pleasureheavenn"
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="w-full md:w-auto bg-slate-200/90 text-slate-700 font-display text-xl px-10 py-4 rounded-xl hover:bg-slate-300 transition-all shadow-sm flex items-center justify-center gap-2 border border-slate-300"
+              >
+                WATCH THE TRAILER
+              </a>
+            </div>
+
+            {/* Privacy Guard Notice */}
+            <div className="mt-4 flex items-center justify-center gap-2 px-4 py-2 bg-violet-50/80 border border-violet-200/90 rounded-xl text-xs md:text-sm text-slate-800 font-medium shadow-xs">
+              <ShieldCheck size={18} className="text-violet-600 shrink-0" />
+              <span><strong className="text-violet-950 font-bold">🔒 %100 Discreet Billing:</strong> Appears as neutral <strong className="underline text-violet-950 font-bold">FLOW1 LTD</strong> on your bank or PayPal statement.</span>
+            </div>
           </div>
 
-          <div className="mt-8 flex flex-col items-center gap-3 animate-bounce-subtle">
-            <span className="text-violet-600 font-display text-sm tracking-[0.2em] uppercase">LIMITED TIME OFFER</span>
+          <div className="mt-8 flex flex-col items-center gap-3">
+            <span className="text-violet-500 font-display text-sm tracking-[0.2em] uppercase">LIMITED TIME OFFER</span>
             <Countdown />
           </div>
           
@@ -514,12 +568,12 @@ const App: React.FC = () => {
 
 
       {/* Who We Are Section */}
-      <section className="relative z-10 py-16 md:py-24 bg-white border-t border-violet-50">
+      <section className="relative z-10 py-16 md:py-24 bg-white border-t border-violet-100">
         <div className="max-w-4xl mx-auto px-4">
           <h2 className="font-display text-center text-3xl md:text-4xl mb-8 md:mb-12 text-slate-900">WHO WE <span className="brand-text">ARE</span></h2>
-          <div className="bg-[#fcfaff] border border-violet-100 p-8 md:p-12 rounded-3xl shadow-[0_15px_45px_rgba(139,92,246,0.06)] flex flex-col md:flex-row gap-8 items-center">
-            <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center flex-shrink-0 border border-violet-100 shadow-sm">
-              <Crown className="text-violet-600 animate-pulse" size={40} />
+          <div className="bg-gradient-to-br from-white via-violet-50/40 to-purple-50/20 border border-violet-200/90 p-8 md:p-12 rounded-3xl shadow-md flex flex-col md:flex-row gap-8 items-center">
+            <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center flex-shrink-0 border border-violet-200 shadow-sm">
+              <Crown className="text-violet-600" size={40} />
             </div>
             <div className="space-y-4 text-center md:text-left">
               <p className="text-slate-700 leading-relaxed text-lg font-medium">
@@ -528,7 +582,7 @@ const App: React.FC = () => {
               <p className="text-slate-700 leading-relaxed text-lg font-medium">
                 Our main goal is to provide a safe, private space with clean organization, making it easy to search and find exactly what you want. And providing leaks for a really low price.
               </p>
-              <p className="text-violet-600 leading-relaxed font-bold text-lg uppercase tracking-wider">
+              <p className="text-violet-700 leading-relaxed font-bold text-lg uppercase tracking-wider">
                 Today, we have thousands of active VIP members in our premium channels enjoying daily updates.
               </p>
             </div>
@@ -537,47 +591,55 @@ const App: React.FC = () => {
       </section>
 
       {/* The Choice Section */}
-      <section className="relative z-10 py-16 md:py-24 bg-white border-t border-violet-50">
+      <section className="relative z-10 py-16 md:py-24 bg-white border-t border-violet-100">
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="font-display text-3xl md:text-5xl mb-8 md:mb-12 text-slate-900">CHOOSE <span className="text-violet-600">SIDE</span></h2>
-          <div className="grid md:grid-cols-2 gap-8">
+          <h2 className="font-display text-3xl md:text-5xl mb-8 md:mb-12 text-slate-900">CHOOSE <span className="brand-text">SIDE</span></h2>
+          <div className="grid md:grid-cols-2 gap-8 items-stretch">
             {/* Blue Pill (OnlyFans) - Gray/Slate styled */}
-            <div className="p-8 rounded-2xl bg-slate-50 border border-slate-200 hover:border-slate-300 transition-colors group shadow-sm">
-              <div className="w-16 h-16 bg-white border border-blue-100 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform shadow-sm">
-                <span className="font-display text-3xl tracking-tighter text-[#00AFF0]">OF</span>
+            <div className="p-8 rounded-2xl bg-slate-50 border border-slate-200/90 hover:border-slate-300 transition-colors group shadow-sm flex flex-col justify-between">
+              <div>
+                <div className="w-16 h-16 bg-white border border-blue-100 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
+                  <span className="font-display text-3xl tracking-tighter text-[#00AFF0]">OF</span>
+                </div>
+                <h3 className="font-display text-2xl mb-4 text-slate-600">ONLYFANS</h3>
+                <ul className="text-left text-slate-500 space-y-3 mb-8">
+                  <li className="flex gap-2 items-start"><XCircle className="text-red-400 w-5 h-5 flex-shrink-0 mt-0.5" /> <span>Unexpected fees</span></li>
+                  <li className="flex gap-2 items-start"><XCircle className="text-red-400 w-5 h-5 flex-shrink-0 mt-0.5" /> <span>Poor website design</span></li>
+                  <li className="flex gap-2 items-start"><XCircle className="text-red-400 w-5 h-5 flex-shrink-0 mt-0.5" /> <span>No content downloads</span></li>
+                  <li className="flex gap-2 items-start"><XCircle className="text-red-400 w-5 h-5 flex-shrink-0 mt-0.5" /> <span>$400+ for decent content</span></li>
+                </ul>
               </div>
-              <h3 className="font-display text-2xl mb-4 text-slate-600">ONLYFANS</h3>
-              <ul className="text-left text-slate-500 space-y-3 mb-8">
-                <li className="flex gap-2 items-start"><XCircle className="text-red-400 w-5 h-5 flex-shrink-0 mt-0.5" /> <span>Unexpected fees</span></li>
-                <li className="flex gap-2 items-start"><XCircle className="text-red-400 w-5 h-5 flex-shrink-0 mt-0.5" /> <span>Poor website design</span></li>
-                <li className="flex gap-2 items-start"><XCircle className="text-red-400 w-5 h-5 flex-shrink-0 mt-0.5" /> <span>No content downloads</span></li>
-                <li className="flex gap-2 items-start"><XCircle className="text-red-400 w-5 h-5 flex-shrink-0 mt-0.5" /> <span>$400+ for decent content</span></li>
-              </ul>
             </div>
 
              {/* Red Pill (Pleasure Heaven) - Violet styled */}
-             <div className="relative p-8 rounded-2xl bg-violet-50 border border-violet-200 shadow-lg shadow-violet-100 hover:border-violet-400 transition-colors group overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-b from-white/50 to-transparent pointer-events-none"></div>
-              <div className="w-16 h-16 bg-white border border-violet-100 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform shadow-sm">
-                <Crown className="text-violet-500" size={32} />
+             <div className="relative p-8 rounded-2xl bg-gradient-to-br from-white via-violet-50/70 to-purple-50/40 border-2 border-violet-400 shadow-xl shadow-violet-200/50 hover:border-violet-500 transition-colors group overflow-hidden flex flex-col justify-between">
+              <div className="absolute top-4 right-4 bg-violet-600 text-white text-[11px] font-black uppercase px-3 py-1 rounded-full tracking-wider shadow-sm">
+                VIP CHOICE
               </div>
-              <h3 className="font-display text-2xl mb-4 text-violet-600">PLEASURE HEAVEN</h3>
-              <ul className="text-left text-slate-600 space-y-3 mb-8">
-                <li className="flex gap-2 items-start"><CheckCircle2 className="text-violet-500 w-5 h-5 flex-shrink-0 mt-0.5" /> <span>No unexpected fees (No PPVs)</span></li>
-                <li className="flex gap-2 items-start"><CheckCircle2 className="text-violet-500 w-5 h-5 flex-shrink-0 mt-0.5" /> <span>Download videos</span></li>
-                <li className="flex gap-2 items-start"><CheckCircle2 className="text-violet-500 w-5 h-5 flex-shrink-0 mt-0.5" /> <span>Watch the models' videos you don't find online</span></li>
-                <li className="flex gap-2 items-start"><CheckCircle2 className="text-violet-500 w-5 h-5 flex-shrink-0 mt-0.5" /> <span>Be able to watch over 80+ models' videos</span></li>
-                <li className="flex gap-2 items-start"><CheckCircle2 className="text-violet-500 w-5 h-5 flex-shrink-0 mt-0.5" /> <span>Be able to request models' videos</span></li>
-              </ul>
-              <button 
-                onClick={() => window.open(JOIN_LINK, '_blank')}
-                className="block w-full text-center bg-violet-600 text-white font-bold py-3 uppercase tracking-wider hover:bg-violet-700 transition-colors shadow-lg shadow-violet-500/30 rounded"
-              >
-                Enter Pleasure Heaven
-              </button>
-              <div className="mt-6 flex flex-col items-center gap-2">
-                <span className="text-violet-500 font-display text-xs tracking-[0.2em] uppercase">LIMITED TIME OFFER</span>
-                <Countdown />
+              <div>
+                <div className="w-16 h-16 bg-white border border-violet-200 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
+                  <Crown className="text-violet-600" size={32} />
+                </div>
+                <h3 className="font-display text-2xl mb-4 text-violet-700">PLEASURE HEAVEN</h3>
+                <ul className="text-left text-slate-700 space-y-3 mb-8 font-medium">
+                  <li className="flex gap-2 items-start"><CheckCircle2 className="text-violet-600 w-5 h-5 flex-shrink-0 mt-0.5" /> <span>No unexpected fees (No PPVs)</span></li>
+                  <li className="flex gap-2 items-start"><CheckCircle2 className="text-violet-600 w-5 h-5 flex-shrink-0 mt-0.5" /> <span>Download videos</span></li>
+                  <li className="flex gap-2 items-start"><CheckCircle2 className="text-violet-600 w-5 h-5 flex-shrink-0 mt-0.5" /> <span>Watch the models' videos you don't find online</span></li>
+                  <li className="flex gap-2 items-start"><CheckCircle2 className="text-violet-600 w-5 h-5 flex-shrink-0 mt-0.5" /> <span>Be able to watch over 80+ models' videos</span></li>
+                  <li className="flex gap-2 items-start"><CheckCircle2 className="text-violet-600 w-5 h-5 flex-shrink-0 mt-0.5" /> <span>Be able to request models' videos</span></li>
+                </ul>
+              </div>
+              <div>
+                <button 
+                  onClick={() => window.open(JOIN_LINK, '_blank')}
+                  className="block w-full text-center brand-bg text-white font-bold py-3.5 uppercase tracking-wider hover:brightness-110 transition-all shadow-md rounded-xl"
+                >
+                  Enter Pleasure Heaven
+                </button>
+                <div className="mt-6 flex flex-col items-center gap-2">
+                  <span className="text-violet-600 font-display text-xs tracking-[0.2em] uppercase">LIMITED TIME OFFER</span>
+                  <Countdown />
+                </div>
               </div>
             </div>
           </div>
@@ -585,17 +647,33 @@ const App: React.FC = () => {
       </section>
 
       {/* Contact Section */}
-      <section className="relative z-10 py-16 md:py-24 bg-[#f4f1fd] overflow-hidden">
+      <section className="relative z-10 py-16 md:py-24 bg-[#f8f6fe] overflow-hidden">
         {/* Background glow */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-white blur-[120px] rounded-full pointer-events-none opacity-60"></div>
         
         <div className="relative max-w-lg mx-auto px-4 text-center">
-          <div className="bg-white/80 backdrop-blur-xl border border-violet-200 p-8 md:p-12 rounded-3xl shadow-[0_20px_60px_rgba(139,92,246,0.15)]">
+          <div className="bg-white/90 backdrop-blur-xl border border-violet-200/80 p-8 md:p-12 rounded-3xl shadow-lg">
             <h3 className="font-display text-2xl text-slate-900 mb-6 tracking-wide">CONTACT US</h3>
             <div className="text-center space-y-4 text-slate-700 font-medium text-lg">
               <p>+1 (213) 986-8699</p>
               <p>For UK: +44 20 4628 1675</p>
-              <p>Email: naxavt@gmail.com</p>
+              <div className="pt-1 flex items-center justify-center gap-2">
+                <span>Email:</span>
+                <button
+                  onClick={() => handleCopyEmail('naxavt@gmail.com')}
+                  className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-violet-50/80 hover:bg-violet-100/80 text-violet-700 rounded-lg border border-violet-200/80 transition-all cursor-pointer font-medium group active:scale-95"
+                  title="Click to copy email address"
+                >
+                  <span>naxavt@gmail.com</span>
+                  {emailCopied ? (
+                    <span className="flex items-center text-xs text-emerald-600 font-semibold gap-1 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                      <Check size={14} /> Copied!
+                    </span>
+                  ) : (
+                    <Copy size={15} className="text-violet-500 group-hover:scale-110 transition-transform" />
+                  )}
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -604,15 +682,53 @@ const App: React.FC = () => {
       {/* Footer */}
       <footer className="relative z-10 bg-white border-t border-slate-100 py-12 text-center text-slate-400 text-sm">
         <div className="max-w-7xl mx-auto px-4 flex flex-col items-center">
-          <Crown className="text-violet-600 mb-4" size={40} />
+          <Crown className="text-violet-500 mb-4" size={40} />
           <p className="mb-4">&copy; {new Date().getFullYear()} PLEASURE HEAVEN. ALL RIGHTS RESERVED.</p>
           <div className="flex gap-6">
-            <button onClick={() => setActiveModal('terms')} className="hover:text-violet-600 transition">Terms of Service</button>
-            <button onClick={() => setActiveModal('privacy')} className="hover:text-violet-600 transition">Privacy Policy</button>
-            <button onClick={() => setActiveModal('support')} className="hover:text-violet-600 transition">Support</button>
+            <button onClick={() => setActiveModal('terms')} className="hover:text-violet-500 transition">Terms of Service</button>
+            <button onClick={() => setActiveModal('privacy')} className="hover:text-violet-500 transition">Privacy Policy</button>
+            <button onClick={() => setActiveModal('support')} className="hover:text-violet-500 transition">Support</button>
           </div>
         </div>
       </footer>
+
+      {/* Sticky Floating Bottom Conversion Bar */}
+      <div 
+        className={`fixed bottom-0 left-0 right-0 z-40 p-3 md:p-4 bg-white/95 backdrop-blur-xl border-t border-violet-200/80 shadow-[0_-8px_30px_rgba(139,92,246,0.15)] transition-all duration-500 ease-out transform ${
+          showStickyCTA ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0 pointer-events-none'
+        }`}
+      >
+        <div className="max-w-6xl mx-auto flex items-center justify-between gap-4">
+          <div className="hidden sm:flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-violet-100 flex items-center justify-center border border-violet-200 flex-shrink-0">
+              <Crown size={20} className="text-violet-600" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="font-display text-slate-900 text-base md:text-lg">PLEASURE HEAVEN VIP</span>
+                <span className="bg-emerald-100 text-emerald-800 text-[10px] md:text-xs font-bold px-2 py-0.5 rounded-full border border-emerald-200/80">
+                  LIFETIME ACCESS
+                </span>
+              </div>
+              <p className="text-xs text-slate-500 font-medium">8,000+ Videos • Daily Updates • One-Time Payment</p>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between sm:justify-end gap-3 w-full sm:w-auto">
+            <div className="sm:hidden flex flex-col">
+              <span className="text-xs text-violet-600 font-bold uppercase tracking-wider">LIMITED OFFER</span>
+              <span className="text-xs text-slate-600 font-medium">One-Time • Lifetime Access</span>
+            </div>
+            <button
+              onClick={() => window.open(JOIN_LINK, '_blank')}
+              className="brand-bg text-white font-display text-base md:text-lg px-6 md:px-8 py-3 rounded-xl hover:brightness-110 transition-all shadow-md flex items-center gap-2 whitespace-nowrap active:scale-95"
+            >
+              <span>JOIN VIP NOW</span>
+              <ArrowRight size={18} />
+            </button>
+          </div>
+        </div>
+      </div>
       
       {/* Legal Modal */}
       <LegalModal 
@@ -650,14 +766,25 @@ const App: React.FC = () => {
                 </div>
               ) : (
                 <>
-                  <div className="mb-6">
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="text-slate-600 font-medium">Lifetime VIP Membership</span>
+                  <div className="mb-4">
+                    <div className="flex justify-between items-center mb-1">
+                      <span className="text-slate-700 font-medium">Lifetime VIP Membership</span>
                       <span className="text-slate-900 font-bold text-xl">$19.99</span>
                     </div>
                     <p className="text-xs text-slate-400 text-left">
                       * Lifetime Access: Enjoy permanent VIP membership with this one-time payment. No recurring fees.
                     </p>
+                  </div>
+
+                  {/* Privacy Guard Notice */}
+                  <div className="mb-5 p-3.5 bg-violet-50/80 border border-violet-200/90 rounded-xl flex items-start gap-2.5 text-left shadow-xs">
+                    <ShieldCheck size={18} className="text-violet-600 shrink-0 mt-0.5" />
+                    <div className="text-xs">
+                      <span className="font-bold text-violet-950 block mb-0.5">🔒 100% Discreet Billing (Privacy Guard)</span>
+                      <p className="text-slate-700 leading-relaxed font-medium">
+                        On your bank or PayPal statement, this purchase will appear discreetly as <strong className="underline text-violet-950 font-bold">FLOW1 LTD</strong> with zero mention of VIP or adult content.
+                      </p>
+                    </div>
                   </div>
 
                   {paymentError && (
@@ -731,16 +858,16 @@ const App: React.FC = () => {
 const FAQItem: React.FC<{question: string, answer: string}> = ({ question, answer }) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
-      <div className="border border-violet-100 rounded-lg bg-white overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+      <div className={`border rounded-xl bg-white overflow-hidden transition-all duration-200 ${isOpen ? 'border-violet-300 shadow-md ring-1 ring-violet-200' : 'border-violet-200/80 hover:border-violet-300 shadow-sm'}`}>
           <button 
               onClick={() => setIsOpen(!isOpen)}
-              className="w-full p-6 text-left flex justify-between items-center hover:bg-slate-50 transition-colors"
+              className="w-full p-5 md:p-6 text-left flex justify-between items-center hover:bg-violet-50/40 transition-colors"
           >
-              <span className="font-display text-lg text-slate-800">{question}</span>
-              {isOpen ? <Minus className="text-violet-500" /> : <Plus className="text-violet-500" />}
+              <span className="font-display text-base md:text-lg text-slate-900">{question}</span>
+              {isOpen ? <Minus className="text-violet-600 shrink-0" /> : <Plus className="text-violet-600 shrink-0" />}
           </button>
           <div className={`overflow-hidden transition-all duration-300 ${isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
-               <div className="p-6 pt-0 text-slate-600 leading-relaxed whitespace-pre-line border-t border-slate-50 bg-slate-50/50">
+               <div className="p-5 md:p-6 pt-0 text-slate-600 leading-relaxed whitespace-pre-line border-t border-violet-100/60 bg-violet-50/20">
                   {answer}
                </div>
           </div>
