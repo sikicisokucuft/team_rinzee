@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const Countdown: React.FC = () => {
+const Countdown: React.FC<{ compact?: boolean }> = ({ compact = false }) => {
   const [timeLeft, setTimeLeft] = useState({ h: 2, m: 12, s: 0 });
 
   useEffect(() => {
@@ -17,17 +17,17 @@ const Countdown: React.FC = () => {
   }, []);
 
   return (
-    <div className="flex gap-2 font-mono text-violet-600 text-xl font-bold">
-      <div className="bg-violet-50 px-2 py-1 rounded border border-violet-200">
-        {timeLeft.h.toString().padStart(2, '0')}
+    <div className={`flex items-center gap-1 font-mono font-bold tracking-tight ${compact ? 'text-xs' : 'text-xs md:text-sm'}`}>
+      <div className="bg-blue-600 text-white px-2 py-0.5 rounded-md shadow-xs text-center min-w-[28px] tabular-nums">
+        {timeLeft.h.toString().padStart(2, '0')}<span className="text-[10px] font-normal text-blue-200 ml-0.5">h</span>
       </div>
-      <span className="self-center text-violet-400">:</span>
-      <div className="bg-violet-50 px-2 py-1 rounded border border-violet-200">
-        {timeLeft.m.toString().padStart(2, '0')}
+      <span className="text-blue-400 font-sans text-xs font-semibold">:</span>
+      <div className="bg-blue-600 text-white px-2 py-0.5 rounded-md shadow-xs text-center min-w-[28px] tabular-nums">
+        {timeLeft.m.toString().padStart(2, '0')}<span className="text-[10px] font-normal text-blue-200 ml-0.5">m</span>
       </div>
-      <span className="self-center text-violet-400">:</span>
-      <div className="bg-violet-50 px-2 py-1 rounded border border-violet-200">
-        {timeLeft.s.toString().padStart(2, '0')}
+      <span className="text-blue-400 font-sans text-xs font-semibold">:</span>
+      <div className="bg-blue-600 text-white px-2 py-0.5 rounded-md shadow-xs text-center min-w-[28px] tabular-nums">
+        {timeLeft.s.toString().padStart(2, '0')}<span className="text-[10px] font-normal text-blue-200 ml-0.5">s</span>
       </div>
     </div>
   );

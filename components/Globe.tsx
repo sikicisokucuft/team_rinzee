@@ -40,7 +40,7 @@ const Globe: React.FC = () => {
       const cx = width / 2;
       const cy = height / 2;
 
-      ctx.fillStyle = '#8b5cf6'; // Violet-500
+      ctx.fillStyle = '#3b82f6'; // Blue-500
       
       dots.forEach(dot => {
         // Rotate

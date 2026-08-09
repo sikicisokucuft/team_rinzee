@@ -37,12 +37,12 @@ const MatrixCanvas: React.FC = () => {
         this.opacity = Math.random() * 0.5 + 0.1; // Start with varied low opacity
         this.fadeSpeed = Math.random() * 0.005 + 0.002;
         
-        // Sweet Pastel Palette (White, Soft Violet, Baby Pink)
+        // Soft Blue Palette (White, Soft Blue, Sky Blue)
         const colors = [
           '255, 255, 255', // White sparkle
-          '216, 180, 254', // Soft Violet
-          '240, 171, 252', // Soft Pink
-          '167, 139, 250'  // Slightly deeper violet
+          '147, 197, 253', // Soft Blue
+          '186, 230, 253', // Sky Blue
+          '96, 165, 250'   // Medium Blue
         ];
         this.color = colors[Math.floor(Math.random() * colors.length)];
       }
@@ -121,7 +121,7 @@ const MatrixCanvas: React.FC = () => {
   return (
     <div className="fixed top-0 left-0 w-full h-full pointer-events-none z-0 overflow-hidden">
       {/* Hero background placeholder ambient glow for instant interactive feel */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] md:w-[1000px] md:h-[1000px] bg-gradient-to-tr from-violet-200/30 via-purple-100/40 to-fuchsia-100/20 rounded-full blur-3xl opacity-80" />
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] md:w-[1000px] md:h-[1000px] bg-gradient-to-tr from-blue-200/30 via-sky-100/40 to-blue-100/20 rounded-full blur-3xl opacity-80" />
       <canvas 
         ref={canvasRef} 
         className="w-full h-full transition-opacity duration-700"
