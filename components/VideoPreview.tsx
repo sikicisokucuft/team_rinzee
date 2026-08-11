@@ -11,7 +11,7 @@ interface VideoModalProps {
 export const VideoModal: React.FC<VideoModalProps> = ({
   isOpen,
   onClose,
-  videoUrl = 'https://files.catbox.moe/6mfgkr.mp4',
+  videoUrl = 'https://files.catbox.moe/ust2lm.mp4',
   posterUrl,
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
