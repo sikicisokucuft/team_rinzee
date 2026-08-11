@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { CheckCircle2, TrendingUp, DollarSign, Globe2, Lock, ArrowRight, ShieldCheck, Users, Crown, Star, Plus, Minus, Reply, X, Copy, Check } from 'lucide-react';
+import { CheckCircle2, TrendingUp, DollarSign, Globe2, Lock, ArrowRight, ShieldCheck, Users, Crown, Star, Plus, Minus, Reply, X, Copy, Check, Play, Film } from 'lucide-react';
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import MatrixCanvas from './components/MatrixCanvas';
 import Countdown from './components/Countdown';
+import { VideoModal } from './components/VideoPreview';
 import { Testimonial } from './types';
 
 const PAYPAL_CLIENT_ID = "AVxQYNem8VSj-46hc80juvbrt0U9eVfL9RAwFhH8wxlPIcKreVuEjjJZ5FNIN6rhmOTBc6YURTvtGBYq";
@@ -346,39 +347,59 @@ const socialProofItems: SocialProofItem[] = [
 const faqs = [
   {
     question: "Do you see my credit card number when I pay?",
-    answer: "No. We don't see your card informations. Our site is powered by PayPal. So you can just safely pay."
+    answer: "No. We never see or store your credit card information. All transactions are securely processed through PayPal, ensuring 100% privacy and safety."
   },
   {
     question: "Is this a one-time payment?",
-    answer: "Yes, this is a one-time payment for Lifetime Access! Once you pay, you get permanent access to watch and download all videos forever. You will never be charged again and there are no recurring subscription fees."
+    answer: "Yes! This is a single one-time payment for permanent Lifetime Access. Once joined, you get unlimited access to stream and download all current and future content. You will never be charged again, and there are no hidden subscription fees."
   },
   {
     question: "Where will I watch the videos?",
-    answer: "Our videos are hosted on Telegram, a popular messaging and video-sharing app. If you're not already registered, you can sign up in just 2 minutes—for free!\n\nPlus, your privacy is protected: no one can see which groups or channels you're in. And as a bonus, Telegram makes it super easy to search for your models.\n\nAfter you pay directly you will see the invite link. If you don't see the invite link contact with us: pleasureheavenn@gmail.com or send a message to our Telegram @pleheaven"
+    answer: "All content is hosted directly on Telegram in private channels. If you don't have Telegram yet, creating a free account takes less than 2 minutes.\n\nYour privacy is completely protected—no one can see what channels you belong to. Telegram also features built-in search so you can easily locate your favorite models.\n\nImmediately after completing your payment, you will receive your instant invite link. If you ever need help, contact us at pleasureheavenn@gmail.com or message us on Telegram at @pleheaven."
   },
   {
     question: "Are the videos long?",
-    answer: "80% of the videos are long. We don't upload short videos unless the model doesn't have too much long videos. At that point we have to upload her short videos.\n\nAnd if you wonder, we don't upload images and GIFs. Only videos."
+    answer: "Yes! Over 80% of our videos are full-length features. We strictly focus on full video content and avoid uploading short clips unless long-format material is unavailable for a specific creator.\n\nNote: We upload full video media only—no standalone photos or GIFs."
   },
   {
     question: "I couldn't find the models I wanted",
-    answer: "Generally, we choose to upload content from the top 1% OnlyFans models.\n\nIf you can't find the models you're looking for, you can simply make a request to us on Telegram about the ones you want. We'll upload all of their paid videos within a couple of days."
+    answer: "We regularly archive content from top 1% creators. If a model you want is not currently in the channel, simply message us on Telegram with your request. Our team will upload their complete video collection within a few days."
   }
 ];
 
 // Top Promo Bar Component
 const PromoBar: React.FC<{ onJoinClick: () => void }> = ({ onJoinClick }) => {
-  // 4 hours 47 minutes in seconds = (4 * 3600) + (47 * 60) = 14400 + 2820 = 17220
-  const INITIAL_TIME = 17220; 
-  const [timeLeft, setTimeLeft] = useState(INITIAL_TIME);
+  const STORAGE_KEY = 'ph_promo_expiry';
+  const DEFAULT_DURATION = 2 * 3600 + 12 * 60; // 2 hours 12 minutes
+
+  const [timeLeft, setTimeLeft] = useState<number>(() => {
+    if (typeof window === 'undefined') return DEFAULT_DURATION;
+    const now = Date.now();
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      const target = parseInt(stored, 10);
+      if (!isNaN(target) && target > now) {
+        return Math.floor((target - now) / 1000);
+      }
+    }
+    const newTarget = now + DEFAULT_DURATION * 1000;
+    localStorage.setItem(STORAGE_KEY, newTarget.toString());
+    return DEFAULT_DURATION;
+  });
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft((prev) => {
-        if (prev <= 0) return INITIAL_TIME; // Loop back
-        return prev - 1;
-      });
-    }, 1000);
+    const updateTimer = () => {
+      const now = Date.now();
+      const stored = localStorage.getItem(STORAGE_KEY);
+      let target = stored ? parseInt(stored, 10) : 0;
+      if (isNaN(target) || target <= now) {
+        target = now + DEFAULT_DURATION * 1000;
+        localStorage.setItem(STORAGE_KEY, target.toString());
+      }
+      setTimeLeft(Math.max(0, Math.floor((target - now) / 1000)));
+    };
+
+    const timer = setInterval(updateTimer, 1000);
     return () => clearInterval(timer);
   }, []);
 
@@ -390,11 +411,22 @@ const PromoBar: React.FC<{ onJoinClick: () => void }> = ({ onJoinClick }) => {
   };
 
   return (
-    <div className="absolute top-0 left-0 w-full h-10 bg-gradient-to-r from-blue-600 to-sky-600 z-50 flex items-center justify-center text-white text-xs md:text-sm font-bold tracking-wider shadow-sm">
-      <span className="animate-pulse mr-2">●</span>
-      LIMITED TIME OFFER: <span className="mx-2 font-mono bg-white/20 px-2 py-0.5 rounded">{formatTime(timeLeft)}</span>
-      <span className="hidden md:inline mr-2">-</span>
-      <button onClick={onJoinClick} className="underline hover:text-blue-100 ml-1 md:ml-0 uppercase tracking-wider">JOIN NOW</button>
+    <div className="absolute top-0 left-0 w-full h-10 bg-gradient-to-r from-blue-700 via-blue-600 to-sky-600 z-50 flex items-center justify-center text-white text-xs md:text-sm font-bold tracking-wide shadow-sm border-b border-blue-400/20 px-3">
+      <span className="relative flex h-2 w-2 mr-2">
+        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-300 opacity-75"></span>
+        <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
+      </span>
+      <span className="uppercase font-extrabold tracking-wider text-[11px] md:text-xs">SPECIAL OFFER EXPIRES IN:</span> 
+      <span className="mx-2 font-mono bg-white/15 border border-white/25 px-2.5 py-0.5 rounded-full text-xs shadow-inner backdrop-blur-xs tracking-wider text-blue-50 font-bold">
+        {formatTime(timeLeft)}
+      </span>
+      <button 
+        onClick={onJoinClick} 
+        className="inline-flex items-center gap-1 text-[11px] md:text-xs font-black tracking-wider uppercase bg-white text-blue-700 px-3 py-1 rounded-full hover:bg-blue-50 transition-all shadow-xs ml-1 hover:scale-105 active:scale-95 cursor-pointer"
+      >
+        <span>JOIN NOW</span>
+        <ArrowRight size={12} className="stroke-[3]" />
+      </button>
     </div>
   );
 };
@@ -402,6 +434,7 @@ const PromoBar: React.FC<{ onJoinClick: () => void }> = ({ onJoinClick }) => {
 const App: React.FC = () => {
   const [activeModal, setActiveModal] = useState<'terms' | 'privacy' | 'support' | null>(null);
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [paymentError, setPaymentError] = useState<string | null>(null);
@@ -480,19 +513,19 @@ const App: React.FC = () => {
           <div className="text-slate-600 text-base md:text-xl max-w-3xl mb-6 leading-relaxed text-left inline-block">
             <ul className="space-y-3 list-disc pl-5 marker:text-blue-500">
               <li>
-                Get full access to content worth over <span className="font-bold text-slate-900">$3000/month</span> and we upload 100+ videos every day.
+                Specialized in <span className="font-bold text-slate-900">high-quality JOI videos</span> + thousands of exclusive OnlyFans content
               </li>
               <li>
-                Be able to watch <span className="font-bold text-slate-900">over 8000 long</span> paid videos of OnlyFans models.
+                Get instant access to over <span className="font-bold text-slate-900">$3,000/month</span> worth of premium videos
               </li>
               <li>
-                <span className="font-bold text-slate-900">You can request</span> your favourite OnlyFans models. We will upload the videos within 2 days.
+                Watch <span className="font-bold text-slate-900">8,000+ full-length videos</span> from top creators
               </li>
               <li>
-                Don't deal with links and ads. If you want download and <span className="font-bold text-slate-900">watch later</span>.
+                <span className="font-bold text-slate-900">Request any model</span> — we upload within 48 hours
               </li>
               <li>
-                <span className="font-bold text-slate-900">One-time payment</span> for <span className="font-bold text-slate-900">Lifetime Access</span>. No recurring fees, ever.
+                <span className="font-bold text-slate-900">One-time payment</span> for <span className="font-bold text-slate-900">Lifetime Access</span>. No recurring fees.
               </li>
             </ul>
           </div>
@@ -502,57 +535,39 @@ const App: React.FC = () => {
             <div className="flex flex-col md:flex-row gap-4 items-center w-full justify-center">
               <button 
                 onClick={() => window.open(JOIN_LINK, '_blank')}
-                className="w-full md:w-auto brand-bg text-white font-display text-xl px-12 py-4 rounded-xl hover:brightness-110 transition-all shadow-[0_10px_30px_rgba(139,92,246,0.3)] hover:shadow-[0_15px_35px_rgba(139,92,246,0.4)] flex items-center justify-center gap-3 group active:scale-98"
+                className="w-full md:w-auto brand-bg text-white font-display text-xl px-12 py-4 rounded-xl hover:brightness-110 transition-all shadow-[0_10px_30px_rgba(37,99,235,0.4)] hover:shadow-[0_15px_35px_rgba(37,99,235,0.6)] flex items-center justify-center gap-3 group active:scale-98 cursor-pointer"
               >
                 <span>GET LIFETIME ACCESS NOW</span>
                 <ArrowRight size={22} className="group-hover:translate-x-1 transition-transform" />
               </button>
-              <a 
-                href="https://t.me/pleasureheavenn"
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="w-full md:w-auto bg-slate-200/90 text-slate-700 font-display text-xl px-10 py-4 rounded-xl hover:bg-slate-300 transition-all shadow-sm flex items-center justify-center gap-2 border border-slate-300"
+              <button 
+                onClick={() => setIsVideoModalOpen(true)}
+                className="w-full md:w-auto bg-slate-900 hover:bg-slate-800 text-white font-display text-xl px-10 py-4 rounded-xl transition-all shadow-md flex items-center justify-center gap-2.5 border border-slate-700/80 cursor-pointer active:scale-98 group"
               >
-                LEARN MORE
-              </a>
+                <Play size={20} className="fill-current text-sky-400 group-hover:scale-110 transition-transform" />
+                <span>WATCH VIP PREVIEW</span>
+              </button>
             </div>
 
             {/* Privacy Guard Notice */}
             <div className="mt-5 inline-flex items-center gap-2.5 px-4 py-2.5 bg-blue-50/90 border border-blue-200/90 text-slate-800 rounded-full text-xs md:text-sm font-medium shadow-xs backdrop-blur-md">
               <ShieldCheck size={18} className="text-blue-600 shrink-0" />
               <span>
-                <strong className="text-blue-950 font-bold">🔒 100% Discreet Billing:</strong> Appears as neutral <strong className="text-blue-700 font-extrabold underline underline-offset-2">FLOW1 LTD</strong> on bank & PayPal statements.
+                <strong className="text-blue-950 font-bold">🔒 100% Discreet Billing:</strong> Appears strictly as neutral <strong className="text-blue-700 font-extrabold underline underline-offset-2">FLOW1 LTD</strong> on bank & PayPal statements.
               </span>
             </div>
           </div>
 
           <div className="mt-8 flex justify-center">
-            <div className="w-full max-w-md bg-white border border-slate-200/90 rounded-2xl p-6 shadow-xl shadow-slate-900/5 flex flex-col gap-4 relative overflow-hidden transition-all hover:border-blue-300/80">
-              {/* Subtle top accent bar */}
-              <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-blue-600 via-sky-500 to-blue-700"></div>
-
-              <div className="flex items-center justify-between">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-200/80 text-blue-900 text-[11px] font-bold tracking-wider uppercase">
-                  <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse"></span>
-                  <span>LIMITED TIME OFFER</span>
-                </div>
+            <div className="w-full max-w-md bg-gradient-to-b from-white via-blue-50/20 to-white border border-blue-200/90 rounded-2xl p-4 md:p-5 shadow-lg shadow-blue-900/5 flex items-center justify-between relative overflow-hidden transition-all hover:border-blue-300/80">
+              <div className="flex items-center gap-1.5 shrink-0">
+                <span className="text-slate-800 font-extrabold text-[10px] sm:text-xs uppercase tracking-wide whitespace-nowrap">SPECIAL OFFER EXPIRES IN:</span>
+                <span className="bg-emerald-100 border border-emerald-300 text-emerald-800 text-[10px] font-extrabold px-1.5 py-0.5 rounded-md flex items-center gap-1 shadow-2xs">
+                  <span className="text-slate-400 line-through font-medium text-[9px]">$35</span>
+                  <span className="text-emerald-900 font-black">$25</span>
+                </span>
               </div>
-
-              <div className="flex items-baseline justify-between border-y border-slate-100 py-3.5 my-0.5">
-                <div className="text-left">
-                  <span className="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-0.5">LIFETIME VIP ACCESS</span>
-                  <p className="text-xs text-slate-500 font-medium">One-time payment • No subscription</p>
-                </div>
-                <div className="text-right flex items-baseline gap-2">
-                  <span className="text-slate-400 line-through text-sm font-medium">$35</span>
-                  <span className="text-slate-900 font-black text-2xl tracking-tight">$25 <span className="text-xs text-slate-500 font-bold uppercase">USD</span></span>
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between">
-                <span className="text-slate-500 font-medium text-xs tracking-tight">Special offer expires in:</span>
-                <Countdown />
-              </div>
+              <Countdown />
             </div>
           </div>
           
@@ -560,7 +575,7 @@ const App: React.FC = () => {
           <div className="mt-8 md:mt-24 flex flex-row flex-nowrap items-center justify-center gap-x-6 md:gap-16 text-slate-500 font-mono text-xs md:text-sm whitespace-nowrap">
             <div className="flex items-center gap-1.5 md:gap-2">
               <Users className="text-blue-500" size={16} />
-              <span>3,000+ MEMBERS</span>
+              <span>3,000+ VIP MEMBERS</span>
             </div>
             <div className="flex items-center gap-1.5 md:gap-2">
               <Star className="text-blue-500" size={16} />
@@ -575,7 +590,7 @@ const App: React.FC = () => {
       {/* Trusted By Many / Social Proof - Updated with Masonry Grid */}
       <section className="relative z-10 py-16 md:py-24 bg-[#f0f7ff] border-y border-blue-100">
         <div className="max-w-7xl mx-auto px-4">
-          <h2 className="font-display text-center text-3xl md:text-4xl mb-12 md:mb-16 text-slate-900">TRUSTED BY <span className="text-blue-600">MANY</span></h2>
+          <h2 className="font-display text-center text-3xl md:text-4xl mb-12 md:mb-16 text-slate-900">TRUSTED BY <span className="text-blue-600">THOUSANDS</span></h2>
           
           <MasonryGrid items={socialProofItems} />
         </div>
@@ -605,13 +620,13 @@ const App: React.FC = () => {
             </div>
             <div className="space-y-4 text-center md:text-left">
               <p className="text-slate-700 leading-relaxed text-lg font-medium">
-                As Pleasure Heaven, we have been archiving premium content since 2023. Our team is dedicated to collecting the highest quality and most exclusive media from across hundreds of models, ensuring a continuous and daily updated leak library. Even with our previously closed Twitter accounts, our network has reached millions of views and got hundreds of thousands of followers in total.
+                At Pleasure Heaven, we have been archiving premium digital content since 2023. Our dedicated team collects the highest quality and most exclusive media from hundreds of creators, maintaining a continuously updated, well-organized library. Over the years, our media network has generated millions of views and brought together hundreds of thousands of followers.
               </p>
               <p className="text-slate-700 leading-relaxed text-lg font-medium">
-                Our main goal is to provide a safe, private space with clean organization, making it easy to search and find exactly what you want. And providing leaks for a really low price.
+                Our primary mission is to offer a secure, completely private platform with effortless search and navigation—delivering full creator libraries at an unbeatable price.
               </p>
               <p className="text-blue-700 leading-relaxed font-bold text-lg uppercase tracking-wider">
-                Today, we have thousands of active VIP members in our premium channels enjoying daily updates.
+                Today, thousands of active VIP members enjoy exclusive daily updates across our private channels.
               </p>
             </div>
           </div>
@@ -621,7 +636,7 @@ const App: React.FC = () => {
       {/* The Choice Section */}
       <section className="relative z-10 py-16 md:py-24 bg-white border-t border-blue-100">
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="font-display text-3xl md:text-5xl mb-8 md:mb-12 text-slate-900">CHOOSE <span className="brand-text">SIDE</span></h2>
+          <h2 className="font-display text-3xl md:text-5xl mb-8 md:mb-12 text-slate-900">CHOOSE YOUR <span className="brand-text">SIDE</span></h2>
           <div className="grid md:grid-cols-2 gap-8 items-stretch">
             {/* Blue Pill (OnlyFans) - Gray/Slate styled */}
             <div className="p-8 rounded-2xl bg-slate-50 border border-slate-200/90 hover:border-slate-300 transition-colors group shadow-sm flex flex-col justify-between">
@@ -631,10 +646,10 @@ const App: React.FC = () => {
                 </div>
                 <h3 className="font-display text-2xl mb-4 text-slate-600">ONLYFANS</h3>
                 <ul className="text-left text-slate-500 space-y-3 mb-8">
-                  <li className="flex gap-2 items-start"><XCircle className="text-red-400 w-5 h-5 flex-shrink-0 mt-0.5" /> <span>Unexpected fees</span></li>
-                  <li className="flex gap-2 items-start"><XCircle className="text-red-400 w-5 h-5 flex-shrink-0 mt-0.5" /> <span>Poor website design</span></li>
-                  <li className="flex gap-2 items-start"><XCircle className="text-red-400 w-5 h-5 flex-shrink-0 mt-0.5" /> <span>No content downloads</span></li>
-                  <li className="flex gap-2 items-start"><XCircle className="text-red-400 w-5 h-5 flex-shrink-0 mt-0.5" /> <span>$400+ for decent content</span></li>
+                  <li className="flex gap-2 items-start"><XCircle className="text-red-400 w-5 h-5 flex-shrink-0 mt-0.5" /> <span>Unpredictable pay-per-view fees</span></li>
+                  <li className="flex gap-2 items-start"><XCircle className="text-red-400 w-5 h-5 flex-shrink-0 mt-0.5" /> <span>Cluttered & slow interface</span></li>
+                  <li className="flex gap-2 items-start"><XCircle className="text-red-400 w-5 h-5 flex-shrink-0 mt-0.5" /> <span>No direct video downloads</span></li>
+                  <li className="flex gap-2 items-start"><XCircle className="text-red-400 w-5 h-5 flex-shrink-0 mt-0.5" /> <span>$400+ per month for full access</span></li>
                 </ul>
               </div>
             </div>
@@ -650,45 +665,30 @@ const App: React.FC = () => {
                 </div>
                 <h3 className="font-display text-2xl mb-4 text-blue-700">PLEASURE HEAVEN</h3>
                 <ul className="text-left text-slate-700 space-y-3 mb-8 font-medium">
-                  <li className="flex gap-2 items-start"><CheckCircle2 className="text-blue-600 w-5 h-5 flex-shrink-0 mt-0.5" /> <span>No unexpected fees (No PPVs)</span></li>
-                  <li className="flex gap-2 items-start"><CheckCircle2 className="text-blue-600 w-5 h-5 flex-shrink-0 mt-0.5" /> <span>Download videos</span></li>
-                  <li className="flex gap-2 items-start"><CheckCircle2 className="text-blue-600 w-5 h-5 flex-shrink-0 mt-0.5" /> <span>Watch the models' videos you don't find online</span></li>
-                  <li className="flex gap-2 items-start"><CheckCircle2 className="text-blue-600 w-5 h-5 flex-shrink-0 mt-0.5" /> <span>Be able to watch over 80+ models' videos</span></li>
-                  <li className="flex gap-2 items-start"><CheckCircle2 className="text-blue-600 w-5 h-5 flex-shrink-0 mt-0.5" /> <span>Be able to request models' videos</span></li>
+                  <li className="flex gap-2 items-start"><CheckCircle2 className="text-blue-600 w-5 h-5 flex-shrink-0 mt-0.5" /> <span>Zero hidden fees or PPVs</span></li>
+                  <li className="flex gap-2 items-start"><CheckCircle2 className="text-blue-600 w-5 h-5 flex-shrink-0 mt-0.5" /> <span>Direct video downloads enabled</span></li>
+                  <li className="flex gap-2 items-start"><CheckCircle2 className="text-blue-600 w-5 h-5 flex-shrink-0 mt-0.5" /> <span>Exclusive videos not found anywhere else online</span></li>
+                  <li className="flex gap-2 items-start"><CheckCircle2 className="text-blue-600 w-5 h-5 flex-shrink-0 mt-0.5" /> <span>Full access to 80+ top creator libraries</span></li>
+                  <li className="flex gap-2 items-start"><CheckCircle2 className="text-blue-600 w-5 h-5 flex-shrink-0 mt-0.5" /> <span>Custom model requests fulfilled within 48 hours</span></li>
                 </ul>
               </div>
               <div>
                 <button 
                   onClick={() => window.open(JOIN_LINK, '_blank')}
-                  className="block w-full text-center brand-bg text-white font-bold py-3.5 uppercase tracking-wider hover:brightness-110 transition-all shadow-md rounded-xl"
+                  className="block w-full text-center brand-bg text-white font-bold py-3.5 uppercase tracking-wider hover:brightness-110 transition-all shadow-md rounded-xl cursor-pointer"
                 >
                   Enter Pleasure Heaven
                 </button>
-                <div className="mt-5 w-full bg-white border border-slate-200/90 rounded-2xl p-5 shadow-sm flex flex-col gap-3.5 relative overflow-hidden text-left">
+                <div className="mt-5 w-full bg-white border border-slate-200/90 rounded-2xl p-4 shadow-sm flex items-center justify-between relative overflow-hidden text-left">
                   <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-blue-600 via-sky-500 to-blue-700"></div>
-                  
-                  <div className="flex items-center justify-between">
-                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 border border-blue-200/80 text-blue-900 text-[10px] font-bold tracking-wider uppercase">
-                      <span className="w-1.5 h-1.5 rounded-full bg-blue-600 animate-pulse"></span>
-                      <span>SPECIAL OFFER</span>
-                    </div>
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    <span className="text-slate-800 font-extrabold text-[10px] sm:text-xs uppercase tracking-wide whitespace-nowrap">SPECIAL OFFER EXPIRES IN:</span>
+                    <span className="bg-emerald-100 border border-emerald-300 text-emerald-800 text-[10px] font-extrabold px-1.5 py-0.5 rounded-md flex items-center gap-1 shadow-2xs">
+                      <span className="text-slate-400 line-through font-medium text-[9px]">$35</span>
+                      <span className="text-emerald-900 font-black">$25</span>
+                    </span>
                   </div>
-
-                  <div className="flex items-baseline justify-between border-y border-slate-100 py-3">
-                    <div>
-                      <span className="text-xs font-bold uppercase tracking-wider text-slate-800 block">Lifetime VIP Access</span>
-                      <span className="text-[11px] text-slate-500 font-medium">One-time payment • No subscription</span>
-                    </div>
-                    <div className="flex items-baseline gap-2">
-                      <span className="text-slate-400 line-through text-xs font-medium">$35</span>
-                      <span className="text-slate-900 font-black text-xl tracking-tight">$25 <span className="text-[10px] text-slate-500 font-bold uppercase">USD</span></span>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="text-slate-500 font-medium text-[11px]">Special offer expires in:</span>
-                    <Countdown compact />
-                  </div>
+                  <Countdown compact />
                 </div>
               </div>
             </div>
@@ -796,6 +796,13 @@ const App: React.FC = () => {
         </div>
       </div>
       
+      {/* Video Preview Modal */}
+      <VideoModal 
+        isOpen={isVideoModalOpen} 
+        onClose={() => setIsVideoModalOpen(false)} 
+        videoUrl="https://files.catbox.moe/6mfgkr.mp4" 
+      />
+
       {/* Legal Modal */}
       <LegalModal 
         isOpen={!!activeModal} 
