@@ -60,7 +60,7 @@ const LEGAL_CONTENT = {
 
       **CONTACT US**
       - **Email:** pleasureheavenn@gmail.com
-      - **Telegram:** https://t.me/pleheaven
+      - **Telegram:** https://t.me/pleasureheaven7
       - **Twitter (X):** @PleasureHeavenn
 
       **RESPONSE TIME**
@@ -355,7 +355,7 @@ const faqs = [
   },
   {
     question: "Where will I watch the videos?",
-    answer: "All content is hosted directly on Telegram in private channels. If you don't have Telegram yet, creating a free account takes less than 2 minutes.\n\nYour privacy is completely protected—no one can see what channels you belong to. Telegram also features built-in search so you can easily locate your favorite models.\n\nImmediately after completing your payment, you will receive your instant invite link. If you ever need help, contact us at pleasureheavenn@gmail.com or message us on Telegram at @pleheaven."
+    answer: "All content is hosted directly on Telegram in private channels. If you don't have Telegram yet, creating a free account takes less than 2 minutes.\n\nYour privacy is completely protected—no one can see what channels you belong to. Telegram also features built-in search so you can easily locate your favorite models.\n\nImmediately after completing your payment, you will receive your instant invite link. If you ever need help, contact us at pleasureheavenn@gmail.com or message us on Telegram at @pleasureheaven7."
   },
   {
     question: "Are the videos long?",
@@ -477,7 +477,7 @@ const App: React.FC = () => {
           </div>
           <div className="flex items-center gap-4">
             <a 
-              href="https://t.me/pleheaven" 
+              href="https://t.me/pleasureheaven7" 
               target="_blank" 
               rel="noopener noreferrer"
               className="text-blue-600 hover:text-blue-800 transition-colors"
@@ -727,8 +727,8 @@ const App: React.FC = () => {
 
               <div className="pt-4 border-t border-slate-100 flex flex-col items-center gap-2">
                 <a
-                  href="https://t.me/pleheaven"
-                  target="_blank"
+                  href="https://t.me/pleasureheaven7"
+                  target="_blank" 
                   rel="noopener noreferrer"
                   className="w-full inline-flex items-center justify-center gap-2.5 px-5 py-3.5 bg-sky-500 hover:bg-sky-600 text-white font-bold rounded-xl shadow-md hover:shadow-lg transition-all active:scale-95 text-sm sm:text-base tracking-wide"
                 >
