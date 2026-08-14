@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Play, Pause, Volume2, VolumeX, Maximize, Film, Sparkles, X } from 'lucide-react';
+import { Play, Pause, Volume2, VolumeX, Maximize, Film, Sparkles, X, Loader2 } from 'lucide-react';
 
 interface VideoModalProps {
   isOpen: boolean;
@@ -17,10 +17,13 @@ export const VideoModal: React.FC<VideoModalProps> = ({
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
+      setIsLoading(true);
+      setHasError(false);
       setIsPlaying(true);
       const timer = setTimeout(() => {
         if (videoRef.current) {
@@ -42,6 +45,7 @@ export const VideoModal: React.FC<VideoModalProps> = ({
         videoRef.current.pause();
       }
       setIsPlaying(false);
+      setIsLoading(true);
     }
   }, [isOpen]);
 
@@ -113,11 +117,34 @@ export const VideoModal: React.FC<VideoModalProps> = ({
             muted={isMuted}
             playsInline
             loop
-            onError={() => setHasError(true)}
-            onPlay={() => setIsPlaying(true)}
+            onLoadStart={() => setIsLoading(true)}
+            onWaiting={() => setIsLoading(true)}
+            onLoadedData={() => setIsLoading(false)}
+            onCanPlay={() => setIsLoading(false)}
+            onError={() => {
+              setHasError(true);
+              setIsLoading(false);
+            }}
+            onPlay={() => {
+              setIsLoading(false);
+              setIsPlaying(true);
+            }}
             onPause={() => setIsPlaying(false)}
-            className={`w-full h-full object-cover transition-opacity duration-300 ${isPlaying ? 'opacity-100' : 'opacity-90'}`}
+            className={`w-full h-full object-cover transition-opacity duration-300 ${isPlaying && !isLoading ? 'opacity-100' : 'opacity-85'}`}
           />
+
+          {/* Loading Spinner */}
+          {isLoading && !hasError && (
+            <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/60 backdrop-blur-[3px] z-20 pointer-events-none transition-all">
+              <div className="relative flex items-center justify-center">
+                <div className="w-16 h-16 rounded-full border-4 border-blue-500/20 border-t-sky-400 animate-spin" />
+                <Loader2 size={28} className="absolute text-sky-400 animate-spin" />
+              </div>
+              <span className="mt-3 text-xs font-bold uppercase tracking-wider text-sky-200 animate-pulse drop-shadow">
+                Loading Trailer...
+              </span>
+            </div>
+          )}
 
           {hasError && (
             <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 flex flex-col items-center justify-center p-6 text-center z-10">
@@ -131,7 +158,7 @@ export const VideoModal: React.FC<VideoModalProps> = ({
             </div>
           )}
 
-          {!isPlaying && !hasError && (
+          {!isPlaying && !isLoading && !hasError && (
             <div className="absolute inset-0 flex items-center justify-center bg-slate-950/40 backdrop-blur-[2px] transition-all group-hover:bg-slate-950/20 z-10">
               <button 
                 onClick={togglePlay}

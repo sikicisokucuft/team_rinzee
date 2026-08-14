@@ -535,7 +535,7 @@ const App: React.FC = () => {
             <div className="flex flex-col md:flex-row gap-4 items-center w-full justify-center">
               <button 
                 onClick={() => window.open(JOIN_LINK, '_blank')}
-                className="w-full md:w-auto brand-bg text-white font-display text-xl px-12 py-4 rounded-xl hover:brightness-110 transition-all shadow-[0_10px_30px_rgba(37,99,235,0.4)] hover:shadow-[0_15px_35px_rgba(37,99,235,0.6)] flex items-center justify-center gap-3 group active:scale-98 cursor-pointer"
+                className="w-full md:w-auto bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white font-display text-xl px-12 py-4 rounded-xl hover:brightness-110 transition-all shadow-[0_10px_30px_rgba(220,38,38,0.4)] hover:shadow-[0_15px_35px_rgba(220,38,38,0.6)] flex items-center justify-center gap-3 group active:scale-98 cursor-pointer"
               >
                 <span>GET LIFETIME ACCESS NOW</span>
                 <ArrowRight size={22} className="group-hover:translate-x-1 transition-transform" />
@@ -558,8 +558,8 @@ const App: React.FC = () => {
             </div>
           </div>
 
-          <div className="mt-8 flex justify-center">
-            <div className="w-full max-w-md bg-gradient-to-b from-white via-blue-50/20 to-white border border-blue-200/90 rounded-2xl p-4 md:p-5 shadow-lg shadow-blue-900/5 flex items-center justify-between relative overflow-hidden transition-all hover:border-blue-300/80">
+          <div className="mt-8 flex flex-col items-center justify-center gap-3 w-full max-w-md mx-auto">
+            <div className="w-full bg-gradient-to-b from-white via-blue-50/20 to-white border border-blue-200/90 rounded-2xl p-4 md:p-5 shadow-lg shadow-blue-900/5 flex items-center justify-between relative overflow-hidden transition-all hover:border-blue-300/80">
               <div className="flex items-center gap-1.5 shrink-0">
                 <span className="text-slate-800 font-extrabold text-[10px] sm:text-xs uppercase tracking-wide whitespace-nowrap">SPECIAL OFFER EXPIRES IN:</span>
                 <span className="bg-emerald-100 border border-emerald-300 text-emerald-800 text-[10px] font-extrabold px-1.5 py-0.5 rounded-md flex items-center gap-1 shadow-2xs">
@@ -569,6 +569,17 @@ const App: React.FC = () => {
               </div>
               <Countdown />
             </div>
+
+            {/* Message Us On Telegram */}
+            <a
+              href="https://t.me/pleasureheaven7"
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="w-full inline-flex items-center justify-center gap-2.5 px-5 py-3.5 bg-sky-500 hover:bg-sky-600 text-white font-bold rounded-xl shadow-md hover:shadow-lg transition-all active:scale-95 text-sm sm:text-base tracking-wide cursor-pointer"
+            >
+              <TelegramIcon className="w-5 h-5 fill-current shrink-0" />
+              <span>Message Us On Telegram</span>
+            </a>
           </div>
           
           {/* Social Proof Bar */}
