@@ -88,7 +88,14 @@ const MatrixCanvas: React.FC = () => {
     init();
 
     let animationId: number;
+    let isTabActive = !document.hidden;
+
     const animate = () => {
+      if (!isTabActive) {
+        animationId = 0;
+        return;
+      }
+
       ctx.clearRect(0, 0, width, height);
       
       particles.forEach(p => {
@@ -100,6 +107,15 @@ const MatrixCanvas: React.FC = () => {
     };
 
     animate();
+
+    const handleVisibilityChange = () => {
+      isTabActive = !document.hidden;
+      if (isTabActive && !animationId) {
+        animate();
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
 
     const handleResize = () => {
       width = window.innerWidth;
@@ -113,7 +129,8 @@ const MatrixCanvas: React.FC = () => {
     window.addEventListener('resize', handleResize);
 
     return () => {
-      cancelAnimationFrame(animationId);
+      if (animationId) cancelAnimationFrame(animationId);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
       window.removeEventListener('resize', handleResize);
     };
   }, []);

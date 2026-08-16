@@ -228,7 +228,8 @@ const SocialProofImage: React.FC<{ src: string; alt: string }> = ({ src, alt }) 
         className={`w-full h-auto rounded-xl transition-all duration-500 ease-out transform group-hover:scale-105 ${
           isLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-95 min-h-[200px]'
         }`}
-        loading="eager"
+        loading="lazy"
+        decoding="async"
       />
     </div>
   );
@@ -416,6 +417,9 @@ const PromoBar: React.FC<{ onJoinClick: () => void }> = ({ onJoinClick }) => {
         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-300 opacity-75"></span>
         <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
       </span>
+      <span className="bg-red-500 text-white text-[10px] md:text-xs font-black px-2 py-0.5 rounded-full tracking-wider mr-2 uppercase shadow-2xs">
+        50% OFF
+      </span>
       <span className="uppercase font-extrabold tracking-wider text-[11px] md:text-xs">SPECIAL OFFER EXPIRES IN:</span> 
       <span className="mx-2 font-mono bg-white/15 border border-white/25 px-2.5 py-0.5 rounded-full text-xs shadow-inner backdrop-blur-xs tracking-wider text-blue-50 font-bold">
         {formatTime(timeLeft)}
@@ -560,12 +564,12 @@ const App: React.FC = () => {
 
           <div className="mt-8 flex flex-col items-center justify-center gap-3 w-full max-w-md mx-auto">
             <div className="w-full bg-gradient-to-b from-white via-blue-50/20 to-white border border-blue-200/90 rounded-2xl p-4 md:p-5 shadow-lg shadow-blue-900/5 flex items-center justify-between relative overflow-hidden transition-all hover:border-blue-300/80">
-              <div className="flex items-center gap-1.5 shrink-0">
-                <span className="text-slate-800 font-extrabold text-[10px] sm:text-xs uppercase tracking-wide whitespace-nowrap">SPECIAL OFFER EXPIRES IN:</span>
-                <span className="bg-emerald-100 border border-emerald-300 text-emerald-800 text-[10px] font-extrabold px-1.5 py-0.5 rounded-md flex items-center gap-1 shadow-2xs">
-                  <span className="text-slate-400 line-through font-medium text-[9px]">$35</span>
-                  <span className="text-emerald-900 font-black">$25</span>
+              <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-blue-600 via-sky-500 to-blue-700"></div>
+              <div className="flex items-center gap-2 shrink-0">
+                <span className="bg-gradient-to-r from-red-600 to-rose-600 text-white text-[10px] sm:text-xs font-black px-2 py-0.5 rounded-md tracking-wider shadow-xs uppercase">
+                  50% OFF
                 </span>
+                <span className="text-slate-800 font-extrabold text-[10px] sm:text-xs uppercase tracking-wide whitespace-nowrap">OFFER EXPIRES IN:</span>
               </div>
               <Countdown />
             </div>
@@ -692,12 +696,11 @@ const App: React.FC = () => {
                 </button>
                 <div className="mt-5 w-full bg-white border border-slate-200/90 rounded-2xl p-4 shadow-sm flex items-center justify-between relative overflow-hidden text-left">
                   <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-blue-600 via-sky-500 to-blue-700"></div>
-                  <div className="flex items-center gap-1.5 shrink-0">
-                    <span className="text-slate-800 font-extrabold text-[10px] sm:text-xs uppercase tracking-wide whitespace-nowrap">SPECIAL OFFER EXPIRES IN:</span>
-                    <span className="bg-emerald-100 border border-emerald-300 text-emerald-800 text-[10px] font-extrabold px-1.5 py-0.5 rounded-md flex items-center gap-1 shadow-2xs">
-                      <span className="text-slate-400 line-through font-medium text-[9px]">$35</span>
-                      <span className="text-emerald-900 font-black">$25</span>
+                  <div className="flex items-center gap-2 shrink-0">
+                    <span className="bg-gradient-to-r from-red-600 to-rose-600 text-white text-[10px] sm:text-xs font-black px-2 py-0.5 rounded-md tracking-wider shadow-xs uppercase">
+                      50% OFF
                     </span>
+                    <span className="text-slate-800 font-extrabold text-[10px] sm:text-xs uppercase tracking-wide whitespace-nowrap">OFFER EXPIRES IN:</span>
                   </div>
                   <Countdown compact />
                 </div>
@@ -782,10 +785,9 @@ const App: React.FC = () => {
                 <span className="bg-blue-100 text-blue-800 text-[10px] md:text-xs font-bold px-2.5 py-0.5 rounded-full border border-blue-200/60">
                   LIFETIME ACCESS
                 </span>
-                <div className="flex items-center gap-1.5 ml-1">
-                  <span className="text-xs text-slate-400 line-through font-medium">$35</span>
-                  <span className="text-sm md:text-base font-extrabold text-blue-900">$25</span>
-                </div>
+                <span className="bg-gradient-to-r from-red-600 to-rose-600 text-white text-[10px] md:text-xs font-black px-2 py-0.5 rounded-full uppercase tracking-wider shadow-xs">
+                  50% OFF
+                </span>
               </div>
               <p className="text-xs text-slate-500 font-medium">8,000+ Videos • Daily Updates • One-Time Payment</p>
             </div>
@@ -854,8 +856,9 @@ const App: React.FC = () => {
                     <div className="flex justify-between items-center mb-1.5">
                       <span className="text-slate-800 font-semibold">Lifetime VIP Membership</span>
                       <div className="flex items-center gap-2">
-                        <span className="line-through text-slate-400 text-xs font-medium">$35.00</span>
-                        <span className="text-slate-900 font-extrabold text-xl">$25.00</span>
+                        <span className="bg-red-100 text-red-700 border border-red-200 text-xs font-black px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+                          50% OFF SPECIAL
+                        </span>
                       </div>
                     </div>
                     <p className="text-xs text-slate-400 text-left">

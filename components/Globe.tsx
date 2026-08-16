@@ -33,8 +33,28 @@ const Globe: React.FC = () => {
     }
 
     let animationFrameId: number;
+    let isVisible = true;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          isVisible = entry.isIntersecting;
+          if (isVisible && !animationFrameId) {
+            render();
+          }
+        });
+      },
+      { threshold: 0.05 }
+    );
+
+    observer.observe(canvas);
 
     const render = () => {
+      if (!isVisible) {
+        animationFrameId = 0;
+        return;
+      }
+
       ctx.clearRect(0, 0, width, height);
       
       const cx = width / 2;
@@ -58,13 +78,11 @@ const Globe: React.FC = () => {
         const py = cy + z * scale * 0.2 + (y * 0.1); // Flatten slightly
 
         // Draw dot if it's on the front side
-        if (y < 0 || true) { // Draw all for wireframe transparent effect, adjust opacity by Z
-            const alpha = (y + GLOBE_RADIUS) / (2 * GLOBE_RADIUS); // Simple depth cue
-            ctx.globalAlpha = Math.max(0.1, alpha);
-            ctx.beginPath();
-            ctx.arc(px, py, DOT_RADIUS * scale, 0, Math.PI * 2);
-            ctx.fill();
-        }
+        const alpha = (y + GLOBE_RADIUS) / (2 * GLOBE_RADIUS); // Simple depth cue
+        ctx.globalAlpha = Math.max(0.1, alpha);
+        ctx.beginPath();
+        ctx.arc(px, py, DOT_RADIUS * scale, 0, Math.PI * 2);
+        ctx.fill();
       });
 
       angle += 0.005;
@@ -73,7 +91,10 @@ const Globe: React.FC = () => {
 
     render();
 
-    return () => cancelAnimationFrame(animationFrameId);
+    return () => {
+      observer.disconnect();
+      if (animationFrameId) cancelAnimationFrame(animationFrameId);
+    };
   }, []);
 
   return (
