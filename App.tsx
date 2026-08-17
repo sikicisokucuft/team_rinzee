@@ -466,37 +466,39 @@ const App: React.FC = () => {
       <MatrixCanvas />
       
       {/* Absolute Header (disappears on scroll) */}
-      <nav className="absolute top-0 w-full z-40 bg-[#f0f7ff]/90 backdrop-blur-md border-b border-blue-100/60 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
-          <div className="flex items-center gap-2">
-             <span className="text-2xl md:text-3xl text-blue-600 font-display tracking-wide">PLEASURE HEAVEN</span>
+      <nav className="absolute top-0 w-full z-40 bg-[#f0f7ff]/95 backdrop-blur-md border-b border-blue-100/60 shadow-xs">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 py-2.5 sm:py-3.5 flex justify-between items-center gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+             <span className="text-lg sm:text-2xl md:text-3xl text-blue-600 font-display tracking-tight sm:tracking-wide font-extrabold whitespace-nowrap">
+               PLEASURE HEAVEN
+             </span>
           </div>
-          <div className="flex items-center gap-3 md:gap-4">
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
             <LanguageSelector currentLanguage={lang} onLanguageChange={handleLanguageChange} />
             <a 
               href="https://t.me/pleasureheaven7" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="text-blue-600 hover:text-blue-800 transition-colors"
+              className="text-blue-600 hover:text-blue-800 transition-colors p-1"
               aria-label="Telegram"
             >
-              <TelegramIcon className="w-7 h-7 md:w-8 md:h-8" />
+              <TelegramIcon className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8" />
             </a>
             <a 
               href="https://x.com/MistikTapinak" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="text-blue-600 hover:text-blue-800 transition-colors"
+              className="text-blue-600 hover:text-blue-800 transition-colors p-1"
               aria-label="X (Twitter)"
             >
-              <XIcon className="w-5 h-5 md:w-6 md:h-6" />
+              <XIcon className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
             </a>
           </div>
         </div>
       </nav>
 
       {/* Hero Section */}
-      <header className="relative z-10 pt-20 md:pt-24 pb-6 md:pb-10 px-4 text-center overflow-hidden">
+      <header className="relative z-10 pt-24 sm:pt-28 md:pt-32 pb-6 md:pb-10 px-4 text-center overflow-hidden">
         {/* Instant Hero Background Ambient Placeholder */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] md:w-[800px] md:h-[450px] bg-gradient-to-r from-blue-200/40 via-sky-100/30 to-blue-100/30 blur-3xl rounded-full pointer-events-none -z-10" />
 
@@ -507,7 +509,7 @@ const App: React.FC = () => {
             {t.hero.joinOur}<span className="brand-text">{t.hero.vipGroup}</span>
           </h1>
           
-          <div className="text-slate-600 text-base md:text-xl max-w-3xl mb-6 leading-relaxed text-left rtl:text-right inline-block">
+          <div className="text-slate-600 text-base md:text-xl max-w-3xl mb-6 leading-relaxed text-left rtl:text-right inline-block w-full">
             <ul className="space-y-3 list-disc pl-5 rtl:pl-0 rtl:pr-5 marker:text-blue-500">
               {t.hero.bullets.map((bullet, idx) => (
                 <li key={idx}>
@@ -521,25 +523,25 @@ const App: React.FC = () => {
 
           {/* CTA Buttons */}
           <div className="w-full max-w-2xl flex flex-col items-center">
-            <div className="flex flex-col md:flex-row gap-4 items-center w-full justify-center">
+            <div className="flex flex-col md:flex-row gap-3.5 sm:gap-4 items-center w-full justify-center">
               <button 
                 onClick={() => window.open(JOIN_LINK, '_blank')}
-                className="w-full md:w-auto bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white font-display text-xl px-12 py-4 rounded-xl hover:brightness-110 transition-all shadow-[0_10px_30px_rgba(220,38,38,0.4)] hover:shadow-[0_15px_35px_rgba(220,38,38,0.6)] flex items-center justify-center gap-3 group active:scale-98 cursor-pointer"
+                className="w-full md:w-auto bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white font-display text-base sm:text-lg md:text-xl px-6 sm:px-10 md:px-12 py-3.5 sm:py-4 rounded-xl hover:brightness-110 transition-all shadow-[0_10px_30px_rgba(220,38,38,0.4)] hover:shadow-[0_15px_35px_rgba(220,38,38,0.6)] flex items-center justify-center gap-2.5 sm:gap-3 group active:scale-98 cursor-pointer text-center"
               >
                 <span>{t.hero.ctaLifetime}</span>
-                <ArrowRight size={22} className="group-hover:translate-x-1 transition-transform" />
+                <ArrowRight size={20} className="group-hover:translate-x-1 rtl:group-hover:-translate-x-1 transition-transform shrink-0" />
               </button>
               <button 
                 onClick={() => setIsVideoModalOpen(true)}
-                className="w-full md:w-auto bg-slate-900 hover:bg-slate-800 text-white font-display text-xl px-10 py-4 rounded-xl transition-all shadow-md flex items-center justify-center gap-2.5 border border-slate-700/80 cursor-pointer active:scale-98 group"
+                className="w-full md:w-auto bg-slate-900 hover:bg-slate-800 text-white font-display text-base sm:text-lg md:text-xl px-6 sm:px-8 md:px-10 py-3.5 sm:py-4 rounded-xl transition-all shadow-md flex items-center justify-center gap-2.5 border border-slate-700/80 cursor-pointer active:scale-98 group text-center"
               >
-                <Play size={20} className="fill-current text-sky-400 group-hover:scale-110 transition-transform" />
+                <Play size={18} className="fill-current text-sky-400 group-hover:scale-110 transition-transform shrink-0" />
                 <span>{t.hero.ctaPreview}</span>
               </button>
             </div>
 
             {/* Privacy Guard Notice */}
-            <div className="mt-5 inline-flex items-center gap-2.5 px-4 py-2.5 bg-blue-50/90 border border-blue-200/90 text-slate-800 rounded-full text-xs md:text-sm font-medium shadow-xs backdrop-blur-md">
+            <div className="mt-5 inline-flex items-center gap-2.5 px-4 py-2.5 bg-blue-50/90 border border-blue-200/90 text-slate-800 rounded-2xl sm:rounded-full text-xs md:text-sm font-medium shadow-xs backdrop-blur-md text-left rtl:text-right">
               <ShieldCheck size={18} className="text-blue-600 shrink-0" />
               <span>
                 <strong className="text-blue-950 font-bold">{t.hero.billingTitle}</strong> {t.hero.billingDesc}
@@ -548,7 +550,7 @@ const App: React.FC = () => {
           </div>
 
           <div className="mt-8 flex flex-col items-center justify-center gap-3 w-full max-w-md mx-auto">
-            <div className="w-full bg-gradient-to-b from-white via-blue-50/20 to-white border border-blue-200/90 rounded-2xl p-4 md:p-5 shadow-lg shadow-blue-900/5 flex items-center justify-between relative overflow-hidden transition-all hover:border-blue-300/80">
+            <div className="w-full bg-gradient-to-b from-white via-blue-50/20 to-white border border-blue-200/90 rounded-2xl p-3.5 sm:p-4 md:p-5 shadow-lg shadow-blue-900/5 flex flex-wrap sm:flex-nowrap items-center justify-between gap-2.5 relative overflow-hidden transition-all hover:border-blue-300/80">
               <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-blue-600 via-sky-500 to-blue-700"></div>
               <div className="flex items-center gap-2 shrink-0">
                 <span className="bg-gradient-to-r from-red-600 to-rose-600 text-white text-[10px] sm:text-xs font-black px-2 py-0.5 rounded-md tracking-wider shadow-xs uppercase">
@@ -686,7 +688,7 @@ const App: React.FC = () => {
                 >
                   {t.choice.enterButton}
                 </button>
-                <div className="mt-5 w-full bg-white border border-slate-200/90 rounded-2xl p-4 shadow-sm flex items-center justify-between relative overflow-hidden text-left rtl:text-right">
+                <div className="mt-5 w-full bg-white border border-slate-200/90 rounded-2xl p-3 sm:p-4 shadow-sm flex flex-wrap sm:flex-nowrap items-center justify-between gap-2 relative overflow-hidden text-left rtl:text-right">
                   <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-blue-600 via-sky-500 to-blue-700"></div>
                   <div className="flex items-center gap-2 shrink-0">
                     <span className="bg-gradient-to-r from-red-600 to-rose-600 text-white text-[10px] sm:text-xs font-black px-2 py-0.5 rounded-md tracking-wider shadow-xs uppercase">
@@ -762,40 +764,40 @@ const App: React.FC = () => {
 
       {/* Sticky Floating Bottom Conversion Bar */}
       <div 
-        className={`fixed bottom-0 left-0 right-0 z-40 p-3 md:p-4 bg-white/95 backdrop-blur-xl border-t border-blue-200/80 shadow-[0_-8px_30px_rgba(37,99,235,0.12)] transition-all duration-500 ease-out transform ${
+        className={`fixed bottom-0 left-0 right-0 z-40 p-2.5 sm:p-3 md:p-4 bg-white/95 backdrop-blur-xl border-t border-blue-200/80 shadow-[0_-8px_30px_rgba(37,99,235,0.12)] transition-all duration-500 ease-out transform ${
           showStickyCTA ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0 pointer-events-none'
         }`}
       >
-        <div className="max-w-6xl mx-auto flex items-center justify-between gap-4">
-          <div className="hidden sm:flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center border border-blue-200 flex-shrink-0">
+        <div className="max-w-6xl mx-auto flex items-center justify-between gap-2.5 sm:gap-4">
+          <div className="hidden sm:flex items-center gap-3 min-w-0">
+            <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center border border-blue-200 shrink-0">
               <Crown size={20} className="text-blue-600" />
             </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="font-display text-slate-900 text-base md:text-lg">{t.stickyCta.brandTitle}</span>
-                <span className="bg-blue-100 text-blue-800 text-[10px] md:text-xs font-bold px-2.5 py-0.5 rounded-full border border-blue-200/60">
+            <div className="min-w-0">
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="font-display text-slate-900 text-base md:text-lg whitespace-nowrap">{t.stickyCta.brandTitle}</span>
+                <span className="bg-blue-100 text-blue-800 text-[10px] md:text-xs font-bold px-2.5 py-0.5 rounded-full border border-blue-200/60 whitespace-nowrap">
                   {t.stickyCta.lifetimeAccess}
                 </span>
-                <span className="bg-gradient-to-r from-red-600 to-rose-600 text-white text-[10px] md:text-xs font-black px-2 py-0.5 rounded-full uppercase tracking-wider shadow-xs">
+                <span className="bg-gradient-to-r from-red-600 to-rose-600 text-white text-[10px] md:text-xs font-black px-2 py-0.5 rounded-full uppercase tracking-wider shadow-xs whitespace-nowrap">
                   {t.stickyCta.discountBadge}
                 </span>
               </div>
-              <p className="text-xs text-slate-500 font-medium">{t.stickyCta.tagline}</p>
+              <p className="text-xs text-slate-500 font-medium truncate">{t.stickyCta.tagline}</p>
             </div>
           </div>
 
-          <div className="flex items-center justify-between sm:justify-end gap-3 w-full sm:w-auto">
-            <div className="sm:hidden flex flex-col">
-              <span className="text-xs text-blue-600 font-bold uppercase tracking-wider">{t.stickyCta.limitedOffer}</span>
-              <span className="text-xs text-slate-600 font-medium">{t.stickyCta.subTagline}</span>
+          <div className="flex items-center justify-between sm:justify-end gap-2.5 sm:gap-3 w-full sm:w-auto">
+            <div className="sm:hidden flex flex-col min-w-0 pr-2 rtl:pr-0 rtl:pl-2">
+              <span className="text-[11px] text-blue-600 font-bold uppercase tracking-wider truncate">{t.stickyCta.limitedOffer}</span>
+              <span className="text-[11px] text-slate-600 font-medium truncate">{t.stickyCta.subTagline}</span>
             </div>
             <button
               onClick={() => window.open(JOIN_LINK, '_blank')}
-              className="brand-bg text-white font-display text-base md:text-lg px-6 md:px-8 py-3 rounded-xl hover:brightness-110 transition-all shadow-md flex items-center gap-2 whitespace-nowrap active:scale-95 cursor-pointer"
+              className="brand-bg text-white font-display text-sm sm:text-base md:text-lg px-4 sm:px-6 md:px-8 py-2.5 sm:py-3 rounded-xl hover:brightness-110 transition-all shadow-md flex items-center gap-1.5 sm:gap-2 whitespace-nowrap active:scale-95 cursor-pointer shrink-0"
             >
               <span>{t.stickyCta.joinButton}</span>
-              <ArrowRight size={18} />
+              <ArrowRight size={16} className="rtl:rotate-180" />
             </button>
           </div>
         </div>

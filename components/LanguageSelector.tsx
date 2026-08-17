@@ -27,25 +27,28 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
   }, []);
 
   return (
-    <div className="relative" ref={dropdownRef}>
+    <div className="relative shrink-0" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/80 hover:bg-white border border-blue-200/80 text-slate-700 hover:text-blue-600 transition-all text-xs font-semibold shadow-2xs backdrop-blur-xs cursor-pointer active:scale-95"
+        className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-full bg-white/90 hover:bg-white border border-blue-200/90 text-slate-700 hover:text-blue-600 transition-all text-xs font-semibold shadow-2xs backdrop-blur-xs cursor-pointer active:scale-95 whitespace-nowrap"
         title="Change Language"
         aria-label="Select Language"
       >
-        <span className="text-sm leading-none">{currentInfo.flag}</span>
-        <span className="uppercase tracking-wider font-bold text-[11px]">{currentInfo.code}</span>
+        <Globe size={13} className="text-blue-600 shrink-0" />
+        <span className="uppercase tracking-wider font-bold text-[11px] text-slate-800">{currentInfo.code}</span>
         <ChevronDown size={12} className={`text-slate-400 transition-transform duration-200 ${isOpen ? 'rotate-180 text-blue-600' : ''}`} />
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-48 bg-white/95 backdrop-blur-md rounded-2xl shadow-xl border border-blue-100/90 py-1.5 z-50 animate-in fade-in zoom-in-95 duration-150">
-          <div className="px-3 py-1.5 border-b border-slate-100 flex items-center gap-1.5 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-            <Globe size={13} className="text-blue-500" />
-            <span>Select Language</span>
+        <div className="absolute right-0 rtl:right-auto rtl:left-0 mt-2 w-52 sm:w-56 bg-white/98 backdrop-blur-md rounded-2xl shadow-2xl border border-blue-100 py-1.5 z-50 animate-in fade-in zoom-in-95 duration-150">
+          <div className="px-3.5 py-2 border-b border-slate-100 flex items-center justify-between text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+            <div className="flex items-center gap-1.5">
+              <Globe size={13} className="text-blue-500" />
+              <span>Language</span>
+            </div>
+            <span className="text-[10px] text-blue-600 font-mono font-bold uppercase">{currentInfo.code}</span>
           </div>
-          <div className="max-h-64 overflow-y-auto py-1">
+          <div className="max-h-64 sm:max-h-72 overflow-y-auto py-1 overscroll-contain">
             {SUPPORTED_LANGUAGES.map((lang) => {
               const isSelected = lang.code === currentLanguage;
               return (
@@ -55,17 +58,18 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
                     onLanguageChange(lang.code);
                     setIsOpen(false);
                   }}
-                  className={`w-full px-3 py-2 text-left flex items-center justify-between text-xs transition-colors cursor-pointer ${
+                  className={`w-full px-3.5 py-2 text-left rtl:text-right flex items-center justify-between text-xs transition-colors cursor-pointer ${
                     isSelected
-                      ? 'bg-blue-50 text-blue-700 font-bold'
+                      ? 'bg-blue-50/90 text-blue-700 font-bold'
                       : 'text-slate-700 hover:bg-slate-50'
                   }`}
                 >
-                  <div className="flex items-center gap-2.5">
-                    <span className="text-base leading-none">{lang.flag}</span>
-                    <span>{lang.nativeName}</span>
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <span className="text-base leading-none shrink-0">{lang.flag}</span>
+                    <span className="truncate">{lang.nativeName}</span>
+                    <span className="text-[10px] text-slate-400 font-normal shrink-0">({lang.name})</span>
                   </div>
-                  {isSelected && <Check size={14} className="text-blue-600 stroke-[2.5]" />}
+                  {isSelected && <Check size={14} className="text-blue-600 stroke-[2.5] shrink-0 ml-2 rtl:ml-0 rtl:mr-2" />}
                 </button>
               );
             })}

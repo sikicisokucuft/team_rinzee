@@ -40,17 +40,20 @@ const Countdown: React.FC<{ compact?: boolean }> = ({ compact = false }) => {
   const s = remaining % 60;
 
   return (
-    <div className={`flex items-center gap-1 font-mono font-bold tracking-tight ${compact ? 'text-xs' : 'text-xs md:text-sm'}`}>
-      <div className="bg-blue-600 text-white px-2 py-0.5 rounded-md shadow-xs text-center min-w-[28px] tabular-nums">
-        {h.toString().padStart(2, '0')}<span className="text-[10px] font-normal text-blue-200 ml-0.5">h</span>
+    <div 
+      dir="ltr"
+      className={`flex items-center gap-1 font-mono font-bold tracking-tight shrink-0 ${compact ? 'text-[11px] sm:text-xs' : 'text-xs md:text-sm'}`}
+    >
+      <div className="bg-blue-600 text-white px-1.5 sm:px-2 py-0.5 rounded-md shadow-xs text-center min-w-[26px] sm:min-w-[28px] tabular-nums">
+        {h.toString().padStart(2, '0')}<span className="text-[9px] sm:text-[10px] font-normal text-blue-200 ml-0.5">h</span>
       </div>
       <span className="text-blue-400 font-sans text-xs font-semibold">:</span>
-      <div className="bg-blue-600 text-white px-2 py-0.5 rounded-md shadow-xs text-center min-w-[28px] tabular-nums">
-        {m.toString().padStart(2, '0')}<span className="text-[10px] font-normal text-blue-200 ml-0.5">m</span>
+      <div className="bg-blue-600 text-white px-1.5 sm:px-2 py-0.5 rounded-md shadow-xs text-center min-w-[26px] sm:min-w-[28px] tabular-nums">
+        {m.toString().padStart(2, '0')}<span className="text-[9px] sm:text-[10px] font-normal text-blue-200 ml-0.5">m</span>
       </div>
       <span className="text-blue-400 font-sans text-xs font-semibold">:</span>
-      <div className="bg-blue-600 text-white px-2 py-0.5 rounded-md shadow-xs text-center min-w-[28px] tabular-nums">
-        {s.toString().padStart(2, '0')}<span className="text-[10px] font-normal text-blue-200 ml-0.5">s</span>
+      <div className="bg-blue-600 text-white px-1.5 sm:px-2 py-0.5 rounded-md shadow-xs text-center min-w-[26px] sm:min-w-[28px] tabular-nums">
+        {s.toString().padStart(2, '0')}<span className="text-[9px] sm:text-[10px] font-normal text-blue-200 ml-0.5">s</span>
       </div>
     </div>
   );
