@@ -5,6 +5,8 @@ import MatrixCanvas from './components/MatrixCanvas';
 import Countdown from './components/Countdown';
 import { VideoModal } from './components/VideoPreview';
 import { Testimonial } from './types';
+import { translations, getInitialLanguage, Language, TranslationSchema } from './translations';
+import { LanguageSelector } from './components/LanguageSelector';
 
 const PAYPAL_CLIENT_ID = "AVxQYNem8VSj-46hc80juvbrt0U9eVfL9RAwFhH8wxlPIcKreVuEjjJZ5FNIN6rhmOTBc6YURTvtGBYq";
 const JOIN_LINK = "https://www.paypal.com/ncp/payment/D2SR9M5QZL6RQ";
@@ -345,31 +347,8 @@ const socialProofItems: SocialProofItem[] = [
   }
 ];
 
-const faqs = [
-  {
-    question: "Do you see my credit card number when I pay?",
-    answer: "No. We never see or store your credit card information. All transactions are securely processed through PayPal, ensuring 100% privacy and safety."
-  },
-  {
-    question: "Is this a one-time payment?",
-    answer: "Yes! This is a single one-time payment for permanent Lifetime Access. Once joined, you get unlimited access to stream and download all current and future content. You will never be charged again, and there are no hidden subscription fees."
-  },
-  {
-    question: "Where will I watch the videos?",
-    answer: "All content is hosted directly on Telegram in private channels. If you don't have Telegram yet, creating a free account takes less than 2 minutes.\n\nYour privacy is completely protected—no one can see what channels you belong to. Telegram also features built-in search so you can easily locate your favorite models.\n\nImmediately after completing your payment, you will receive your instant invite link. If you ever need help, contact us at pleasureheavenn@gmail.com or message us on Telegram at @pleasureheaven7."
-  },
-  {
-    question: "Are the videos long?",
-    answer: "Yes! Over 80% of our videos are full-length features. We strictly focus on full video content and avoid uploading short clips unless long-format material is unavailable for a specific creator.\n\nNote: We upload full video media only—no standalone photos or GIFs."
-  },
-  {
-    question: "I couldn't find the models I wanted",
-    answer: "We regularly archive content from top 1% creators. If a model you want is not currently in the channel, simply message us on Telegram with your request. Our team will upload their complete video collection within a few days."
-  }
-];
-
 // Top Promo Bar Component
-const PromoBar: React.FC<{ onJoinClick: () => void }> = ({ onJoinClick }) => {
+const PromoBar: React.FC<{ onJoinClick: () => void; t: TranslationSchema['promo'] }> = ({ onJoinClick, t }) => {
   const STORAGE_KEY = 'ph_promo_expiry';
   const DEFAULT_DURATION = 2 * 3600 + 12 * 60; // 2 hours 12 minutes
 
@@ -418,9 +397,9 @@ const PromoBar: React.FC<{ onJoinClick: () => void }> = ({ onJoinClick }) => {
         <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
       </span>
       <span className="bg-red-500 text-white text-[10px] md:text-xs font-black px-2 py-0.5 rounded-full tracking-wider mr-2 uppercase shadow-2xs">
-        50% OFF
+        {t.discountBadge}
       </span>
-      <span className="uppercase font-extrabold tracking-wider text-[11px] md:text-xs">SPECIAL OFFER EXPIRES IN:</span> 
+      <span className="uppercase font-extrabold tracking-wider text-[11px] md:text-xs">{t.expiresIn}</span> 
       <span className="mx-2 font-mono bg-white/15 border border-white/25 px-2.5 py-0.5 rounded-full text-xs shadow-inner backdrop-blur-xs tracking-wider text-blue-50 font-bold">
         {formatTime(timeLeft)}
       </span>
@@ -428,7 +407,7 @@ const PromoBar: React.FC<{ onJoinClick: () => void }> = ({ onJoinClick }) => {
         onClick={onJoinClick} 
         className="inline-flex items-center gap-1 text-[11px] md:text-xs font-black tracking-wider uppercase bg-white text-blue-700 px-3 py-1 rounded-full hover:bg-blue-50 transition-all shadow-xs ml-1 hover:scale-105 active:scale-95 cursor-pointer"
       >
-        <span>JOIN NOW</span>
+        <span>{t.joinNow}</span>
         <ArrowRight size={12} className="stroke-[3]" />
       </button>
     </div>
@@ -436,6 +415,7 @@ const PromoBar: React.FC<{ onJoinClick: () => void }> = ({ onJoinClick }) => {
 };
 
 const App: React.FC = () => {
+  const [lang, setLang] = useState<Language>(() => getInitialLanguage());
   const [activeModal, setActiveModal] = useState<'terms' | 'privacy' | 'support' | null>(null);
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
@@ -444,6 +424,18 @@ const App: React.FC = () => {
   const [paymentError, setPaymentError] = useState<string | null>(null);
   const [emailCopied, setEmailCopied] = useState(false);
   const [showStickyCTA, setShowStickyCTA] = useState(false);
+
+  useEffect(() => {
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+  }, [lang]);
+
+  const handleLanguageChange = (newLang: Language) => {
+    setLang(newLang);
+    localStorage.setItem('ph_user_lang', newLang);
+  };
+
+  const t = translations[lang] || translations.en;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -479,7 +471,8 @@ const App: React.FC = () => {
           <div className="flex items-center gap-2">
              <span className="text-2xl md:text-3xl text-blue-600 font-display tracking-wide">PLEASURE HEAVEN</span>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3 md:gap-4">
+            <LanguageSelector currentLanguage={lang} onLanguageChange={handleLanguageChange} />
             <a 
               href="https://t.me/pleasureheaven7" 
               target="_blank" 
@@ -487,7 +480,7 @@ const App: React.FC = () => {
               className="text-blue-600 hover:text-blue-800 transition-colors"
               aria-label="Telegram"
             >
-              <TelegramIcon className="w-8 h-8" />
+              <TelegramIcon className="w-7 h-7 md:w-8 md:h-8" />
             </a>
             <a 
               href="https://x.com/MistikTapinak" 
@@ -496,7 +489,7 @@ const App: React.FC = () => {
               className="text-blue-600 hover:text-blue-800 transition-colors"
               aria-label="X (Twitter)"
             >
-              <XIcon className="w-6 h-6" />
+              <XIcon className="w-5 h-5 md:w-6 md:h-6" />
             </a>
           </div>
         </div>
@@ -508,29 +501,21 @@ const App: React.FC = () => {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] md:w-[800px] md:h-[450px] bg-gradient-to-r from-blue-200/40 via-sky-100/30 to-blue-100/30 blur-3xl rounded-full pointer-events-none -z-10" />
 
         <div className="max-w-5xl mx-auto flex flex-col items-center">
-
           
           <h1 className="font-display text-3xl md:text-6xl leading-tight mb-4 text-slate-900">
-            JOIN OUR <span className="brand-text">VIP MEMBERSHIP!</span>
+            <span className="block text-red-600 font-black text-2xl md:text-4xl mb-1.5 tracking-tight">{t.hero.discountBadge}</span>
+            {t.hero.joinOur}<span className="brand-text">{t.hero.vipGroup}</span>
           </h1>
           
-          <div className="text-slate-600 text-base md:text-xl max-w-3xl mb-6 leading-relaxed text-left inline-block">
-            <ul className="space-y-3 list-disc pl-5 marker:text-blue-500">
-              <li>
-                Specialized in <span className="font-bold text-slate-900">high-quality JOI videos</span> + thousands of exclusive OnlyFans content
-              </li>
-              <li>
-                Get instant access to over <span className="font-bold text-slate-900">$3,000/month</span> worth of premium videos
-              </li>
-              <li>
-                Watch <span className="font-bold text-slate-900">8,000+ full-length videos</span> from top creators
-              </li>
-              <li>
-                <span className="font-bold text-slate-900">Request any model</span> — we upload within 48 hours
-              </li>
-              <li>
-                <span className="font-bold text-slate-900">One-time payment</span> for <span className="font-bold text-slate-900">Lifetime Access</span>. No recurring fees.
-              </li>
+          <div className="text-slate-600 text-base md:text-xl max-w-3xl mb-6 leading-relaxed text-left rtl:text-right inline-block">
+            <ul className="space-y-3 list-disc pl-5 rtl:pl-0 rtl:pr-5 marker:text-blue-500">
+              {t.hero.bullets.map((bullet, idx) => (
+                <li key={idx}>
+                  {bullet.prefix && <span>{bullet.prefix} </span>}
+                  <span className="font-bold text-slate-900">{bullet.bold}</span>
+                  {bullet.suffix && <span> {bullet.suffix}</span>}
+                </li>
+              ))}
             </ul>
           </div>
 
@@ -541,7 +526,7 @@ const App: React.FC = () => {
                 onClick={() => window.open(JOIN_LINK, '_blank')}
                 className="w-full md:w-auto bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white font-display text-xl px-12 py-4 rounded-xl hover:brightness-110 transition-all shadow-[0_10px_30px_rgba(220,38,38,0.4)] hover:shadow-[0_15px_35px_rgba(220,38,38,0.6)] flex items-center justify-center gap-3 group active:scale-98 cursor-pointer"
               >
-                <span>GET LIFETIME ACCESS NOW</span>
+                <span>{t.hero.ctaLifetime}</span>
                 <ArrowRight size={22} className="group-hover:translate-x-1 transition-transform" />
               </button>
               <button 
@@ -549,7 +534,7 @@ const App: React.FC = () => {
                 className="w-full md:w-auto bg-slate-900 hover:bg-slate-800 text-white font-display text-xl px-10 py-4 rounded-xl transition-all shadow-md flex items-center justify-center gap-2.5 border border-slate-700/80 cursor-pointer active:scale-98 group"
               >
                 <Play size={20} className="fill-current text-sky-400 group-hover:scale-110 transition-transform" />
-                <span>WATCH VIP PREVIEW</span>
+                <span>{t.hero.ctaPreview}</span>
               </button>
             </div>
 
@@ -557,7 +542,7 @@ const App: React.FC = () => {
             <div className="mt-5 inline-flex items-center gap-2.5 px-4 py-2.5 bg-blue-50/90 border border-blue-200/90 text-slate-800 rounded-full text-xs md:text-sm font-medium shadow-xs backdrop-blur-md">
               <ShieldCheck size={18} className="text-blue-600 shrink-0" />
               <span>
-                <strong className="text-blue-950 font-bold">🔒 100% Discreet Billing:</strong> Appears strictly as neutral <strong className="text-blue-700 font-extrabold underline underline-offset-2">FLOW1 LTD</strong> on bank & PayPal statements.
+                <strong className="text-blue-950 font-bold">{t.hero.billingTitle}</strong> {t.hero.billingDesc}
               </span>
             </div>
           </div>
@@ -567,9 +552,9 @@ const App: React.FC = () => {
               <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-blue-600 via-sky-500 to-blue-700"></div>
               <div className="flex items-center gap-2 shrink-0">
                 <span className="bg-gradient-to-r from-red-600 to-rose-600 text-white text-[10px] sm:text-xs font-black px-2 py-0.5 rounded-md tracking-wider shadow-xs uppercase">
-                  50% OFF
+                  {t.hero.discountBadge}
                 </span>
-                <span className="text-slate-800 font-extrabold text-[10px] sm:text-xs uppercase tracking-wide whitespace-nowrap">OFFER EXPIRES IN:</span>
+                <span className="text-slate-800 font-extrabold text-[10px] sm:text-xs uppercase tracking-wide whitespace-nowrap">{t.hero.offerExpiresIn}</span>
               </div>
               <Countdown />
             </div>
@@ -582,7 +567,7 @@ const App: React.FC = () => {
               className="w-full inline-flex items-center justify-center gap-2.5 px-5 py-3.5 bg-sky-500 hover:bg-sky-600 text-white font-bold rounded-xl shadow-md hover:shadow-lg transition-all active:scale-95 text-sm sm:text-base tracking-wide cursor-pointer"
             >
               <TelegramIcon className="w-5 h-5 fill-current shrink-0" />
-              <span>Message Us On Telegram</span>
+              <span>{t.hero.messageTelegram}</span>
             </a>
           </div>
           
@@ -590,22 +575,22 @@ const App: React.FC = () => {
           <div className="mt-8 md:mt-24 flex flex-row flex-nowrap items-center justify-center gap-x-6 md:gap-16 text-slate-500 font-mono text-xs md:text-sm whitespace-nowrap">
             <div className="flex items-center gap-1.5 md:gap-2">
               <Users className="text-blue-500" size={16} />
-              <span>3,000+ VIP MEMBERS</span>
+              <span>{t.hero.vipMembers}</span>
             </div>
             <div className="flex items-center gap-1.5 md:gap-2">
               <Star className="text-blue-500" size={16} />
-              <span>99% POSITIVE REVIEWS</span>
+              <span>{t.hero.positiveReviews}</span>
             </div>
           </div>
         </div>
       </header>
 
-
-
-      {/* Trusted By Many / Social Proof - Updated with Masonry Grid */}
+      {/* Trusted By Many / Social Proof */}
       <section className="relative z-10 py-16 md:py-24 bg-[#f0f7ff] border-y border-blue-100">
         <div className="max-w-7xl mx-auto px-4">
-          <h2 className="font-display text-center text-3xl md:text-4xl mb-12 md:mb-16 text-slate-900">TRUSTED BY <span className="text-blue-600">THOUSANDS</span></h2>
+          <h2 className="font-display text-center text-3xl md:text-4xl mb-12 md:mb-16 text-slate-900">
+            {t.socialProof.title}<span className="text-blue-600">{t.socialProof.titleHighlight}</span>
+          </h2>
           
           <MasonryGrid items={socialProofItems} />
         </div>
@@ -614,34 +599,36 @@ const App: React.FC = () => {
       {/* FAQ Section */}
       <section className="relative z-10 py-16 md:py-24 bg-white">
         <div className="max-w-4xl mx-auto px-4">
-          <h2 className="font-display text-center text-3xl md:text-4xl mb-8 md:mb-12 text-slate-900">FREQUENTLY ASKED <span className="brand-text">QUESTIONS</span></h2>
+          <h2 className="font-display text-center text-3xl md:text-4xl mb-8 md:mb-12 text-slate-900">
+            {t.faq.title}<span className="brand-text">{t.faq.titleHighlight}</span>
+          </h2>
           <div className="space-y-4">
-            {faqs.map((faq, index) => (
+            {t.faq.items.map((faq, index) => (
               <FAQItem key={index} question={faq.question} answer={faq.answer} />
             ))}
           </div>
         </div>
       </section>
 
-
-
       {/* Who We Are Section */}
       <section className="relative z-10 py-16 md:py-24 bg-white border-t border-blue-100">
         <div className="max-w-4xl mx-auto px-4">
-          <h2 className="font-display text-center text-3xl md:text-4xl mb-8 md:mb-12 text-slate-900">WHO WE <span className="brand-text">ARE</span></h2>
+          <h2 className="font-display text-center text-3xl md:text-4xl mb-8 md:mb-12 text-slate-900">
+            {t.whoWeAre.title}<span className="brand-text">{t.whoWeAre.titleHighlight}</span>
+          </h2>
           <div className="bg-gradient-to-br from-white via-blue-50/40 to-sky-50/20 border border-blue-200/90 p-8 md:p-12 rounded-3xl shadow-md flex flex-col md:flex-row gap-8 items-center">
             <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center flex-shrink-0 border border-blue-200 shadow-sm">
               <Crown className="text-blue-600" size={40} />
             </div>
-            <div className="space-y-4 text-center md:text-left">
+            <div className="space-y-4 text-center md:text-left rtl:md:text-right">
               <p className="text-slate-700 leading-relaxed text-lg font-medium">
-                At Pleasure Heaven, we have been archiving premium digital content since 2023. Our dedicated team collects the highest quality and most exclusive media from hundreds of creators, maintaining a continuously updated, well-organized library. Over the years, our media network has generated millions of views and brought together hundreds of thousands of followers.
+                {t.whoWeAre.p1}
               </p>
               <p className="text-slate-700 leading-relaxed text-lg font-medium">
-                Our primary mission is to offer a secure, completely private platform with effortless search and navigation—delivering full creator libraries at an unbeatable price.
+                {t.whoWeAre.p2}
               </p>
               <p className="text-blue-700 leading-relaxed font-bold text-lg uppercase tracking-wider">
-                Today, thousands of active VIP members enjoy exclusive daily updates across our private channels.
+                {t.whoWeAre.p3}
               </p>
             </div>
           </div>
@@ -651,7 +638,9 @@ const App: React.FC = () => {
       {/* The Choice Section */}
       <section className="relative z-10 py-16 md:py-24 bg-white border-t border-blue-100">
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="font-display text-3xl md:text-5xl mb-8 md:mb-12 text-slate-900">CHOOSE YOUR <span className="brand-text">SIDE</span></h2>
+          <h2 className="font-display text-3xl md:text-5xl mb-8 md:mb-12 text-slate-900">
+            {t.choice.title}<span className="brand-text">{t.choice.titleHighlight}</span>
+          </h2>
           <div className="grid md:grid-cols-2 gap-8 items-stretch">
             {/* Blue Pill (OnlyFans) - Gray/Slate styled */}
             <div className="p-8 rounded-2xl bg-slate-50 border border-slate-200/90 hover:border-slate-300 transition-colors group shadow-sm flex flex-col justify-between">
@@ -659,32 +648,35 @@ const App: React.FC = () => {
                 <div className="w-16 h-16 bg-white border border-blue-100 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
                   <span className="font-display text-3xl tracking-tighter text-[#00AFF0]">OF</span>
                 </div>
-                <h3 className="font-display text-2xl mb-4 text-slate-600">ONLYFANS</h3>
-                <ul className="text-left text-slate-500 space-y-3 mb-8">
-                  <li className="flex gap-2 items-start"><XCircle className="text-red-400 w-5 h-5 flex-shrink-0 mt-0.5" /> <span>Unpredictable pay-per-view fees</span></li>
-                  <li className="flex gap-2 items-start"><XCircle className="text-red-400 w-5 h-5 flex-shrink-0 mt-0.5" /> <span>Cluttered & slow interface</span></li>
-                  <li className="flex gap-2 items-start"><XCircle className="text-red-400 w-5 h-5 flex-shrink-0 mt-0.5" /> <span>No direct video downloads</span></li>
-                  <li className="flex gap-2 items-start"><XCircle className="text-red-400 w-5 h-5 flex-shrink-0 mt-0.5" /> <span>$400+ per month for full access</span></li>
+                <h3 className="font-display text-2xl mb-4 text-slate-600">{t.choice.ofTitle}</h3>
+                <ul className="text-left rtl:text-right text-slate-500 space-y-3 mb-8">
+                  {t.choice.ofItems.map((item, idx) => (
+                    <li key={idx} className="flex gap-2 items-start">
+                      <XCircle className="text-red-400 w-5 h-5 flex-shrink-0 mt-0.5" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
                 </ul>
               </div>
             </div>
 
              {/* Red Pill (Pleasure Heaven) - Blue styled */}
              <div className="relative p-8 rounded-2xl bg-gradient-to-br from-white via-blue-50/70 to-sky-50/40 border-2 border-blue-400 shadow-xl shadow-blue-200/50 hover:border-blue-500 transition-colors group overflow-hidden flex flex-col justify-between">
-              <div className="absolute top-4 right-4 bg-blue-600 text-white text-[11px] font-black uppercase px-3 py-1 rounded-full tracking-wider shadow-sm">
-                VIP CHOICE
+              <div className="absolute top-4 right-4 rtl:right-auto rtl:left-4 bg-blue-600 text-white text-[11px] font-black uppercase px-3 py-1 rounded-full tracking-wider shadow-sm">
+                {t.choice.vipBadge}
               </div>
               <div>
                 <div className="w-16 h-16 bg-white border border-blue-200 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
                   <Crown className="text-blue-600" size={32} />
                 </div>
-                <h3 className="font-display text-2xl mb-4 text-blue-700">PLEASURE HEAVEN</h3>
-                <ul className="text-left text-slate-700 space-y-3 mb-8 font-medium">
-                  <li className="flex gap-2 items-start"><CheckCircle2 className="text-blue-600 w-5 h-5 flex-shrink-0 mt-0.5" /> <span>Zero hidden fees or PPVs</span></li>
-                  <li className="flex gap-2 items-start"><CheckCircle2 className="text-blue-600 w-5 h-5 flex-shrink-0 mt-0.5" /> <span>Direct video downloads enabled</span></li>
-                  <li className="flex gap-2 items-start"><CheckCircle2 className="text-blue-600 w-5 h-5 flex-shrink-0 mt-0.5" /> <span>Exclusive videos not found anywhere else online</span></li>
-                  <li className="flex gap-2 items-start"><CheckCircle2 className="text-blue-600 w-5 h-5 flex-shrink-0 mt-0.5" /> <span>Full access to 80+ top creator libraries</span></li>
-                  <li className="flex gap-2 items-start"><CheckCircle2 className="text-blue-600 w-5 h-5 flex-shrink-0 mt-0.5" /> <span>Custom model requests fulfilled within 48 hours</span></li>
+                <h3 className="font-display text-2xl mb-4 text-blue-700">{t.choice.phTitle}</h3>
+                <ul className="text-left rtl:text-right text-slate-700 space-y-3 mb-8 font-medium">
+                  {t.choice.phItems.map((item, idx) => (
+                    <li key={idx} className="flex gap-2 items-start">
+                      <CheckCircle2 className="text-blue-600 w-5 h-5 flex-shrink-0 mt-0.5" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
                 </ul>
               </div>
               <div>
@@ -692,15 +684,15 @@ const App: React.FC = () => {
                   onClick={() => window.open(JOIN_LINK, '_blank')}
                   className="block w-full text-center brand-bg text-white font-bold py-3.5 uppercase tracking-wider hover:brightness-110 transition-all shadow-md rounded-xl cursor-pointer"
                 >
-                  Enter Pleasure Heaven
+                  {t.choice.enterButton}
                 </button>
-                <div className="mt-5 w-full bg-white border border-slate-200/90 rounded-2xl p-4 shadow-sm flex items-center justify-between relative overflow-hidden text-left">
+                <div className="mt-5 w-full bg-white border border-slate-200/90 rounded-2xl p-4 shadow-sm flex items-center justify-between relative overflow-hidden text-left rtl:text-right">
                   <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-blue-600 via-sky-500 to-blue-700"></div>
                   <div className="flex items-center gap-2 shrink-0">
                     <span className="bg-gradient-to-r from-red-600 to-rose-600 text-white text-[10px] sm:text-xs font-black px-2 py-0.5 rounded-md tracking-wider shadow-xs uppercase">
-                      50% OFF
+                      {t.hero.discountBadge}
                     </span>
-                    <span className="text-slate-800 font-extrabold text-[10px] sm:text-xs uppercase tracking-wide whitespace-nowrap">OFFER EXPIRES IN:</span>
+                    <span className="text-slate-800 font-extrabold text-[10px] sm:text-xs uppercase tracking-wide whitespace-nowrap">{t.hero.offerExpiresIn}</span>
                   </div>
                   <Countdown compact />
                 </div>
@@ -717,21 +709,21 @@ const App: React.FC = () => {
         
         <div className="relative max-w-lg mx-auto px-4 text-center">
           <div className="bg-white/90 backdrop-blur-xl border border-blue-200/80 p-8 md:p-12 rounded-3xl shadow-lg">
-            <h3 className="font-display text-2xl text-slate-900 mb-6 tracking-wide">CONTACT US</h3>
+            <h3 className="font-display text-2xl text-slate-900 mb-6 tracking-wide">{t.contact.title}</h3>
             <div className="text-center space-y-4 text-slate-700 font-medium text-base sm:text-lg">
               <p>+1 (213) 986-8699</p>
-              <p>For UK: +44 20 4628 1675</p>
+              <p>{t.contact.ukPhone}</p>
               <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-2 text-sm sm:text-base">
-                <span className="text-slate-500 font-semibold">Email:</span>
+                <span className="text-slate-500 font-semibold">{t.contact.emailLabel}</span>
                 <button
                   onClick={() => handleCopyEmail('pleasureheavenn@gmail.com')}
                   className="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg border border-blue-200/80 transition-all cursor-pointer font-medium text-xs sm:text-sm group active:scale-95 max-w-full overflow-hidden"
-                  title="Click to copy email address"
+                  title={t.contact.copyTitle}
                 >
                   <span className="truncate">pleasureheavenn@gmail.com</span>
                   {emailCopied ? (
                     <span className="flex items-center text-xs text-emerald-600 font-semibold gap-1 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 shrink-0">
-                      <Check size={14} /> Copied!
+                      <Check size={14} /> {t.contact.copied}
                     </span>
                   ) : (
                     <Copy size={15} className="text-blue-500 group-hover:scale-110 transition-transform shrink-0" />
@@ -747,7 +739,7 @@ const App: React.FC = () => {
                   className="w-full inline-flex items-center justify-center gap-2.5 px-5 py-3.5 bg-sky-500 hover:bg-sky-600 text-white font-bold rounded-xl shadow-md hover:shadow-lg transition-all active:scale-95 text-sm sm:text-base tracking-wide"
                 >
                   <TelegramIcon className="w-5 h-5 fill-current shrink-0" />
-                  <span>Message Us On Telegram</span>
+                  <span>{t.contact.messageTelegram}</span>
                 </a>
               </div>
             </div>
@@ -759,11 +751,11 @@ const App: React.FC = () => {
       <footer className="relative z-10 bg-white border-t border-slate-100 py-12 text-center text-slate-400 text-sm">
         <div className="max-w-7xl mx-auto px-4 flex flex-col items-center">
           <Crown className="text-blue-500 mb-4" size={40} />
-          <p className="mb-4">&copy; {new Date().getFullYear()} PLEASURE HEAVEN. ALL RIGHTS RESERVED.</p>
+          <p className="mb-4">&copy; {new Date().getFullYear()} {t.footer.rightsReserved}</p>
           <div className="flex gap-6">
-            <button onClick={() => setActiveModal('terms')} className="hover:text-blue-600 transition">Terms of Service</button>
-            <button onClick={() => setActiveModal('privacy')} className="hover:text-blue-600 transition">Privacy Policy</button>
-            <button onClick={() => setActiveModal('support')} className="hover:text-blue-600 transition">Support</button>
+            <button onClick={() => setActiveModal('terms')} className="hover:text-blue-600 transition cursor-pointer">{t.footer.terms}</button>
+            <button onClick={() => setActiveModal('privacy')} className="hover:text-blue-600 transition cursor-pointer">{t.footer.privacy}</button>
+            <button onClick={() => setActiveModal('support')} className="hover:text-blue-600 transition cursor-pointer">{t.footer.support}</button>
           </div>
         </div>
       </footer>
@@ -781,28 +773,28 @@ const App: React.FC = () => {
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="font-display text-slate-900 text-base md:text-lg">PLEASURE HEAVEN VIP</span>
+                <span className="font-display text-slate-900 text-base md:text-lg">{t.stickyCta.brandTitle}</span>
                 <span className="bg-blue-100 text-blue-800 text-[10px] md:text-xs font-bold px-2.5 py-0.5 rounded-full border border-blue-200/60">
-                  LIFETIME ACCESS
+                  {t.stickyCta.lifetimeAccess}
                 </span>
                 <span className="bg-gradient-to-r from-red-600 to-rose-600 text-white text-[10px] md:text-xs font-black px-2 py-0.5 rounded-full uppercase tracking-wider shadow-xs">
-                  50% OFF
+                  {t.stickyCta.discountBadge}
                 </span>
               </div>
-              <p className="text-xs text-slate-500 font-medium">8,000+ Videos • Daily Updates • One-Time Payment</p>
+              <p className="text-xs text-slate-500 font-medium">{t.stickyCta.tagline}</p>
             </div>
           </div>
 
           <div className="flex items-center justify-between sm:justify-end gap-3 w-full sm:w-auto">
             <div className="sm:hidden flex flex-col">
-              <span className="text-xs text-blue-600 font-bold uppercase tracking-wider">LIMITED OFFER</span>
-              <span className="text-xs text-slate-600 font-medium">One-Time • Lifetime Access</span>
+              <span className="text-xs text-blue-600 font-bold uppercase tracking-wider">{t.stickyCta.limitedOffer}</span>
+              <span className="text-xs text-slate-600 font-medium">{t.stickyCta.subTagline}</span>
             </div>
             <button
               onClick={() => window.open(JOIN_LINK, '_blank')}
-              className="brand-bg text-white font-display text-base md:text-lg px-6 md:px-8 py-3 rounded-xl hover:brightness-110 transition-all shadow-md flex items-center gap-2 whitespace-nowrap active:scale-95"
+              className="brand-bg text-white font-display text-base md:text-lg px-6 md:px-8 py-3 rounded-xl hover:brightness-110 transition-all shadow-md flex items-center gap-2 whitespace-nowrap active:scale-95 cursor-pointer"
             >
-              <span>JOIN VIP NOW</span>
+              <span>{t.stickyCta.joinButton}</span>
               <ArrowRight size={18} />
             </button>
           </div>
@@ -829,15 +821,15 @@ const App: React.FC = () => {
           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden relative animate-in fade-in zoom-in duration-200">
             <button 
               onClick={() => setIsPaymentModalOpen(false)}
-              className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 transition-colors z-10"
+              className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 transition-colors z-10 cursor-pointer"
             >
               <X size={24} />
             </button>
             
             <div className="p-8 text-center border-b border-slate-100">
               <Crown className="text-blue-500 mx-auto mb-4" size={40} />
-              <h2 className="font-display text-2xl text-slate-900 mb-2">JOIN PLEASURE HEAVEN</h2>
-              <p className="text-slate-500 text-sm">Secure your VIP access today.</p>
+              <h2 className="font-display text-2xl text-slate-900 mb-2">{t.paymentModal.title}</h2>
+              <p className="text-slate-500 text-sm">{t.paymentModal.subtitle}</p>
             </div>
             
             <div className="p-8 bg-slate-50">
@@ -846,23 +838,23 @@ const App: React.FC = () => {
                   <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                     <CheckCircle2 className="text-green-600" size={32} />
                   </div>
-                  <h3 className="text-xl font-bold text-slate-900 mb-2">Payment Successful!</h3>
-                  <p className="text-slate-600 mb-6">Welcome to Pleasure Heaven VIP.</p>
-                  <p className="text-sm text-slate-500 animate-pulse">Redirecting to Telegram channel...</p>
+                  <h3 className="text-xl font-bold text-slate-900 mb-2">{t.paymentModal.successTitle}</h3>
+                  <p className="text-slate-600 mb-6">{t.paymentModal.successDesc}</p>
+                  <p className="text-sm text-slate-500 animate-pulse">{t.paymentModal.redirecting}</p>
                 </div>
               ) : (
                 <>
                   <div className="mb-4">
                     <div className="flex justify-between items-center mb-1.5">
-                      <span className="text-slate-800 font-semibold">Lifetime VIP Membership</span>
+                      <span className="text-slate-800 font-semibold">{t.paymentModal.membershipTitle}</span>
                       <div className="flex items-center gap-2">
                         <span className="bg-red-100 text-red-700 border border-red-200 text-xs font-black px-2.5 py-0.5 rounded-full uppercase tracking-wider">
-                          50% OFF SPECIAL
+                          {t.paymentModal.specialOffer}
                         </span>
                       </div>
                     </div>
                     <p className="text-xs text-slate-400 text-left">
-                      * Lifetime Access: Enjoy permanent VIP membership with this one-time payment. No recurring fees.
+                      {t.paymentModal.lifetimeNotice}
                     </p>
                   </div>
 
@@ -870,9 +862,9 @@ const App: React.FC = () => {
                   <div className="mb-5 p-4 bg-blue-50/90 border border-blue-200/90 rounded-xl flex items-start gap-3 text-left shadow-xs">
                     <ShieldCheck size={20} className="text-blue-600 shrink-0 mt-0.5" />
                     <div className="text-xs">
-                      <span className="font-bold text-blue-950 block mb-0.5 tracking-wide">🔒 100% Discreet Billing (Privacy Guard)</span>
+                      <span className="font-bold text-blue-950 block mb-0.5 tracking-wide">{t.paymentModal.discreetBillingTitle}</span>
                       <p className="text-slate-700 leading-relaxed font-medium">
-                        On your bank or PayPal statement, this transaction will appear strictly as <strong className="text-blue-700 font-bold underline underline-offset-2">FLOW1 LTD</strong> with zero mention of VIP or adult content.
+                        {t.paymentModal.discreetBillingDesc}
                       </p>
                     </div>
                   </div>
@@ -886,7 +878,7 @@ const App: React.FC = () => {
                   {isProcessing ? (
                     <div className="flex flex-col items-center justify-center py-8">
                       <div className="w-8 h-8 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin mb-4"></div>
-                      <p className="text-slate-600 font-medium">Processing payment...</p>
+                      <p className="text-slate-600 font-medium">{t.paymentModal.processing}</p>
                     </div>
                   ) : (
                     <PayPalButtons 
@@ -932,7 +924,7 @@ const App: React.FC = () => {
                   
                   <div className="mt-6 flex items-center justify-center gap-2 text-xs text-slate-400">
                     <Lock size={12} />
-                    <span>Secure encrypted payment</span>
+                    <span>{t.paymentModal.securePayment}</span>
                   </div>
                 </>
               )}

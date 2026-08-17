@@ -1,5 +1,6 @@
 {
   "name": "Pleasure Heaven",
-  "description": "An exclusive platform for digital wealth creation and agency management.",
-  "requestFramePermissions": []
+  "description": "An exclusive platform for digital wealth creation and agency management with multi-language support and optimized performance.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
