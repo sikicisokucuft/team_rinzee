@@ -42,18 +42,18 @@ const Countdown: React.FC<{ compact?: boolean }> = ({ compact = false }) => {
   return (
     <div 
       dir="ltr"
-      className={`flex items-center gap-1 font-mono font-bold tracking-tight shrink-0 ${compact ? 'text-[11px] sm:text-xs' : 'text-xs md:text-sm'}`}
+      className={`flex items-center gap-1 font-mono tracking-tight shrink-0 ${compact ? 'text-[11px] sm:text-xs' : 'text-xs md:text-sm'}`}
     >
-      <div className="bg-blue-600 text-white px-1.5 sm:px-2 py-0.5 rounded-md shadow-xs text-center min-w-[26px] sm:min-w-[28px] tabular-nums">
-        {h.toString().padStart(2, '0')}<span className="text-[9px] sm:text-[10px] font-normal text-blue-200 ml-0.5">h</span>
+      <div className="bg-white border border-neutral-200 text-black font-black px-1.5 sm:px-2 py-0.5 rounded-md text-center min-w-[26px] sm:min-w-[28px] tabular-nums shadow-xs">
+        {h.toString().padStart(2, '0')}<span className="text-[9px] sm:text-[10px] text-neutral-400 ml-0.5">h</span>
       </div>
-      <span className="text-blue-400 font-sans text-xs font-semibold">:</span>
-      <div className="bg-blue-600 text-white px-1.5 sm:px-2 py-0.5 rounded-md shadow-xs text-center min-w-[26px] sm:min-w-[28px] tabular-nums">
-        {m.toString().padStart(2, '0')}<span className="text-[9px] sm:text-[10px] font-normal text-blue-200 ml-0.5">m</span>
+      <span className="text-neutral-400 font-sans text-xs">:</span>
+      <div className="bg-white border border-neutral-200 text-black font-black px-1.5 sm:px-2 py-0.5 rounded-md text-center min-w-[26px] sm:min-w-[28px] tabular-nums shadow-xs">
+        {m.toString().padStart(2, '0')}<span className="text-[9px] sm:text-[10px] text-neutral-400 ml-0.5">m</span>
       </div>
-      <span className="text-blue-400 font-sans text-xs font-semibold">:</span>
-      <div className="bg-blue-600 text-white px-1.5 sm:px-2 py-0.5 rounded-md shadow-xs text-center min-w-[26px] sm:min-w-[28px] tabular-nums">
-        {s.toString().padStart(2, '0')}<span className="text-[9px] sm:text-[10px] font-normal text-blue-200 ml-0.5">s</span>
+      <span className="text-neutral-400 font-sans text-xs">:</span>
+      <div className="bg-white border border-neutral-200 text-black font-black px-1.5 sm:px-2 py-0.5 rounded-md text-center min-w-[26px] sm:min-w-[28px] tabular-nums shadow-xs">
+        {s.toString().padStart(2, '0')}<span className="text-[9px] sm:text-[10px] text-neutral-400 ml-0.5">s</span>
       </div>
     </div>
   );

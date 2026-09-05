@@ -52,28 +52,28 @@ const ChatWidget: React.FC = () => {
   return (
     <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end">
       {isOpen && (
-        <div className="mb-4 w-[90vw] md:w-[400px] bg-white border border-blue-200 shadow-2xl shadow-blue-900/10 rounded-lg overflow-hidden flex flex-col animate-fade-in-up">
+        <div className="mb-4 w-[90vw] md:w-[400px] bg-slate-50 border border-slate-200 shadow-2xl rounded-lg overflow-hidden flex flex-col animate-fade-in-up">
           {/* Header */}
-          <div className="bg-blue-600 border-b border-blue-500 p-3 flex justify-between items-center">
+          <div className="bg-white border-b border-slate-200 p-3 flex justify-between items-center">
             <div className="flex items-center gap-2">
-              <Terminal size={18} className="text-blue-100" />
-              <span className="font-display text-sm tracking-wider text-white">PLEASURE HEAVEN // AI</span>
+              <Terminal size={18} className="text-slate-500" />
+              <span className="font-display font-semibold text-sm tracking-wider text-slate-900">PLEASURE HEAVEN // AI</span>
             </div>
-            <button onClick={() => setIsOpen(false)} className="text-blue-200 hover:text-white transition">
+            <button onClick={() => setIsOpen(false)} className="text-slate-400 hover:text-slate-900 transition">
               <X size={18} />
             </button>
           </div>
 
           {/* Messages */}
-          <div className="h-[400px] overflow-y-auto p-4 bg-slate-50 scrollbar-thin scrollbar-thumb-blue-200 scrollbar-track-slate-50">
+          <div className="h-[400px] overflow-y-auto p-4 bg-slate-50 scrollbar-thin scrollbar-thumb-[#333] scrollbar-track-[#0a0a0a]">
             {messages.map((msg, idx) => (
               <div key={idx} className={`mb-4 flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                 <div className={`max-w-[85%] p-3 rounded-md text-sm font-mono leading-relaxed ${
                   msg.role === 'user' 
-                    ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20' 
-                    : 'bg-white text-slate-700 border border-slate-200 shadow-sm'
+                    ? 'bg-slate-50 text-slate-900' 
+                    : 'bg-white text-slate-800 border border-slate-200'
                 }`}>
-                  {msg.role === 'model' && <Cpu size={14} className="inline-block mr-2 mb-1 text-blue-500" />}
+                  {msg.role === 'model' && <Cpu size={14} className="inline-block mr-2 mb-1 text-slate-500" />}
                   {msg.text}
                 </div>
               </div>
@@ -82,18 +82,18 @@ const ChatWidget: React.FC = () => {
           </div>
 
           {/* Input */}
-          <form onSubmit={handleSubmit} className="p-3 bg-white border-t border-slate-100 flex gap-2">
+          <form onSubmit={handleSubmit} className="p-3 bg-white border-t border-slate-200 flex gap-2">
             <input
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Inquire about membership..."
-              className="flex-1 bg-slate-100 border border-slate-200 rounded px-3 py-2 text-sm text-slate-800 focus:outline-none focus:border-blue-400 font-mono placeholder:text-slate-400"
+              className="flex-1 bg-slate-100 border border-slate-200 rounded px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-slate-300 font-mono placeholder:text-slate-400"
             />
             <button 
               type="submit" 
               disabled={isTyping}
-              className="bg-blue-600 hover:bg-blue-500 text-white p-2 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="bg-slate-50 hover:bg-slate-900 text-slate-900 p-2 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Send size={18} />
             </button>
@@ -103,10 +103,10 @@ const ChatWidget: React.FC = () => {
 
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="group relative flex items-center justify-center w-14 h-14 bg-gradient-to-br from-blue-600 to-sky-500 rounded-full shadow-[0_4px_20px_rgba(37,99,235,0.4)] hover:scale-105 transition-transform duration-300"
+        className="group relative flex items-center justify-center w-14 h-14 bg-white border border-slate-200 rounded-full shadow-lg hover:scale-105 hover:bg-slate-100 hover:border-slate-300 transition-all duration-300"
       >
-        <span className="absolute inset-0 rounded-full bg-white opacity-20 group-hover:animate-ping"></span>
-        {isOpen ? <X className="text-white" /> : <MessageSquare className="text-white" />}
+        <span className="absolute inset-0 rounded-full bg-white opacity-0 group-hover:opacity-10 group-hover:animate-ping"></span>
+        {isOpen ? <X className="text-slate-900" /> : <MessageSquare className="text-slate-400 group-hover:text-slate-900" />}
       </button>
     </div>
   );

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { CheckCircle2, TrendingUp, DollarSign, Globe2, Lock, ArrowRight, ShieldCheck, Users, Crown, Star, Plus, Minus, Reply, X, Copy, Check, Play, Film } from 'lucide-react';
+import { CheckCircle2, TrendingUp, DollarSign, Globe2, Lock, ArrowRight, ShieldCheck, Users, Crown, Star, Plus, Minus, Reply, X, Copy, Check, Play, Film, CheckIcon } from 'lucide-react';
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
-import MatrixCanvas from './components/MatrixCanvas';
 import Countdown from './components/Countdown';
 import { VideoModal } from './components/VideoPreview';
 import { Testimonial } from './types';
@@ -87,26 +86,26 @@ const LegalModal: React.FC<{
   const data = LEGAL_CONTENT[type];
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-sm animate-fade-in">
-      <div className="bg-white rounded-2xl w-full max-w-2xl max-h-[80vh] flex flex-col shadow-2xl overflow-hidden animate-scale-in">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-50/80 backdrop-blur-sm animate-fade-in">
+      <div className="bg-slate-50 border border-slate-200 rounded-xl w-full max-w-2xl max-h-[80vh] flex flex-col shadow-2xl overflow-hidden animate-scale-in">
         {/* Header */}
-        <div className="bg-blue-600 p-4 flex justify-between items-center shrink-0">
-          <h3 className="font-display text-white text-xl tracking-wider">{data.title}</h3>
-          <button onClick={onClose} className="text-white/80 hover:text-white transition">
+        <div className="bg-white border-b border-slate-200 p-4 flex justify-between items-center shrink-0">
+          <h3 className="font-display text-slate-800 text-xl tracking-wider">{data.title}</h3>
+          <button onClick={onClose} className="text-slate-500 hover:text-slate-900 transition">
             <X size={24} />
           </button>
         </div>
         
         {/* Content */}
-        <div className="p-8 overflow-y-auto text-slate-700 leading-relaxed whitespace-pre-line text-sm md:text-base">
+        <div className="p-8 overflow-y-auto text-slate-500 leading-relaxed whitespace-pre-line text-sm md:text-base">
           {data.content}
         </div>
 
         {/* Footer */}
-        <div className="p-4 border-t border-slate-100 bg-slate-50 flex justify-end shrink-0">
+        <div className="p-4 border-t border-slate-200 bg-white flex justify-end shrink-0">
           <button 
             onClick={onClose}
-            className="px-6 py-2 bg-slate-200 hover:bg-slate-300 text-slate-800 rounded font-bold text-sm transition"
+            className="px-6 py-2 bg-slate-50 hover:bg-slate-900 text-slate-900 rounded font-bold text-sm transition"
           >
             CLOSE
           </button>
@@ -122,35 +121,35 @@ const ChatCard: React.FC<{
   avatarColor: string;
   messages: { text: string; isMe: boolean; time: string; reaction?: string }[];
 }> = ({ name, avatarColor, messages }) => (
-  <div className="bg-[#1c242f] rounded-xl overflow-hidden shadow-lg border border-slate-800 font-sans text-sm break-inside-avoid mb-6">
+  <div className="bg-white rounded-xl overflow-hidden shadow-lg border border-slate-200 font-sans text-sm break-inside-avoid mb-6">
     {/* Header */}
-    <div className="bg-[#242f3d] p-3 flex items-center gap-3 border-b border-[#101620]">
-      <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-xs ${avatarColor}`}>
+    <div className="bg-slate-100 p-3 flex items-center gap-3 border-b border-slate-200">
+      <div className={`w-8 h-8 rounded-full flex items-center justify-center text-slate-900 font-bold text-xs bg-[#333]`}>
         {name.substring(0, 2).toUpperCase()}
       </div>
       <div>
-        <div className="text-white font-semibold text-sm">{name}</div>
-        <div className="text-[#6c7883] text-xs">last seen recently</div>
+        <div className="text-slate-800 font-bold text-sm">{name}</div>
+        <div className="text-slate-400 text-xs">last seen recently</div>
       </div>
     </div>
     {/* Messages */}
-    <div className="p-4 space-y-3 bg-[#0e1621]">
+    <div className="p-4 space-y-3 bg-slate-50">
       {messages.map((msg, idx) => (
         <div key={idx} className={`flex ${msg.isMe ? 'justify-end' : 'justify-start'}`}>
           <div 
             className={`max-w-[85%] rounded-lg p-2.5 relative ${
               msg.isMe 
-                ? 'bg-[#8774e1] text-white rounded-br-none' 
-                : 'bg-[#182533] text-white rounded-bl-none'
+                ? 'bg-slate-50 text-slate-900 rounded-br-none' 
+                : 'bg-slate-200 text-slate-800 rounded-bl-none'
             }`}
           >
             <div className="leading-relaxed whitespace-pre-wrap">{msg.text}</div>
-            <div className={`text-[10px] mt-1 flex items-center gap-1 ${msg.isMe ? 'text-blue-100 justify-end' : 'text-slate-400 justify-end'}`}>
+            <div className={`text-[10px] mt-1 flex items-center gap-1 ${msg.isMe ? 'text-[#555] justify-end' : 'text-slate-400 justify-end'}`}>
                {msg.time}
                {msg.isMe && <span>✓✓</span>}
             </div>
             {msg.reaction && (
-              <div className="absolute -bottom-2 -right-2 bg-[#2b5278] rounded-full px-1.5 py-0.5 text-xs border border-[#0e1621]">
+              <div className="absolute -bottom-2 -right-2 bg-[#333] text-slate-900 rounded-full px-1.5 py-0.5 text-xs border border-[#111]">
                 {msg.reaction}
               </div>
             )}
@@ -163,15 +162,15 @@ const ChatCard: React.FC<{
 
 // 2. Stat Card (Replicates Profit Dashboard)
 const StatCard: React.FC = () => (
-  <div className="bg-white rounded-xl shadow-lg border border-slate-100 p-6 mb-6 break-inside-avoid font-sans">
+  <div className="bg-white rounded-xl shadow-lg border border-slate-200 p-6 mb-6 break-inside-avoid font-sans">
     <div className="flex justify-between items-center mb-6">
       <div className="text-xs font-bold text-slate-400 tracking-wider">PROFIT: 2024</div>
-      <div className="text-green-600 text-xs font-bold flex items-center gap-1">
+      <div className="text-[#4ade80] text-xs font-bold flex items-center gap-1">
         <TrendingUp size={14} /> SEE TRENDS
       </div>
     </div>
     <div className="mb-2">
-      <div className="text-4xl font-extrabold text-slate-900">$22,408.01</div>
+      <div className="text-4xl font-extrabold text-slate-800">$22,408.01</div>
       <div className="text-slate-500 text-sm mt-1">Total profit</div>
     </div>
     <div className="mt-6 space-y-3">
@@ -180,8 +179,8 @@ const StatCard: React.FC = () => (
           <span className="text-slate-500">Income</span>
           <span className="font-bold text-slate-800">$103,251</span>
         </div>
-        <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
-          <div className="h-full bg-green-500 w-[80%]"></div>
+        <div className="h-2 w-full bg-slate-200 rounded-full overflow-hidden">
+          <div className="h-full bg-[#4ade80] w-[80%]"></div>
         </div>
       </div>
       <div>
@@ -189,14 +188,14 @@ const StatCard: React.FC = () => (
           <span className="text-slate-500">Expenses</span>
           <span className="font-bold text-slate-800">$81,263</span>
         </div>
-        <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
-          <div className="h-full bg-blue-400 w-[60%]"></div>
+        <div className="h-2 w-full bg-slate-200 rounded-full overflow-hidden">
+          <div className="h-full bg-[#f87171] w-[60%]"></div>
         </div>
       </div>
     </div>
-    <div className="mt-6 pt-4 border-t border-slate-50">
-       <div className="flex items-center justify-between text-slate-600 text-sm hover:bg-slate-50 p-2 rounded cursor-pointer transition">
-         <span className="flex items-center gap-2"><CheckCircle2 size={16} className="text-green-500"/> Review 1 transaction</span>
+    <div className="mt-6 pt-4 border-t border-slate-200">
+       <div className="flex items-center justify-between text-slate-500 text-sm hover:bg-slate-100 p-2 rounded cursor-pointer transition">
+         <span className="flex items-center gap-2"><CheckCircle2 size={16} className="text-[#4ade80]"/> Review 1 transaction</span>
          <ArrowRight size={16} />
        </div>
     </div>
@@ -209,12 +208,12 @@ const SocialProofImage: React.FC<{ src: string; alt: string }> = ({ src, alt }) 
   const [imgSrc, setImgSrc] = useState(src);
 
   return (
-    <div className="relative w-full rounded-xl overflow-hidden shadow-md border border-blue-100/50 bg-blue-50/40 group">
+    <div className="relative w-full rounded-xl overflow-hidden shadow-md border border-slate-200 bg-white group">
       {/* Skeleton / Shimmer Overlay */}
       {!isLoaded && (
-        <div className="absolute inset-0 z-10 bg-slate-200/70 overflow-hidden rounded-xl min-h-[200px] flex items-center justify-center">
-          <div className="absolute inset-0 -translate-x-full animate-shimmer bg-gradient-to-r from-transparent via-white/80 to-transparent" />
-          <div className="relative z-20 w-6 h-6 border-2 border-blue-400/40 border-t-blue-600 rounded-full animate-spin" />
+        <div className="absolute inset-0 z-10 bg-slate-100 overflow-hidden rounded-xl min-h-[200px] flex items-center justify-center">
+          <div className="absolute inset-0 -translate-x-full animate-shimmer bg-gradient-to-r from-transparent via-[#333]/50 to-transparent" />
+          <div className="relative z-20 w-6 h-6 border-2 border-slate-300 border-t-[#0a0a0a] rounded-full animate-spin" />
         </div>
       )}
 
@@ -391,24 +390,24 @@ const PromoBar: React.FC<{ onJoinClick: () => void; t: TranslationSchema['promo'
   };
 
   return (
-    <div className="absolute top-0 left-0 w-full h-10 bg-gradient-to-r from-blue-700 via-blue-600 to-sky-600 z-50 flex items-center justify-center text-white text-xs md:text-sm font-bold tracking-wide shadow-sm border-b border-blue-400/20 px-3">
+    <div className="absolute top-0 left-0 w-full h-10 bg-slate-50 z-50 flex items-center justify-center text-slate-800 text-xs md:text-sm font-bold tracking-wide shadow-sm border-b border-slate-200 px-3">
       <span className="relative flex h-2 w-2 mr-2">
-        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-300 opacity-75"></span>
-        <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
+        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-50"></span>
+        <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
       </span>
-      <span className="bg-red-500 text-white text-[10px] md:text-xs font-black px-2 py-0.5 rounded-full tracking-wider mr-2 uppercase shadow-2xs">
+      <span className="bg-slate-50 text-slate-900 text-[10px] md:text-xs font-bold px-2 py-0.5 rounded tracking-wider mr-2 uppercase shadow-2xs">
         {t.discountBadge}
       </span>
-      <span className="uppercase font-extrabold tracking-wider text-[11px] md:text-xs">{t.expiresIn}</span> 
-      <span className="mx-2 font-mono bg-white/15 border border-white/25 px-2.5 py-0.5 rounded-full text-xs shadow-inner backdrop-blur-xs tracking-wider text-blue-50 font-bold">
+      <span className="uppercase font-bold tracking-wider text-[11px] md:text-xs text-slate-500">{t.expiresIn}</span> 
+      <span className="mx-2 font-mono border border-slate-200 px-2.5 py-0.5 rounded text-xs tracking-wider text-slate-800 font-semibold">
         {formatTime(timeLeft)}
       </span>
       <button 
         onClick={onJoinClick} 
-        className="inline-flex items-center gap-1 text-[11px] md:text-xs font-black tracking-wider uppercase bg-white text-blue-700 px-3 py-1 rounded-full hover:bg-blue-50 transition-all shadow-xs ml-1 hover:scale-105 active:scale-95 cursor-pointer"
+        className="inline-flex items-center gap-1 text-[11px] md:text-xs font-bold tracking-wider uppercase text-slate-900 hover:text-slate-500 transition-all ml-1 active:scale-95 cursor-pointer"
       >
         <span>{t.joinNow}</span>
-        <ArrowRight size={12} className="stroke-[3]" />
+        <ArrowRight size={12} className="stroke-[2]" />
       </button>
     </div>
   );
@@ -462,14 +461,12 @@ const App: React.FC = () => {
       intent: "capture", 
       components: "buttons,applepay,googlepay" 
     }}>
-    <div className="relative min-h-screen bg-[#f0f7ff] text-slate-900 selection:bg-blue-100 selection:text-blue-900">
-      <MatrixCanvas />
-      
-      {/* Absolute Header (disappears on scroll) */}
-      <nav className="absolute top-0 w-full z-40 bg-[#f0f7ff]/95 backdrop-blur-md border-b border-blue-100/60 shadow-xs">
-        <div className="max-w-7xl mx-auto px-3 sm:px-6 py-2.5 sm:py-3.5 flex justify-between items-center gap-2">
-          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
-             <span className="text-lg sm:text-2xl md:text-3xl text-blue-600 font-display tracking-tight sm:tracking-wide font-extrabold whitespace-nowrap">
+    <div className="relative min-h-screen bg-neutral-50/40 text-neutral-900 selection:bg-black selection:text-white">
+      {/* Top Header Navbar - In-flow so it does not follow when scrolling down */}
+      <nav className="relative w-full z-40 bg-white/95 border-b border-neutral-200/90">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-3.5 sm:py-4 flex justify-between items-center gap-3">
+          <div className="flex items-center gap-2 shrink-0">
+             <span className="text-xl sm:text-2xl md:text-3xl text-black font-display tracking-tight font-black uppercase whitespace-nowrap">
                PLEASURE HEAVEN
              </span>
           </div>
@@ -479,7 +476,7 @@ const App: React.FC = () => {
               href="https://t.me/pleasureheaven7" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="text-blue-600 hover:text-blue-800 transition-colors p-1"
+              className="text-neutral-600 hover:text-black transition-colors p-1"
               aria-label="Telegram"
             >
               <TelegramIcon className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8" />
@@ -488,7 +485,7 @@ const App: React.FC = () => {
               href="https://x.com/MistikTapinak" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="text-blue-600 hover:text-blue-800 transition-colors p-1"
+              className="text-neutral-600 hover:text-black transition-colors p-1"
               aria-label="X (Twitter)"
             >
               <XIcon className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
@@ -498,100 +495,121 @@ const App: React.FC = () => {
       </nav>
 
       {/* Hero Section */}
-      <header className="relative z-10 pt-24 sm:pt-28 md:pt-32 pb-6 md:pb-10 px-4 text-center overflow-hidden">
-        {/* Instant Hero Background Ambient Placeholder */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] md:w-[800px] md:h-[450px] bg-gradient-to-r from-blue-200/40 via-sky-100/30 to-blue-100/30 blur-3xl rounded-full pointer-events-none -z-10" />
+      <header className="relative w-full min-h-[90vh] md:min-h-[92vh] flex flex-col justify-end overflow-hidden pt-12 sm:pt-16 pb-12 md:pb-16 px-4 md:px-12 text-center md:text-left z-10">
+        
+        {/* Top Image Layer - Full-Bleed Large Hero Backdrop */}
+        <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+          <div 
+            className="w-full h-full bg-cover bg-[center_top] md:bg-[center_20%] bg-no-repeat opacity-60 md:opacity-70 transition-opacity"
+            style={{
+              backgroundImage: "url('https://i.ibb.co/mF00RdKF/g-rsel-2026-09-05-030342129.png')"
+            }}
+          />
+          {/* Seamless fade to background at the bottom edge */}
+          <div className="absolute inset-0 bg-gradient-to-t from-neutral-50 via-neutral-50/40 to-neutral-50/15" />
+        </div>
 
-        <div className="max-w-5xl mx-auto flex flex-col items-center">
+        {/* Clean Natural Flow without Big Opaque White Card */}
+        <div className="relative z-10 w-full max-w-7xl mx-auto flex flex-col items-center md:items-start mt-auto">
           
-          <h1 className="font-display text-3xl md:text-6xl leading-tight mb-4 text-slate-900">
-            <span className="block text-red-600 font-black text-2xl md:text-4xl mb-1.5 tracking-tight">{t.hero.discountBadge}</span>
-            {t.hero.joinOur}<span className="brand-text">{t.hero.vipGroup}</span>
+          <h1 className="font-display text-4xl sm:text-6xl md:text-7xl lg:text-[5.25rem] leading-[0.98] mb-4 md:mb-6 text-black font-black tracking-tighter uppercase max-w-4xl drop-shadow-sm">
+            WANT ONLYFANS? <br className="hidden sm:block" />
+            <span className="text-neutral-500">DON'T OVERPAY.</span>
           </h1>
+
+          <p className="text-neutral-800 font-semibold text-base sm:text-xl md:text-2xl mb-8 max-w-2xl leading-snug tracking-tight">
+            Join our <strong className="text-black font-black">VIP GROUP</strong>. Access 10K+ exclusive leaks that you never find online.
+          </p>
           
-          <div className="text-slate-600 text-base md:text-xl max-w-3xl mb-6 leading-relaxed text-left rtl:text-right inline-block w-full">
-            <ul className="space-y-3 list-disc pl-5 rtl:pl-0 rtl:pr-5 marker:text-blue-500">
-              {t.hero.bullets.map((bullet, idx) => (
-                <li key={idx}>
-                  {bullet.prefix && <span>{bullet.prefix} </span>}
-                  <span className="font-bold text-slate-900">{bullet.bold}</span>
-                  {bullet.suffix && <span> {bullet.suffix}</span>}
-                </li>
-              ))}
-            </ul>
+          {/* Semi-transparent Glassmorphic Badges - Compact & Equal Width */}
+          <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center md:justify-start gap-2.5 sm:gap-3 mb-10 w-full text-black font-bold text-sm">
+            <span className="flex items-center justify-center gap-2 bg-white/50 hover:bg-white/70 backdrop-blur-xl border border-white/80 px-4 py-2.5 rounded-full shadow-lg shadow-black/5 transition-all w-[215px] sm:w-[220px] whitespace-nowrap">
+              <CheckIcon className="w-4.5 h-4.5 text-emerald-600 shrink-0" strokeWidth={3} />
+              <span>Request Any Model</span>
+            </span>
+            <span className="flex items-center justify-center gap-2 bg-white/50 hover:bg-white/70 backdrop-blur-xl border border-white/80 px-4 py-2.5 rounded-full shadow-lg shadow-black/5 transition-all w-[215px] sm:w-[220px] whitespace-nowrap">
+              <CheckIcon className="w-4.5 h-4.5 text-emerald-600 shrink-0" strokeWidth={3} />
+              <span>$3,000/mo Value</span>
+            </span>
+            <span className="flex items-center justify-center gap-2 bg-white/50 hover:bg-white/70 backdrop-blur-xl border border-white/80 px-4 py-2.5 rounded-full shadow-lg shadow-black/5 transition-all w-[215px] sm:w-[220px] whitespace-nowrap">
+              <CheckIcon className="w-4.5 h-4.5 text-emerald-600 shrink-0" strokeWidth={3} />
+              <span>24/7 VIP Support</span>
+            </span>
           </div>
 
-          {/* CTA Buttons */}
-          <div className="w-full max-w-2xl flex flex-col items-center">
-            <div className="flex flex-col md:flex-row gap-3.5 sm:gap-4 items-center w-full justify-center">
+          {/* CTA Buttons - Brutalist Nike Style with Glass Accents */}
+          <div className="w-full flex flex-col items-center md:items-start">
+            <div className="flex flex-col sm:flex-row gap-4 items-center w-full max-w-2xl justify-center md:justify-start">
               <button 
                 onClick={() => window.open(JOIN_LINK, '_blank')}
-                className="w-full md:w-auto bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white font-display text-base sm:text-lg md:text-xl px-6 sm:px-10 md:px-12 py-3.5 sm:py-4 rounded-xl hover:brightness-110 transition-all shadow-[0_10px_30px_rgba(220,38,38,0.4)] hover:shadow-[0_15px_35px_rgba(220,38,38,0.6)] flex items-center justify-center gap-2.5 sm:gap-3 group active:scale-98 cursor-pointer text-center"
+                className="w-full sm:w-auto bg-red-600 text-white hover:bg-red-700 font-display font-black text-base sm:text-lg px-8 sm:px-12 py-4 rounded-full transition-all flex items-center justify-center gap-3 uppercase tracking-wider group active:scale-95 cursor-pointer text-center shadow-2xl shadow-red-600/30"
               >
                 <span>{t.hero.ctaLifetime}</span>
                 <ArrowRight size={20} className="group-hover:translate-x-1 rtl:group-hover:-translate-x-1 transition-transform shrink-0" />
               </button>
               <button 
                 onClick={() => setIsVideoModalOpen(true)}
-                className="w-full md:w-auto bg-slate-900 hover:bg-slate-800 text-white font-display text-base sm:text-lg md:text-xl px-6 sm:px-8 md:px-10 py-3.5 sm:py-4 rounded-xl transition-all shadow-md flex items-center justify-center gap-2.5 border border-slate-700/80 cursor-pointer active:scale-98 group text-center"
+                className="w-full sm:w-auto bg-white/60 hover:bg-white/90 text-neutral-500 hover:text-neutral-800 font-display font-bold text-base sm:text-lg px-6 sm:px-8 py-4 rounded-full transition-all flex items-center justify-center gap-3 uppercase tracking-wider border border-neutral-300/80 hover:border-neutral-500 backdrop-blur-xl cursor-pointer active:scale-95 group text-center shadow-md shadow-black/5"
               >
-                <Play size={18} className="fill-current text-sky-400 group-hover:scale-110 transition-transform shrink-0" />
+                <Play size={18} className="fill-current text-neutral-500 group-hover:text-neutral-800 group-hover:scale-110 transition-transform shrink-0" />
                 <span>{t.hero.ctaPreview}</span>
               </button>
             </div>
 
-            {/* Privacy Guard Notice */}
-            <div className="mt-5 inline-flex items-center gap-2.5 px-4 py-2.5 bg-blue-50/90 border border-blue-200/90 text-slate-800 rounded-2xl sm:rounded-full text-xs md:text-sm font-medium shadow-xs backdrop-blur-md text-left rtl:text-right">
-              <ShieldCheck size={18} className="text-blue-600 shrink-0" />
-              <span>
-                <strong className="text-blue-950 font-bold">{t.hero.billingTitle}</strong> {t.hero.billingDesc}
-              </span>
-            </div>
-          </div>
+            {/* Seamless Native Embedded Trustpilot Widget */}
+            <div className="mt-5 sm:mt-6 flex items-center justify-center md:justify-start w-full max-w-2xl">
+              <div className="inline-flex flex-wrap items-center justify-center gap-2.5 sm:gap-3.5 py-2.5 px-5 sm:px-6 rounded-2xl bg-white/70 hover:bg-white/90 backdrop-blur-xl border border-white/80 shadow-md shadow-black/5 transition-all select-none">
+                <div className="flex items-center gap-2">
+                  <span className="font-display font-black text-sm sm:text-base text-neutral-950 tracking-tight">
+                    Excellent
+                  </span>
+                  {/* 5 Signature Green Trustpilot Star Boxes */}
+                  <div className="flex items-center gap-1">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <div key={star} className="w-5 h-5 sm:w-6 sm:h-6 bg-[#00B67A] flex items-center justify-center rounded-[3px] shadow-2xs">
+                        <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-white" aria-hidden="true">
+                          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                        </svg>
+                      </div>
+                    ))}
+                  </div>
+                </div>
 
-          <div className="mt-8 flex flex-col items-center justify-center gap-3 w-full max-w-md mx-auto">
-            <div className="w-full bg-gradient-to-b from-white via-blue-50/20 to-white border border-blue-200/90 rounded-2xl p-3.5 sm:p-4 md:p-5 shadow-lg shadow-blue-900/5 flex flex-wrap sm:flex-nowrap items-center justify-between gap-2.5 relative overflow-hidden transition-all hover:border-blue-300/80">
-              <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-blue-600 via-sky-500 to-blue-700"></div>
-              <div className="flex items-center gap-2 shrink-0">
-                <span className="bg-gradient-to-r from-red-600 to-rose-600 text-white text-[10px] sm:text-xs font-black px-2 py-0.5 rounded-md tracking-wider shadow-xs uppercase">
-                  {t.hero.discountBadge}
-                </span>
-                <span className="text-slate-800 font-extrabold text-[10px] sm:text-xs uppercase tracking-wide whitespace-nowrap">{t.hero.offerExpiresIn}</span>
+                <div className="h-4 w-px bg-neutral-300/80 hidden sm:block" />
+
+                {/* Trustpilot Brand & Star */}
+                <div className="flex items-center gap-1.5">
+                  <svg viewBox="0 0 24 24" className="w-5 h-5 fill-[#00B67A]" aria-hidden="true">
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                  </svg>
+                  <span className="font-display font-black text-sm sm:text-base tracking-tight text-neutral-950">
+                    Trustpilot
+                  </span>
+                </div>
               </div>
-              <Countdown />
             </div>
 
-            {/* Message Us On Telegram */}
-            <a
-              href="https://t.me/pleasureheaven7"
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="w-full inline-flex items-center justify-center gap-2.5 px-5 py-3.5 bg-sky-500 hover:bg-sky-600 text-white font-bold rounded-xl shadow-md hover:shadow-lg transition-all active:scale-95 text-sm sm:text-base tracking-wide cursor-pointer"
-            >
-              <TelegramIcon className="w-5 h-5 fill-current shrink-0" />
-              <span>{t.hero.messageTelegram}</span>
-            </a>
-          </div>
-          
-          {/* Social Proof Bar */}
-          <div className="mt-8 md:mt-24 flex flex-row flex-nowrap items-center justify-center gap-x-6 md:gap-16 text-slate-500 font-mono text-xs md:text-sm whitespace-nowrap">
-            <div className="flex items-center gap-1.5 md:gap-2">
-              <Users className="text-blue-500" size={16} />
-              <span>{t.hero.vipMembers}</span>
-            </div>
-            <div className="flex items-center gap-1.5 md:gap-2">
-              <Star className="text-blue-500" size={16} />
-              <span>{t.hero.positiveReviews}</span>
+            {/* Telegram Button */}
+            <div className="mt-8 flex flex-col sm:flex-row items-center gap-4 w-full justify-center md:justify-start">
+              <a
+                href="https://t.me/pleasureheaven7"
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2.5 px-6 py-3 bg-[#2AABEE]/90 hover:bg-[#2AABEE] text-white font-black rounded-full transition-all active:scale-95 text-sm uppercase tracking-wider cursor-pointer shadow-lg shadow-[#2AABEE]/25 backdrop-blur-md border border-white/30"
+              >
+                <TelegramIcon className="w-5 h-5 fill-current shrink-0 text-white" />
+                <span>Chat with us on Telegram</span>
+              </a>
             </div>
           </div>
         </div>
       </header>
 
       {/* Trusted By Many / Social Proof */}
-      <section className="relative z-10 py-16 md:py-24 bg-[#f0f7ff] border-y border-blue-100">
+      <section className="relative z-10 py-16 md:py-24 bg-white/70 backdrop-blur-md border-y border-neutral-200/80">
         <div className="max-w-7xl mx-auto px-4">
-          <h2 className="font-display text-center text-3xl md:text-4xl mb-12 md:mb-16 text-slate-900">
-            {t.socialProof.title}<span className="text-blue-600">{t.socialProof.titleHighlight}</span>
+          <h2 className="font-display text-center text-3xl md:text-5xl mb-12 md:mb-16 text-black font-black uppercase tracking-tight">
+            {t.socialProof.title}<span className="text-neutral-400"> {t.socialProof.titleHighlight}</span>
           </h2>
           
           <MasonryGrid items={socialProofItems} />
@@ -599,10 +617,10 @@ const App: React.FC = () => {
       </section>
 
       {/* FAQ Section */}
-      <section className="relative z-10 py-16 md:py-24 bg-white">
+      <section className="relative z-10 py-16 md:py-24 bg-neutral-50/50">
         <div className="max-w-4xl mx-auto px-4">
-          <h2 className="font-display text-center text-3xl md:text-4xl mb-8 md:mb-12 text-slate-900">
-            {t.faq.title}<span className="brand-text">{t.faq.titleHighlight}</span>
+          <h2 className="font-display text-center text-3xl md:text-5xl mb-8 md:mb-12 text-black font-black uppercase tracking-tight">
+            {t.faq.title}<span className="text-neutral-400"> {t.faq.titleHighlight}</span>
           </h2>
           <div className="space-y-4">
             {t.faq.items.map((faq, index) => (
@@ -613,23 +631,23 @@ const App: React.FC = () => {
       </section>
 
       {/* Who We Are Section */}
-      <section className="relative z-10 py-16 md:py-24 bg-white border-t border-blue-100">
+      <section className="relative z-10 py-16 md:py-24 bg-white/80 backdrop-blur-md border-t border-neutral-200/80">
         <div className="max-w-4xl mx-auto px-4">
-          <h2 className="font-display text-center text-3xl md:text-4xl mb-8 md:mb-12 text-slate-900">
-            {t.whoWeAre.title}<span className="brand-text">{t.whoWeAre.titleHighlight}</span>
+          <h2 className="font-display text-center text-3xl md:text-5xl mb-8 md:mb-12 text-black font-black uppercase tracking-tight">
+            {t.whoWeAre.title}<span className="text-neutral-400"> {t.whoWeAre.titleHighlight}</span>
           </h2>
-          <div className="bg-gradient-to-br from-white via-blue-50/40 to-sky-50/20 border border-blue-200/90 p-8 md:p-12 rounded-3xl shadow-md flex flex-col md:flex-row gap-8 items-center">
-            <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center flex-shrink-0 border border-blue-200 shadow-sm">
-              <Crown className="text-blue-600" size={40} />
+          <div className="bg-white/85 backdrop-blur-xl border border-white/90 p-8 md:p-12 rounded-3xl shadow-xl shadow-black/5 flex flex-col md:flex-row gap-8 items-center">
+            <div className="w-20 h-20 bg-neutral-100 rounded-full flex items-center justify-center flex-shrink-0 border border-neutral-200">
+              <Crown className="text-black" size={40} />
             </div>
             <div className="space-y-4 text-center md:text-left rtl:md:text-right">
-              <p className="text-slate-700 leading-relaxed text-lg font-medium">
+              <p className="text-neutral-600 leading-relaxed text-lg font-semibold">
                 {t.whoWeAre.p1}
               </p>
-              <p className="text-slate-700 leading-relaxed text-lg font-medium">
+              <p className="text-neutral-600 leading-relaxed text-lg font-semibold">
                 {t.whoWeAre.p2}
               </p>
-              <p className="text-blue-700 leading-relaxed font-bold text-lg uppercase tracking-wider">
+              <p className="text-black leading-relaxed font-black text-lg uppercase tracking-wider">
                 {t.whoWeAre.p3}
               </p>
             </div>
@@ -638,23 +656,23 @@ const App: React.FC = () => {
       </section>
 
       {/* The Choice Section */}
-      <section className="relative z-10 py-16 md:py-24 bg-white border-t border-blue-100">
+      <section className="relative z-10 py-16 md:py-24 bg-neutral-50/50 border-t border-neutral-200/80">
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="font-display text-3xl md:text-5xl mb-8 md:mb-12 text-slate-900">
-            {t.choice.title}<span className="brand-text">{t.choice.titleHighlight}</span>
+          <h2 className="font-display text-3xl md:text-5xl mb-8 md:mb-12 text-black font-black uppercase tracking-tight">
+            {t.choice.title}<span className="text-neutral-400"> {t.choice.titleHighlight}</span>
           </h2>
           <div className="grid md:grid-cols-2 gap-8 items-stretch">
-            {/* Blue Pill (OnlyFans) - Gray/Slate styled */}
-            <div className="p-8 rounded-2xl bg-slate-50 border border-slate-200/90 hover:border-slate-300 transition-colors group shadow-sm flex flex-col justify-between">
+            {/* Blue Pill (OnlyFans) */}
+            <div className="p-8 rounded-3xl bg-white/70 backdrop-blur-md border border-neutral-200 hover:border-neutral-300 transition-all group shadow-sm flex flex-col justify-between">
               <div>
-                <div className="w-16 h-16 bg-white border border-blue-100 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
-                  <span className="font-display text-3xl tracking-tighter text-[#00AFF0]">OF</span>
+                <div className="w-16 h-16 bg-neutral-100 border border-neutral-200 rounded-full flex items-center justify-center mx-auto mb-6 shadow-xs">
+                  <span className="font-display font-black text-3xl tracking-tighter text-[#00AFF0]">OF</span>
                 </div>
-                <h3 className="font-display text-2xl mb-4 text-slate-600">{t.choice.ofTitle}</h3>
-                <ul className="text-left rtl:text-right text-slate-500 space-y-3 mb-8">
+                <h3 className="font-display font-black text-2xl mb-4 text-neutral-800 uppercase tracking-tight">{t.choice.ofTitle}</h3>
+                <ul className="text-left rtl:text-right text-neutral-600 space-y-3 mb-8 font-medium">
                   {t.choice.ofItems.map((item, idx) => (
-                    <li key={idx} className="flex gap-2 items-start">
-                      <XCircle className="text-red-400 w-5 h-5 flex-shrink-0 mt-0.5" />
+                    <li key={idx} className="flex gap-2.5 items-start">
+                      <X size={20} className="text-red-500 flex-shrink-0 mt-0.5" />
                       <span>{item}</span>
                     </li>
                   ))}
@@ -662,20 +680,20 @@ const App: React.FC = () => {
               </div>
             </div>
 
-             {/* Red Pill (Pleasure Heaven) - Blue styled */}
-             <div className="relative p-8 rounded-2xl bg-gradient-to-br from-white via-blue-50/70 to-sky-50/40 border-2 border-blue-400 shadow-xl shadow-blue-200/50 hover:border-blue-500 transition-colors group overflow-hidden flex flex-col justify-between">
-              <div className="absolute top-4 right-4 rtl:right-auto rtl:left-4 bg-blue-600 text-white text-[11px] font-black uppercase px-3 py-1 rounded-full tracking-wider shadow-sm">
+             {/* Red Pill (Pleasure Heaven) - Nike signature style */}
+             <div className="relative p-8 rounded-3xl bg-white/90 backdrop-blur-xl border-2 border-black shadow-2xl shadow-black/10 hover:shadow-black/15 transition-all group overflow-hidden flex flex-col justify-between">
+              <div className="absolute top-4 right-4 rtl:right-auto rtl:left-4 bg-black text-white text-[10px] font-black uppercase px-3.5 py-1 rounded-full tracking-wider shadow-sm">
                 {t.choice.vipBadge}
               </div>
               <div>
-                <div className="w-16 h-16 bg-white border border-blue-200 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
-                  <Crown className="text-blue-600" size={32} />
+                <div className="w-16 h-16 bg-neutral-100 border border-neutral-200 rounded-full flex items-center justify-center mx-auto mb-6 shadow-xs">
+                  <Crown className="text-black" size={32} />
                 </div>
-                <h3 className="font-display text-2xl mb-4 text-blue-700">{t.choice.phTitle}</h3>
-                <ul className="text-left rtl:text-right text-slate-700 space-y-3 mb-8 font-medium">
+                <h3 className="font-display font-black text-2xl mb-4 text-black uppercase tracking-tight">{t.choice.phTitle}</h3>
+                <ul className="text-left rtl:text-right text-black space-y-3 mb-8 font-bold">
                   {t.choice.phItems.map((item, idx) => (
-                    <li key={idx} className="flex gap-2 items-start">
-                      <CheckCircle2 className="text-blue-600 w-5 h-5 flex-shrink-0 mt-0.5" />
+                    <li key={idx} className="flex gap-2.5 items-start">
+                      <CheckCircle2 className="text-black w-5 h-5 flex-shrink-0 mt-0.5" />
                       <span>{item}</span>
                     </li>
                   ))}
@@ -684,17 +702,13 @@ const App: React.FC = () => {
               <div>
                 <button 
                   onClick={() => window.open(JOIN_LINK, '_blank')}
-                  className="block w-full text-center brand-bg text-white font-bold py-3.5 uppercase tracking-wider hover:brightness-110 transition-all shadow-md rounded-xl cursor-pointer"
+                  className="block w-full text-center bg-black text-white hover:bg-neutral-800 font-black py-4 uppercase tracking-wider transition-all shadow-lg rounded-full cursor-pointer active:scale-95 text-base"
                 >
                   {t.choice.enterButton}
                 </button>
-                <div className="mt-5 w-full bg-white border border-slate-200/90 rounded-2xl p-3 sm:p-4 shadow-sm flex flex-wrap sm:flex-nowrap items-center justify-between gap-2 relative overflow-hidden text-left rtl:text-right">
-                  <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-blue-600 via-sky-500 to-blue-700"></div>
+                <div className="mt-4 w-full bg-neutral-100/90 backdrop-blur-md border border-neutral-200/80 rounded-full p-2.5 sm:p-3 shadow-xs flex flex-wrap sm:flex-nowrap items-center justify-between gap-2 relative overflow-hidden text-left rtl:text-right">
                   <div className="flex items-center gap-2 shrink-0">
-                    <span className="bg-gradient-to-r from-red-600 to-rose-600 text-white text-[10px] sm:text-xs font-black px-2 py-0.5 rounded-md tracking-wider shadow-xs uppercase">
-                      {t.hero.discountBadge}
-                    </span>
-                    <span className="text-slate-800 font-extrabold text-[10px] sm:text-xs uppercase tracking-wide whitespace-nowrap">{t.hero.offerExpiresIn}</span>
+                    <span className="text-neutral-700 font-bold text-[10px] sm:text-xs uppercase tracking-wide whitespace-nowrap">{t.hero.offerExpiresIn}</span>
                   </div>
                   <Countdown compact />
                 </div>
@@ -705,40 +719,37 @@ const App: React.FC = () => {
       </section>
 
       {/* Contact Section */}
-      <section className="relative z-10 py-16 md:py-24 bg-[#f0f7ff] overflow-hidden">
-        {/* Background glow */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-white blur-[120px] rounded-full pointer-events-none opacity-60"></div>
-        
+      <section className="relative z-10 py-16 md:py-24 bg-white/80 backdrop-blur-md overflow-hidden border-t border-neutral-200/80">
         <div className="relative max-w-lg mx-auto px-4 text-center">
-          <div className="bg-white/90 backdrop-blur-xl border border-blue-200/80 p-8 md:p-12 rounded-3xl shadow-lg">
-            <h3 className="font-display text-2xl text-slate-900 mb-6 tracking-wide">{t.contact.title}</h3>
-            <div className="text-center space-y-4 text-slate-700 font-medium text-base sm:text-lg">
+          <div className="bg-white/85 backdrop-blur-xl border border-white/90 p-8 md:p-12 rounded-3xl shadow-xl shadow-black/5">
+            <h3 className="font-display font-black text-2xl text-black mb-6 uppercase tracking-tight">{t.contact.title}</h3>
+            <div className="text-center space-y-4 text-neutral-600 font-semibold text-base sm:text-lg">
               <p>+1 (213) 986-8699</p>
               <p>{t.contact.ukPhone}</p>
               <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-2 text-sm sm:text-base">
-                <span className="text-slate-500 font-semibold">{t.contact.emailLabel}</span>
+                <span className="text-neutral-400 font-bold">{t.contact.emailLabel}</span>
                 <button
                   onClick={() => handleCopyEmail('pleasureheavenn@gmail.com')}
-                  className="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg border border-blue-200/80 transition-all cursor-pointer font-medium text-xs sm:text-sm group active:scale-95 max-w-full overflow-hidden"
+                  className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-neutral-100 hover:bg-neutral-200 text-black rounded-full border border-neutral-200 transition-all cursor-pointer font-bold text-xs sm:text-sm group active:scale-95 max-w-full overflow-hidden"
                   title={t.contact.copyTitle}
                 >
                   <span className="truncate">pleasureheavenn@gmail.com</span>
                   {emailCopied ? (
-                    <span className="flex items-center text-xs text-emerald-600 font-semibold gap-1 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 shrink-0">
+                    <span className="flex items-center text-xs text-emerald-600 font-bold gap-1 bg-white px-2 py-0.5 rounded-full border border-emerald-300 shrink-0">
                       <Check size={14} /> {t.contact.copied}
                     </span>
                   ) : (
-                    <Copy size={15} className="text-blue-500 group-hover:scale-110 transition-transform shrink-0" />
+                    <Copy size={15} className="text-neutral-500 group-hover:scale-110 transition-transform shrink-0" />
                   )}
                 </button>
               </div>
 
-              <div className="pt-4 border-t border-slate-100 flex flex-col items-center gap-2">
+              <div className="pt-4 border-t border-neutral-200 flex flex-col items-center gap-2">
                 <a
                   href="https://t.me/pleasureheaven7"
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="w-full inline-flex items-center justify-center gap-2.5 px-5 py-3.5 bg-sky-500 hover:bg-sky-600 text-white font-bold rounded-xl shadow-md hover:shadow-lg transition-all active:scale-95 text-sm sm:text-base tracking-wide"
+                  className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-4 bg-neutral-100 hover:bg-neutral-200 border border-neutral-200 text-black font-black rounded-full shadow-md transition-all active:scale-95 text-sm sm:text-base tracking-wide uppercase"
                 >
                   <TelegramIcon className="w-5 h-5 fill-current shrink-0" />
                   <span>{t.contact.messageTelegram}</span>
@@ -750,51 +761,48 @@ const App: React.FC = () => {
       </section>
 
       {/* Footer */}
-      <footer className="relative z-10 bg-white border-t border-slate-100 py-12 text-center text-slate-400 text-sm">
+      <footer className="relative z-10 bg-white/70 backdrop-blur-md border-t border-neutral-200 py-12 text-center text-neutral-400 text-sm">
         <div className="max-w-7xl mx-auto px-4 flex flex-col items-center">
-          <Crown className="text-blue-500 mb-4" size={40} />
-          <p className="mb-4">&copy; {new Date().getFullYear()} {t.footer.rightsReserved}</p>
-          <div className="flex gap-6">
-            <button onClick={() => setActiveModal('terms')} className="hover:text-blue-600 transition cursor-pointer">{t.footer.terms}</button>
-            <button onClick={() => setActiveModal('privacy')} className="hover:text-blue-600 transition cursor-pointer">{t.footer.privacy}</button>
-            <button onClick={() => setActiveModal('support')} className="hover:text-blue-600 transition cursor-pointer">{t.footer.support}</button>
+          <Crown className="text-neutral-400 mb-4" size={36} />
+          <p className="mb-4 font-semibold text-neutral-600">&copy; {new Date().getFullYear()} {t.footer.rightsReserved}</p>
+          <div className="flex gap-6 font-bold">
+            <button onClick={() => setActiveModal('terms')} className="hover:text-black transition cursor-pointer">{t.footer.terms}</button>
+            <button onClick={() => setActiveModal('privacy')} className="hover:text-black transition cursor-pointer">{t.footer.privacy}</button>
+            <button onClick={() => setActiveModal('support')} className="hover:text-black transition cursor-pointer">{t.footer.support}</button>
           </div>
         </div>
       </footer>
 
       {/* Sticky Floating Bottom Conversion Bar */}
       <div 
-        className={`fixed bottom-0 left-0 right-0 z-40 p-2.5 sm:p-3 md:p-4 bg-white/95 backdrop-blur-xl border-t border-blue-200/80 shadow-[0_-8px_30px_rgba(37,99,235,0.12)] transition-all duration-500 ease-out transform ${
+        className={`fixed bottom-0 left-0 right-0 z-40 p-2.5 sm:p-3 md:p-4 bg-white/85 backdrop-blur-2xl border-t border-white/80 shadow-[0_-10px_30px_rgba(0,0,0,0.08)] transition-all duration-500 ease-out transform ${
           showStickyCTA ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0 pointer-events-none'
         }`}
       >
         <div className="max-w-6xl mx-auto flex items-center justify-between gap-2.5 sm:gap-4">
           <div className="hidden sm:flex items-center gap-3 min-w-0">
-            <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center border border-blue-200 shrink-0">
-              <Crown size={20} className="text-blue-600" />
+            <div className="w-10 h-10 rounded-full bg-neutral-100 flex items-center justify-center border border-neutral-200 shrink-0">
+              <Crown size={20} className="text-black" />
             </div>
             <div className="min-w-0">
               <div className="flex items-center gap-2 flex-wrap">
-                <span className="font-display text-slate-900 text-base md:text-lg whitespace-nowrap">{t.stickyCta.brandTitle}</span>
-                <span className="bg-blue-100 text-blue-800 text-[10px] md:text-xs font-bold px-2.5 py-0.5 rounded-full border border-blue-200/60 whitespace-nowrap">
+                <span className="font-display text-black font-black text-base md:text-lg whitespace-nowrap uppercase tracking-tight">{t.stickyCta.brandTitle}</span>
+                <span className="bg-neutral-100 text-neutral-700 text-[10px] md:text-xs font-bold px-2.5 py-0.5 rounded-full border border-neutral-200 whitespace-nowrap">
                   {t.stickyCta.lifetimeAccess}
                 </span>
-                <span className="bg-gradient-to-r from-red-600 to-rose-600 text-white text-[10px] md:text-xs font-black px-2 py-0.5 rounded-full uppercase tracking-wider shadow-xs whitespace-nowrap">
-                  {t.stickyCta.discountBadge}
-                </span>
               </div>
-              <p className="text-xs text-slate-500 font-medium truncate">{t.stickyCta.tagline}</p>
+              <p className="text-xs text-neutral-500 font-semibold truncate">{t.stickyCta.tagline}</p>
             </div>
           </div>
 
           <div className="flex items-center justify-between sm:justify-end gap-2.5 sm:gap-3 w-full sm:w-auto">
             <div className="sm:hidden flex flex-col min-w-0 pr-2 rtl:pr-0 rtl:pl-2">
-              <span className="text-[11px] text-blue-600 font-bold uppercase tracking-wider truncate">{t.stickyCta.limitedOffer}</span>
-              <span className="text-[11px] text-slate-600 font-medium truncate">{t.stickyCta.subTagline}</span>
+              <span className="text-[11px] text-black font-black uppercase tracking-wider truncate">{t.stickyCta.limitedOffer}</span>
+              <span className="text-[11px] text-neutral-500 font-semibold truncate">{t.stickyCta.subTagline}</span>
             </div>
             <button
               onClick={() => window.open(JOIN_LINK, '_blank')}
-              className="brand-bg text-white font-display text-sm sm:text-base md:text-lg px-4 sm:px-6 md:px-8 py-2.5 sm:py-3 rounded-xl hover:brightness-110 transition-all shadow-md flex items-center gap-1.5 sm:gap-2 whitespace-nowrap active:scale-95 cursor-pointer shrink-0"
+              className="bg-black text-white hover:bg-neutral-800 shadow-xl font-display font-black text-sm sm:text-base px-5 sm:px-8 py-3 rounded-full transition-all flex items-center gap-2 whitespace-nowrap active:scale-95 cursor-pointer shrink-0 uppercase tracking-wider"
             >
               <span>{t.stickyCta.joinButton}</span>
               <ArrowRight size={16} className="rtl:rotate-180" />
@@ -819,38 +827,38 @@ const App: React.FC = () => {
 
       {/* Payment Modal */}
       {isPaymentModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden relative animate-in fade-in zoom-in duration-200">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-50/80 backdrop-blur-sm">
+          <div className="bg-slate-50 border border-slate-200 rounded-xl shadow-2xl w-full max-w-md overflow-hidden relative animate-in fade-in zoom-in duration-200">
             <button 
               onClick={() => setIsPaymentModalOpen(false)}
-              className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 transition-colors z-10 cursor-pointer"
+              className="absolute top-4 right-4 text-slate-500 hover:text-slate-900 transition-colors z-10 cursor-pointer"
             >
               <X size={24} />
             </button>
             
-            <div className="p-8 text-center border-b border-slate-100">
-              <Crown className="text-blue-500 mx-auto mb-4" size={40} />
-              <h2 className="font-display text-2xl text-slate-900 mb-2">{t.paymentModal.title}</h2>
+            <div className="p-8 text-center border-b border-slate-200 bg-white">
+              <Crown className="text-slate-800 mx-auto mb-4" size={40} />
+              <h2 className="font-display font-semibold text-2xl text-slate-900 mb-2">{t.paymentModal.title}</h2>
               <p className="text-slate-500 text-sm">{t.paymentModal.subtitle}</p>
             </div>
             
             <div className="p-8 bg-slate-50">
               {isSuccess ? (
                 <div className="text-center py-8">
-                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <CheckCircle2 className="text-green-600" size={32} />
+                  <div className="w-16 h-16 bg-[#4ade80]/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <CheckCircle2 className="text-[#4ade80]" size={32} />
                   </div>
                   <h3 className="text-xl font-bold text-slate-900 mb-2">{t.paymentModal.successTitle}</h3>
-                  <p className="text-slate-600 mb-6">{t.paymentModal.successDesc}</p>
-                  <p className="text-sm text-slate-500 animate-pulse">{t.paymentModal.redirecting}</p>
+                  <p className="text-slate-500 mb-6">{t.paymentModal.successDesc}</p>
+                  <p className="text-sm text-slate-400 animate-pulse">{t.paymentModal.redirecting}</p>
                 </div>
               ) : (
                 <>
                   <div className="mb-4">
                     <div className="flex justify-between items-center mb-1.5">
-                      <span className="text-slate-800 font-semibold">{t.paymentModal.membershipTitle}</span>
+                      <span className="text-slate-900 font-semibold">{t.paymentModal.membershipTitle}</span>
                       <div className="flex items-center gap-2">
-                        <span className="bg-red-100 text-red-700 border border-red-200 text-xs font-black px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+                        <span className="bg-slate-50 text-slate-900 text-xs font-bold px-2.5 py-0.5 rounded uppercase tracking-wider">
                           {t.paymentModal.specialOffer}
                         </span>
                       </div>
@@ -861,26 +869,26 @@ const App: React.FC = () => {
                   </div>
 
                   {/* Privacy Guard Notice */}
-                  <div className="mb-5 p-4 bg-blue-50/90 border border-blue-200/90 rounded-xl flex items-start gap-3 text-left shadow-xs">
-                    <ShieldCheck size={20} className="text-blue-600 shrink-0 mt-0.5" />
+                  <div className="mb-5 p-4 bg-white border border-slate-200 rounded-xl flex items-start gap-3 text-left shadow-xs">
+                    <ShieldCheck size={20} className="text-slate-800 shrink-0 mt-0.5" />
                     <div className="text-xs">
-                      <span className="font-bold text-blue-950 block mb-0.5 tracking-wide">{t.paymentModal.discreetBillingTitle}</span>
-                      <p className="text-slate-700 leading-relaxed font-medium">
+                      <span className="font-semibold text-slate-900 block mb-0.5 tracking-wide">{t.paymentModal.discreetBillingTitle}</span>
+                      <p className="text-slate-500 leading-relaxed font-semibold">
                         {t.paymentModal.discreetBillingDesc}
                       </p>
                     </div>
                   </div>
 
                   {paymentError && (
-                    <div className="mb-4 p-3 bg-red-50 border border-red-100 rounded text-red-600 text-sm">
+                    <div className="mb-4 p-3 bg-red-900/20 border border-red-500/30 rounded text-red-400 text-sm">
                       {paymentError}
                     </div>
                   )}
 
                   {isProcessing ? (
                     <div className="flex flex-col items-center justify-center py-8">
-                      <div className="w-8 h-8 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin mb-4"></div>
-                      <p className="text-slate-600 font-medium">{t.paymentModal.processing}</p>
+                      <div className="w-8 h-8 border-4 border-slate-200 border-t-[#0a0a0a] rounded-full animate-spin mb-4"></div>
+                      <p className="text-slate-500 font-semibold">{t.paymentModal.processing}</p>
                     </div>
                   ) : (
                     <PayPalButtons 
@@ -942,16 +950,16 @@ const App: React.FC = () => {
 const FAQItem: React.FC<{question: string, answer: string}> = ({ question, answer }) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
-      <div className={`border rounded-xl bg-white overflow-hidden transition-all duration-200 ${isOpen ? 'border-blue-300 shadow-md ring-1 ring-blue-200' : 'border-blue-200/80 hover:border-blue-300 shadow-sm'}`}>
+      <div className={`border rounded-2xl bg-white/80 backdrop-blur-md overflow-hidden transition-all duration-200 ${isOpen ? 'border-black shadow-md' : 'border-neutral-200/80 hover:border-neutral-300 shadow-xs'}`}>
           <button 
               onClick={() => setIsOpen(!isOpen)}
-              className="w-full p-5 md:p-6 text-left flex justify-between items-center hover:bg-blue-50/40 transition-colors"
+              className="w-full p-5 md:p-6 text-left rtl:text-right flex justify-between items-center hover:bg-neutral-50/60 transition-colors"
           >
-              <span className="font-display text-base md:text-lg text-slate-900">{question}</span>
-              {isOpen ? <Minus className="text-blue-600 shrink-0" /> : <Plus className="text-blue-600 shrink-0" />}
+              <span className="font-display font-black text-base md:text-lg text-black uppercase tracking-tight">{question}</span>
+              {isOpen ? <Minus className="text-black shrink-0" /> : <Plus className="text-neutral-400 shrink-0" />}
           </button>
           <div className={`overflow-hidden transition-all duration-300 ${isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
-               <div className="p-5 md:p-6 pt-0 text-slate-600 leading-relaxed whitespace-pre-line border-t border-blue-100/60 bg-blue-50/20">
+               <div className="p-5 md:p-6 pt-0 text-neutral-600 font-medium leading-relaxed whitespace-pre-line border-t border-neutral-100 bg-neutral-50/40">
                   {answer}
                </div>
           </div>
